@@ -13,8 +13,8 @@ android {
         applicationId "imagetrack.app.trackobject"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 5
-        versionName "2.0"
+        versionCode 6
+        versionName "3.0"
 
         testInstrumentationRunner "image.app.trackobject.CustomTestRunner"
     }
@@ -130,19 +130,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
 
-//    // CameraX core library
-//    def camerax_version = '1.0.0-rc01'
-//
-//
-//    //Camera View
-//    implementation 'androidx.camera:camera-view:1.0.0-alpha20'
-//
-//
-//    // CameraX Lifecycle library
-//    implementation "androidx.camera:camera-lifecycle:$camerax_version"
-//
-
-
     // CameraX core library using the camera2 implementation
     def camerax_version = "1.0.0-rc03"
     // The following line is optional, as the core library is included indirectly by camera-camera2
@@ -223,6 +210,31 @@ dependencies {
     //Retrofit
 //    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
 //    implementation 'com.squareup.retrofit2:converter-gson::2.7.1'
+
+    implementation 'com.android.billingclient:billing:4.0.0'
+    implementation 'com.android.billingclient:billing-ktx:4.0.0'
+
+
+    //Firebase Functions
+    implementation "com.google.firebase:firebase-functions:19.0.2"
+
+
+    //Gson Version
+    implementation "com.google.code.gson:gson:2.8.2"
+
+   //Room DataBase
+
+    def room_version = "2.3.0"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+//    implementation "androidx.room:room-runtime:$room_version"
+//    kapt "androidx.room:room-compiler:$room_version"
+//
+//    // optional - Kotlin Extensions and Coroutines support for Room
+//    implementation "androidx.room:room-ktx:$room_version"
+
 
 
 

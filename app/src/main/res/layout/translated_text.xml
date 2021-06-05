@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="imagetrack.app.trackobject.viewmodel.MainViewModel" />
+            type="imagetrack.app.trackobject.viewmodel.ScanDialogViewModel" />
 
     </data>
 
@@ -35,12 +35,13 @@
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
+
             android:id="@+id/constraintLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+
             android:background="@drawable/textlayoutdesign"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -100,6 +101,8 @@
                 app:layout_constraintTop_toTopOf="@+id/sharedata" />
 
 
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -117,7 +120,7 @@
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"

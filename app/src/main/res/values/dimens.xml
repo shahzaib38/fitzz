@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="features_top_dimensions">10dp</dimen>
+    <dimen name="scan_image_width">28dp</dimen>
+    <dimen name="scan_image_height">28dp</dimen>
+
+</resources>

@@ -19,7 +19,7 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
 
     private val mViewModel by viewModels<PdfViewModel>()
     private var mBinding  : PdfDataBinding? =null
-       private var   argument :Any?=null
+    private var   argument :Any?=null
 
     override fun getBindingVariable(): Int = BR.viewModel
 
@@ -29,13 +29,10 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
 
 
     private fun progressStart(){
+        mBinding?.pdfProgress?.visibility =View.VISIBLE }
 
-        mBinding?.pdfProgress?.visibility =View.VISIBLE
-    }
     private  fun progressStop(){
-
-        mBinding?.pdfProgress?.visibility =View.GONE
-    }
+        mBinding?.pdfProgress?.visibility =View.GONE }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

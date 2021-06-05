@@ -4,19 +4,37 @@
     <string name="scan">Scan</string>
     <string name="auto_detect">Detect Languages</string>
     <string name="english_languages">English</string>
-    <string name="exit">Exit</string>
+    <string name="exit">Close</string>
     <string name="file_name">Write file name</string>
     <string name="generate_pdf">Generate Pdf</string>
     <string name="pdf">.Pdf</string>
     <string name="text_value">textvalue</string>
     <string name="default_notification_channel_id">snaptalknotification</string>
-    <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_2">ca-app-pub-3940256099942544/6300978111</string>
+
+
+
+
+
+    <!-- Test Ads -->
+       <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
+        <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
+        <string name="banner_2">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="notice">Notice</string>
     <string name="pinch_to_zoom">" * Pinch to Zoom "</string>
     <string name="tab_to_focus">Tap to Focus</string>
     <string name="test_string">A plane\'s engines are designed to move it forward at high speed. That makes air flow rapidly over the wings, which throw the air down toward the ground, generating an upward force called lift that overcomes the plane\'s weight and holds it in the sky. ... The wings force the air downward and that pushes the plane upward</string>
     <string name="select_language">Select Language</string>
+    <string name="one_month_subscription">1 Month Subscription</string>
+    <string name="three_month_subscription">3 Month Subscription</string>
+    <string name="translates_languages">Translates more than 100+ languages \"</string>
+    <string name="unlimited_usage">"Unlimited Usage "</string>
+    <string name="image_to_text">OCR  Recognition</string>
+    <string name="no_ads">No Ads</string>
+    <string name="subscription_plans">Subscription Plans :</string>
+    <string name="save">Save</string>
+    <string name="delete_all">Delete All</string>
+    <string name="history">History</string>
 
 
 </resources>

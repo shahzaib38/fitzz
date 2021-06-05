@@ -1,15 +1,18 @@
 package imagetrack.app.trackobject.camera_features
 
 import android.content.Context
+import android.view.ScaleGestureDetector
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
 import imagetrack.app.view.GraphicOverlay
 import java.util.concurrent.Executors
+import imagetrack.app.trackobject.R
 
 
 @ExperimentalUseCaseGroupLifecycle
@@ -19,13 +22,17 @@ abstract class BaseCameraX( private val context: Context,
                             private val graphics: GraphicOverlay?,
                             private val lifecycleOwner: LifecycleOwner,
                             private val  previewView: PreviewView) :
-                             ICamera,IPreview ,ILifeCycleBinder{
+                             ICamera,IPreview ,ILifeCycleBinder {
 
 
     private var cameraProvider: ProcessCameraProvider?=null
     private var camera: Camera? = null
 
     override fun getCamera(): Camera? =camera
+    override fun getCameraInfo() :CameraInfo?= camera?.cameraInfo
+    override  fun getCameraControl() :CameraControl? = camera?.cameraControl
+    override fun getTorchState(): LiveData<Int> =camera?.cameraInfo?.torchState!!
+    override fun getZoomState(): LiveData<ZoomState> =camera?.cameraInfo?.zoomState!!
 
     companion object {
         private var mCameraSelector =CameraSelector.DEFAULT_BACK_CAMERA }
@@ -43,7 +50,24 @@ abstract class BaseCameraX( private val context: Context,
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
    override fun onCameraDestroy(){
         println("OnDestroy")
+        context.resources.getDrawable(R.drawable.ic_flash_off,null )
+
         stop() }
+
+
+    override fun onScale(detector: ScaleGestureDetector?): Boolean {
+        val delta = detector?.scaleFactor ?: return false
+        setZoomRatio(delta)
+            return true }
+
+    override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+
+        return true
+    }
+
+    override fun onScaleEnd(detector: ScaleGestureDetector?) {
+
+    }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -64,7 +88,6 @@ abstract class BaseCameraX( private val context: Context,
      println("OnPause")
         stop()
     }
-
 
 
   override  fun provideSurface(preview : Preview){

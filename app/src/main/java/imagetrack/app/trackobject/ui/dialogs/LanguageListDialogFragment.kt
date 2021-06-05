@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.listener.OnItemClickListener
@@ -14,35 +13,33 @@ import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.LanguageAdapter
 import imagetrack.app.trackobject.databinding.LanguageListDataBinding
-import imagetrack.app.trackobject.viewmodel.MainViewModel
+import imagetrack.app.trackobject.navigator.LanguageListNavigator
+import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
 import imagetrack.app.translate.TranslateUtils
 import imagetrack.app.utils.LanguageArray
 
 
 @AndroidEntryPoint
-class LanguageListDialogFragment : BaseDialogFragment<MainViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> {
+class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator {
 
     private  var bind : LanguageListDataBinding?=null
-    private val mViewModel by viewModels<MainViewModel>()
+    private val mViewModel by viewModels<LanguageListViewModel>()
 
 
   private  var languageAdapter : LanguageAdapter?=null
   private  var resultText :Any?=null
+
     companion object{
 
         private const val TAG :String= "LanguageListDialogFragment"
-        const val KEY_VALUE ="textvalue"
-
+        private const val KEY_VALUE ="textvalue"
 
         fun getInstance(text :String ): LanguageListDialogFragment {
             val fragmentDialog = LanguageListDialogFragment()
-
             val bundle = Bundle()
             bundle.putString(KEY_VALUE, text)
-
             fragmentDialog.arguments = bundle
-            return fragmentDialog
-        }
+            return fragmentDialog }
     }
 
 
@@ -50,20 +47,11 @@ class LanguageListDialogFragment : BaseDialogFragment<MainViewModel, LanguageLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         bind= getViewDataBinding()
-
-        resultText = arguments?.run {
-            get(ScanDialogFragment.KEY_VALUE) }
-
+        mViewModel.setNavigator(this)
+        resultText = arguments?.run { get(ScanDialogFragment.KEY_VALUE) }
         languageAdapter= LanguageAdapter(mViewModel ,this)
-
-setUpRecyclerView()
-
-        bind?.closeId?.setOnClickListener {
-
-            dismissDialog()
-        }
+        setUpRecyclerView()
     }
 
 
@@ -96,33 +84,31 @@ private    fun setUpRecyclerView(){
         return  BR.viewModel
     }
 
-    override fun getViewModel(): MainViewModel? =mViewModel
+    override fun getViewModel(): LanguageListViewModel? =mViewModel
 
     override fun getLayoutId(): Int {
         return  R.layout.language_list_dialog    }
 
-    fun dismissDialog() {
+   private fun dismissDialog() {
         super.dismissDialog(TAG)
 
     }
-     fun startProgress() {
+     private fun startProgress() {
          bind?.progressId?.visibility=View.VISIBLE
     }
 
-     fun stopProgress() {
+    private   fun stopProgress() {
          bind?.progressId?.visibility=View.GONE
     }
 
-    fun toast(value :String ){
-        Toast.makeText(requireContext() ,value , Toast.LENGTH_LONG).show()
+   private fun toast(value :String ){
+        Toast.makeText(requireContext() ,value , Toast.LENGTH_LONG).show() }
 
-    }
     override fun clickItem(item: String) {
         val postParameters: MutableMap<String, String> = HashMap()
         postParameters["q"] = resultText as String
         postParameters["target"] =item
         postParameters["key"] = TranslateUtils.SCANNER_KEY
-
 
         startProgress()
         mViewModel.getUsers(postParameters).observe(this, Observer {
@@ -133,6 +119,11 @@ private    fun setUpRecyclerView(){
             }
 
         })
+    }
+
+    override fun close() {
+        dismissDialog()
+
     }
 
 

@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +18,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
+<!--        <activity android:name=".ui.activities.InAppPurchaseActivity"-->
+<!--            android:theme="@style/AppTheme"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            tools:ignore="LockedOrientationActivity"-->
+<!--            >-->
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+
+<!--        </activity>-->
+
+
+        <activity android:name=".ui.activities.HistoryActivity">
+
+        </activity>
+
 
         <activity android:name="imagetrack.app.trackobject.ui.activities.MainActivity"
             android:theme="@style/AppTheme"
@@ -45,7 +66,7 @@
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="@string/app_id"/>
 
 
         <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming

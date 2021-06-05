@@ -23,8 +23,6 @@ class ScanRepository @Inject constructor(): BaseRepository() {
     @ExperimentalUseCaseGroupLifecycle
     @ExperimentalGetImage
     fun provideScanCamera(context : Context, lifecycleOwner  : LifecycleOwner, previewView: PreviewView,progress : ProgressBar):ICamera?{
-
-
         return  CameraProvider.setCamera(context ,  null,lifecycleOwner , previewView,progress) }
 
 

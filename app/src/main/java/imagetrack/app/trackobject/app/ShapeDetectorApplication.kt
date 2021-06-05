@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.databinding.library.BuildConfig
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
+import imagetrack.app.trackobject.in_app_purchase.BillingClientLifecycle
 import timber.log.Timber
 
 @HiltAndroidApp
@@ -28,6 +29,7 @@ class ShapeDetectorApplication : Application() {
         MobileAds.initialize(this)
     }
 
-
+    val billingClientLifecycle: BillingClientLifecycle
+        get() = BillingClientLifecycle.getInstance(this)
 
 }

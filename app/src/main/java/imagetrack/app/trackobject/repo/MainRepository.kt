@@ -9,23 +9,15 @@ import androidx.camera.view.PreviewView
 import androidx.lifecycle.LifecycleOwner
 import imagetrack.app.trackobject.camera_features.CameraProvider
 import imagetrack.app.trackobject.camera_features.ICamera
+import imagetrack.app.trackobject.database.local.history.HistoryBean
+import imagetrack.app.trackobject.database.local.history.HistoryDatabase
 import imagetrack.app.translate.TranslateApi
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class MainRepository @Inject constructor(private val translateApi : TranslateApi): BaseRepository() {
-
-//
-//    @ExperimentalUseCaseGroup
-//    @ExperimentalUseCaseGroupLifecycle
-//    @ExperimentalGetImage
-//    fun provideCamera(context : Context, graphics : GraphicOverlay, lifecycleOwner  : LifecycleOwner, previewView: PreviewView):ICamera?{
-//
-//
-//       return  CameraProvider.setCamera(context , graphics , lifecycleOwner , previewView,progress) }
-
+class MainRepository @Inject constructor(private val translateApi : TranslateApi , private val historyDatabase: HistoryDatabase): BaseRepository() {
 
 
 
@@ -33,12 +25,14 @@ class MainRepository @Inject constructor(private val translateApi : TranslateApi
     @ExperimentalUseCaseGroupLifecycle
     @ExperimentalGetImage
     fun provideScanCamera(context : Context, lifecycleOwner  : LifecycleOwner, previewView: PreviewView,progress : ProgressBar):ICamera?{
-
-
         return  CameraProvider.setCamera(context ,  null,lifecycleOwner , previewView,progress) }
 
 
     suspend fun getUsers(name: Map<String, String>) = translateApi.getData(name)
 
+
+    suspend fun insertHistory(historyBean : HistoryBean) :Boolean{
+        historyDatabase.userDao().insert(historyBean)
+        return true}
 
 }

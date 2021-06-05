@@ -1,13 +1,10 @@
 package imagetrack.app.trackobject.ui.fragment
 
-import android.Manifest
 import android.animation.Animator
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
@@ -17,23 +14,29 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ExperimentalUseCaseGroup
+import androidx.camera.core.TorchState
 import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
-import imagetrack.app.trackobject.camera_features.ScanningCamera
 import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.camera_features.ICamera
+import imagetrack.app.trackobject.camera_features.ScanningCamera
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
+import imagetrack.app.trackobject.ext.animateFocusRing
 import imagetrack.app.trackobject.navigator.ScanNavigator
+import imagetrack.app.trackobject.ui.activities.HistoryActivity
 import imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog
 import imagetrack.app.trackobject.viewmodel.ScanViewModel
+import imagetrack.app.utils.BitmapUtils
 import imagetrack.app.utils.CameraPermissions
-import imagetrack.app.utils.InternetConnection
+import imagetrack.app.utils.CameraPermissions.hasPermissions
+import imagetrack.app.utils.CameraPermissions.isCameraPermissionGranted
+import imagetrack.app.utils.CameraPermissions.isGalleryPermissionGranted
+import imagetrack.app.utils.InternetConnection.isInternetAvailable
 import java.io.FileNotFoundException
-import java.io.InputStream
 
 
 @ExperimentalGetImage
@@ -57,20 +60,21 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
     override fun getLayoutId(): Int = R.layout.scan_fragment
     override fun getViewModel(): ScanViewModel = mViewModel
 
+
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mScanFragmentDataBinding=   getViewDataBinding()
-        val isPermissionGranted= (CameraPermissions.hasPermissions(requireContext() , CameraPermissions.CAMERA_PERMISSION_ARRAY))
-        if (isPermissionGranted) startCamera() else requestCameraPermission()
 
+        mScanFragmentDataBinding =getViewDataBinding()
+        if (isCameraPermissionGranted(requireContext())) startCamera() else requestCameraPermission()
         mViewModel.setNavigator(this)
-
         loadAds()
     }
 
-   private  fun  toast(value : String ){
-        Toast.makeText(requireContext() ,value , Toast.LENGTH_LONG).show()
+   private  fun  toast(value: String){
+        Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show()
     }
 
    private  fun loadAds() {
@@ -81,32 +85,14 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
 
 
 
-   private  val torchState =  Observer<Int> {
+   private  val torchState =  Observer<Int> {torchState ->
+       when(torchState){
+            TorchState.OFF -> { changeTorchState(R.drawable.ic_flash_off) }
+           TorchState.ON -> { changeTorchState(R.drawable.flashon) }
+            else ->{ changeTorchState(R.drawable.ic_flash_off) } } }
 
-        when(it){
-            0 ->{
-
-                mScanFragmentDataBinding?.torch?.setImageResource(R.drawable.ic_flash_off)
-
-                println("Flash Off")
-            }
-
-            1 ->{
-                mScanFragmentDataBinding?.torch?.setImageResource(R.drawable.flashon)
-                println("Flash On")
-
-            }
-
-            else ->{
-                mScanFragmentDataBinding?.torch?.setImageResource(R.drawable.ic_flash_off)
-                println("Default  On")
-
-            }
-
-        }
-
-
-    }
+   private   fun  changeTorchState(state :Int =R.drawable.ic_flash_off){
+       mScanFragmentDataBinding?.include2?.torch?.setImageResource(state) }
 
     private fun openIntent(){
         toast("Opening Gallery")
@@ -117,28 +103,29 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
 
     }
 
-  override  fun openGallery(){
 
-      if(InternetConnection.isInternetAvailable(requireActivity())) {
-          if ((CameraPermissions.hasPermissions(requireContext(), CameraPermissions.GALLERY_ARRAY)))
+  override  fun openGallery(){
+      if(isInternetAvailable(requireActivity())) {
+          if (isGalleryPermissionGranted(requireContext()))
           { openIntent()
           } else { requestGalleryPermission() }
       }else{
-
-          InternetConnectionDialog.getInstance().showDialog(childFragmentManager)
+          showInternetConnectionDialog()
 
       }
     }
 
+
+    private fun showInternetConnectionDialog(){
+        InternetConnectionDialog.getInstance().showDialog(childFragmentManager) }
+
     override fun capture() {
         iCamera.let {
             if(it is ScanningCamera){
-
-                if(InternetConnection.isInternetAvailable(requireActivity())) {
+                if(isInternetAvailable(requireActivity())) {
                     it.captureImage()
                 }else{
-                    InternetConnectionDialog.getInstance().showDialog(childFragmentManager)
-
+                    showInternetConnectionDialog()
                 }
 
             } }
@@ -146,151 +133,98 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
 
     }
 
+    override fun showHistory() {
+        val myIntent = Intent(requireContext(), HistoryActivity::class.java)
+        this.startActivity(myIntent)    }
+
     private fun requestGalleryPermission(){
         requestPermissions(
-            CameraPermissions.GALLERY_ARRAY ?: arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+            CameraPermissions.GALLERY_ARRAY,
             CameraPermissions.CAMERA_GALLERY_PERMISSION
         )
     }
 
-    val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        override fun onScale(detector: ScaleGestureDetector): Boolean {
-
-            val delta = detector.scaleFactor
-            iCamera?.setZoomRatio(delta)
-
-            return true
-        }
-    }
 
 
 
-      private   fun getBitmap(imageUri: Uri?) : Bitmap {
-
-          val imageStream: InputStream? = requireContext().contentResolver.openInputStream(imageUri!!)
-
-          return  BitmapFactory.decodeStream(imageStream)
-
-      }
 
 
-
-    private fun processImage(bitmap : Bitmap){
-        iCamera?.scanDocument(bitmap)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
             try {
-                   val dataImage = data?.data
-                   val bitmap =   getBitmap(dataImage)
-                   processImage(bitmap)
-
+                val dataImage = data?.data
+                if(dataImage!=null) {
+                    val bitmap = BitmapUtils.getBitmap(requireContext() ,dataImage)
+                    iCamera?.scanDocument(bitmap)
+                } else{
+                    toast("Image not selected try again") }
 
             } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
+                e.printStackTrace() }
         } else {
-
-
-            Toast.makeText(requireContext(), "You haven't picked Image", Toast.LENGTH_LONG).show()
-        }
+            toast("You haven't picked Image") }
     }
+
+
 
 @ExperimentalGetImage
 private fun startCamera() {
-    val scaleGestureDetector = ScaleGestureDetector(context, listener)
 
+    mScanFragmentDataBinding?.include2?.let {previewBinding->
+        iCamera =  mViewModel.provideScanCamera(requireContext(), this@ScanFragment, previewBinding.previewFinder,previewBinding. cameraProgress)
+        if(iCamera==null){toast("Restart App "); return}
+        val scaleGestureDetector = ScaleGestureDetector(context, iCamera)
 
-    mScanFragmentDataBinding?.run {
-        iCamera =  mViewModel.provideScanCamera(requireContext() , this@ScanFragment,this.include2.previewFinder ,include2.cameraProgress)
-        this.include2.previewFinder.apply {
+        previewBinding.previewFinder.apply {
             setOnTouchListener { _, event ->
-
                 scaleGestureDetector.onTouchEvent(event)
 
-            when (event.action) {
+                when (event.action) {
                 MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
                 MotionEvent.ACTION_UP -> {
                     val factory = this.meteringPointFactory
-
                     val point = factory.createPoint(event.x, event.y)
                     iCamera?.startFocusAndMetering(point)
-                    animateFocusRing(event.x , event.y)
+                    previewBinding.focusRing.animateFocusRing(event.x ,event.y)
 
-                    return@setOnTouchListener true
-                }
+                    return@setOnTouchListener true }
                 else -> return@setOnTouchListener false
             }
 
+            }
 
+      }
 
-            } }
-
-        iCamera?.getCamera()?.cameraInfo?.torchState?.observe( viewLifecycleOwner , torchState)
-
+        torchStates()
         iCamera?.setFragmentManagerr(childFragmentManager)
+    }?:throw NullPointerException("Fragment DataBinding must not be null ")
 
-
-
-
-
-
-    }
 
 }
 
 
+  private  fun torchStates(){
+      iCamera?.getTorchState()?.observe(viewLifecycleOwner, torchState) }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == CameraPermissions.CAMERA_PERMISSION) {
             val cameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED
             if (cameraPermission) startCamera() else requireActivity().finish()
         }else if(requestCode ==  CameraPermissions.CAMERA_GALLERY_PERMISSION){
             openIntent() }
-
-    }
-
-
-    private fun animateFocusRing(x1 :Float , y1 : Float){
-        mScanFragmentDataBinding?.include2?.focusRing?.apply {
-          val width = width
-          val height = height
-          x = (x1 - width / 2)
-          y = (y1 - height / 2)
-            println("X   $x")
-            println("Y   $y")
-          visibility = View.VISIBLE
-          alpha = 1F
-          animate().setStartDelay(500).setDuration(300).alpha(0F)
-              .setListener(object : Animator.AnimatorListener {
-                  override fun onAnimationStart(animation: Animator?) {
-
-                  }
-
-                  override fun onAnimationEnd(animation: Animator?) {
-                      visibility = View.INVISIBLE
-                  }
-
-                  override fun onAnimationCancel(animation: Animator?) {
-
-                  }
-
-                  override fun onAnimationRepeat(animation: Animator?) {
-
-                  }
-
-              })
-
-      }
     }
 
     override fun enableTorch() {
-        iCamera?.enableTorch()
-
-    }
+        iCamera?.enableTorch() }
 
 
 }

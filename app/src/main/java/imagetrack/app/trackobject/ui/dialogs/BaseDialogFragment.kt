@@ -44,14 +44,10 @@ abstract class BaseDialogFragment<VM : ViewModel,VDB : ViewDataBinding> : Dialog
         mViewDataBinding=  DataBindingUtil.inflate(inflater,getLayoutId(),container, false)
         mViewDataBinding?.run {
             println("OnViewCreated")
-
             setVariable(getBindingVariable(), mViewModel)
             lifecycleOwner = this@BaseDialogFragment
-            executePendingBindings()
-
-        }
-        return mViewDataBinding?.root
-    }
+            executePendingBindings() }
+        return mViewDataBinding?.root }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +62,7 @@ abstract class BaseDialogFragment<VM : ViewModel,VDB : ViewDataBinding> : Dialog
         val root = RelativeLayout(activity)
         root.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+            ViewGroup.LayoutParams.WRAP_CONTENT)
 
         val dialog = Dialog(requireContext())
 
@@ -79,17 +74,12 @@ abstract class BaseDialogFragment<VM : ViewModel,VDB : ViewDataBinding> : Dialog
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window?.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-
+                ViewGroup.LayoutParams.MATCH_PARENT)
         }
 
-
+        dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
-        return dialog
-
-
-    }
+        return dialog }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

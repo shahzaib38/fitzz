@@ -7,4 +7,10 @@ interface ScanDialogNavigator {
     fun  copy()
     fun  edit()
     fun  share()
+
+    fun pdf()
+    fun  translate()
+    fun startProgress();
+    fun stopProgress()
+    fun exit()
 }

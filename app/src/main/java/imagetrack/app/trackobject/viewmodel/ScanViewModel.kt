@@ -16,6 +16,10 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
 
 
+    fun showHistory(){
+
+        getNavigator().showHistory()
+    }
 
     fun enableTorch(){
         getNavigator().enableTorch() }
