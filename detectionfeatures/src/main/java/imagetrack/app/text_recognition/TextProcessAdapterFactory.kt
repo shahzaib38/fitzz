@@ -11,5 +11,5 @@ object TextProcessAdapterFactory : VisionImageProcessor.Factory {
         return DeviceTextRecognizer(context) }
 
     override fun createOnCloudTextRecognizer(context: Context): VisionImageProcessor {
-        return CloudTextRecognition(context) }
+        return DeviceTextRecognizer(context) }
 }

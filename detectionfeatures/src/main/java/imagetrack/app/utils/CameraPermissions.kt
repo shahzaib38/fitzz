@@ -31,4 +31,11 @@ object CameraPermissions {
 
 
 
+     fun isCameraPermissionGranted(context: Context):Boolean{
+        return hasPermissions(context, CameraPermissions.CAMERA_PERMISSION_ARRAY) }
+
+     fun isGalleryPermissionGranted(context: Context ):Boolean{
+        return hasPermissions(context, CameraPermissions.GALLERY_ARRAY) }
+
+
 }

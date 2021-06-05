@@ -1,18 +1,29 @@
 package imagetrack.app.utils
 
+import android.content.Context
 import android.graphics.*
 import android.media.Image
 import android.media.Image.Plane
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.nio.ByteBuffer
 
 
 object BitmapUtils {
+
+
+
+       fun getBitmap(context : Context ,imageUri: Uri) : Bitmap {
+        val imageStream: InputStream? = context.contentResolver.openInputStream(imageUri!!)
+        return  BitmapFactory.decodeStream(imageStream) }
+
+
 
 
         private const val TAG = "BitmapUtils"

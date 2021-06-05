@@ -24,11 +24,6 @@ object TranslateRetrofit {
             .readTimeout(7, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS).build()
        return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build()
-//
-//        return Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build() //Doesn't require the adapter
     }
 
     @Singleton
