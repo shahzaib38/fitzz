@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Sb Scanner</string>
     <string name="live">Live</string>
     <string name="scan">Scan</string>
@@ -10,15 +11,23 @@
     <string name="pdf">.Pdf</string>
     <string name="text_value">textvalue</string>
     <string name="default_notification_channel_id">snaptalknotification</string>
+    <string name="ad_attribution">Ad</string>
 
 
 
 
 
     <!-- Test Ads -->
-       <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
-        <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
-        <string name="banner_2">ca-app-pub-3940256099942544/6300978111</string>
+         <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
+         <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
+         <string name="scan_editor_unitId">ca-app-pub-3940256099942544/1044960115</string>
+         <string name="language_list_unitId" >ca-app-pub-3940256099942544/2247696110</string>
+         <string name="full_screen_exit">ca-app-pub-3940256099942544/1033173712</string>
+
+
+
+
+
 
     <string name="notice">Notice</string>
     <string name="pinch_to_zoom">" * Pinch to Zoom "</string>
@@ -35,6 +44,9 @@
     <string name="save">Save</string>
     <string name="delete_all">Delete All</string>
     <string name="history">History</string>
-
+    <string name="edit_text">textvalue</string>
+    <string name="exit_description">Would you like to exit</string>
+    <string name="text_editor">Text Editor</string>
+    <string name="edit_value">editvalue</string>
 
 </resources>

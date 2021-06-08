@@ -1,4 +1,4 @@
-package imagetrack.app.trackobject
+package imagetrack.app.trackobject.recyclerview
 
 import android.graphics.Rect
 import androidx.recyclerview.widget.RecyclerView

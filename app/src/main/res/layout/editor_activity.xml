@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data
+        class ="EditorDataBinding">
+
+
+        <variable
+            name="viewModel"
+            type="imagetrack.app.trackobject.viewmodel.EditorViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/black"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_editor"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_editor_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/editorId"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout3"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="16dp"
+            android:onClick="@{()->viewModel.backPress()}"
+            android:src="@drawable/back_press"
+            app:layout_constraintBottom_toTopOf="@+id/editorId"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/textlayoutdesign"
+            app:layout_constraintBottom_toTopOf="@+id/editorId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/copy"
+                style="@style/CopyImage"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{()->viewModel.copy()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/sharedata"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/translate"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/sharedata"
+                style="@style/shareimage"
+                android:onClick="@{()->viewModel.share()}"
+                app:layout_constraintBottom_toBottomOf="@+id/copy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/copy"
+                app:layout_constraintTop_toTopOf="@+id/copy" />
+
+            <ImageView
+                android:id="@+id/translate"
+                style="@style/translate_style"
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                android:onClick="@{()->viewModel.translate()}"
+                app:layout_constraintBottom_toBottomOf="@+id/copy"
+                app:layout_constraintEnd_toStartOf="@+id/copy"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/copy" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <EditText
+            android:id="@+id/editorId"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="start"
+            android:textSize="16sp"
+            android:background="@drawable/textlayoutdesign"
+            android:padding="16dp"
+            android:text="@string/test_string"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@drawable/cursor_color"
+            app:layout_constraintBottom_toTopOf="@+id/template"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+            app:layout_constraintVertical_weight="1" />
+
+
+        <imagetrack.app.trackobject.ui.TemplateView
+            android:id="@+id/template"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:gnt_template_type="@layout/nativ_leftside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editorId" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

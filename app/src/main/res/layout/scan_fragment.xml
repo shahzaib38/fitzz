@@ -18,33 +18,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
         <include
             android:id="@+id/include2"
             layout="@layout/preview_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="visible"
+            app:layout_constraintVertical_weight="1"
             app:layout_constraintBottom_toTopOf="@+id/action_button_id"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="80"
             bind:previewLayout="@{viewModel}" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/action_button_id"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
-            android:background="@color/layout_color"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,3:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include2"
-            app:layout_constraintVertical_weight="15" >
+            app:layout_constraintTop_toBottomOf="@+id/include2">
 
 
             <Button
@@ -53,8 +50,8 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                android:onClick="@{()->viewModel.capture()}"
                 android:background="@drawable/camera_button"
+                android:onClick="@{()->viewModel.capture()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

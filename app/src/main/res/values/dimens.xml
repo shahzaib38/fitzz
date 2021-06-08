@@ -3,5 +3,6 @@
     <dimen name="features_top_dimensions">10dp</dimen>
     <dimen name="scan_image_width">28dp</dimen>
     <dimen name="scan_image_height">28dp</dimen>
+    <dimen name="text_editor_size">30sp</dimen>
 
 </resources>

@@ -12,14 +12,9 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.database.network.firebase.ServerFunctions
 import javax.inject.Inject
 
 class ScanFirebaseMessagingService  : FirebaseMessagingService() {
-
-
-    @Inject
-    lateinit var serverFunction : ServerFunctions
 
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

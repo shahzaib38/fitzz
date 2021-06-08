@@ -7,6 +7,10 @@
     <color name="layout_color" >#FFF</color>
     <color name="Red">#E4547DBF</color>
     <color name="ok_button_pressed">#FF8A65</color>
-    <color name="scan_image_color" >@color/greyish</color>
+    <color name="scan_image_color" >@color/white</color>
+    <color name="white">#FFFF</color>
+    <color name="gray_50">#80836F6F</color>
+    <color name="black">#000000</color>
+    <color name="icon_pressed">#FF8A65</color>
 
 </resources>

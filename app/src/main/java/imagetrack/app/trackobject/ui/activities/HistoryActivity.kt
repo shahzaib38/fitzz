@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.VerticalItemDecorator
+import imagetrack.app.trackobject.recyclerview.VerticalItemDecorator
 import imagetrack.app.trackobject.adapter.HistoryAdapter
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.HistoryDataBinding

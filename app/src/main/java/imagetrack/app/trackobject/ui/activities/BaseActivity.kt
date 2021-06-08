@@ -106,4 +106,17 @@ abstract class BaseActivity<out VM : ViewModel,out VDB : ViewDataBinding> : AppC
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
     }
+
+
+
+    fun shareData(value :String ="no value was shared"){
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, value)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+       startActivity(shareIntent)
+    }
 }

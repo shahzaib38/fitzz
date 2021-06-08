@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="imagetrack.app.trackobject.viewmodel.InAppViewModel" />
+            type="imagetrack.app.trackobject.viewmodel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -137,7 +137,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:background="@drawable/okbutton"
-            android:onClick="@{()->viewModel.buyBasic()}"
             android:text="@string/one_month_subscription"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -153,7 +152,6 @@
             android:background="@drawable/three_month_style"
             android:text="@string/three_month_subscription"
             android:textAllCaps="false"
-            android:onClick="@{()->viewModel.buyPremium()}"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/button2"
             app:layout_constraintStart_toStartOf="@+id/button2"

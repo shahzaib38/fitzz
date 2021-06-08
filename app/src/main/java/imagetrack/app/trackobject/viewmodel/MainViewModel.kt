@@ -12,19 +12,10 @@ import androidx.lifecycle.liveData
 import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.navigator.MainNavigator
 import imagetrack.app.trackobject.repo.MainRepository
-import imagetrack.app.translate.Resource
 import kotlinx.coroutines.Dispatchers
 
 class MainViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) : BaseViewModel<MainNavigator>(mainRepository) {
 
-//
-//@ExperimentalUseCaseGroup
-//@ExperimentalUseCaseGroupLifecycle
-//@ExperimentalGetImage
-//fun provideCamera(context : Context, graphics : GraphicOverlay, lifecycleOwner  : LifecycleOwner, previewView: PreviewView) :ICamera?{
-//    return   mainRepository.provideCamera(context , graphics , lifecycleOwner , previewView)
-//
-//}
 
    fun  saveNext(){
 

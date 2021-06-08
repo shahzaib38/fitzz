@@ -12,15 +12,19 @@ import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.LanguageAdapter
+import imagetrack.app.trackobject.ads.InterstitialAds
+import imagetrack.app.trackobject.ads.NativAdAdvance
+import imagetrack.app.trackobject.ads.OnAdVisibilityListener
 import imagetrack.app.trackobject.databinding.LanguageListDataBinding
 import imagetrack.app.trackobject.navigator.LanguageListNavigator
+import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
 import imagetrack.app.translate.TranslateUtils
 import imagetrack.app.utils.LanguageArray
 
 
 @AndroidEntryPoint
-class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator {
+class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator ,OnAdVisibilityListener {
 
     private  var bind : LanguageListDataBinding?=null
     private val mViewModel by viewModels<LanguageListViewModel>()
@@ -29,12 +33,14 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
   private  var languageAdapter : LanguageAdapter?=null
   private  var resultText :Any?=null
 
+
+
     companion object{
 
         private const val TAG :String= "LanguageListDialogFragment"
         private const val KEY_VALUE ="textvalue"
 
-        fun getInstance(text :String ): LanguageListDialogFragment {
+        fun getInstance(text: String): LanguageListDialogFragment {
             val fragmentDialog = LanguageListDialogFragment()
             val bundle = Bundle()
             bundle.putString(KEY_VALUE, text)
@@ -50,9 +56,20 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
         bind= getViewDataBinding()
         mViewModel.setNavigator(this)
         resultText = arguments?.run { get(ScanDialogFragment.KEY_VALUE) }
-        languageAdapter= LanguageAdapter(mViewModel ,this)
+        languageAdapter= LanguageAdapter(mViewModel, this)
         setUpRecyclerView()
+
+        InterstitialAds.load(requireContext(),resources.getString(R.string.full_screen_exit))
+
+        bind?.let {
+            NativAdAdvance.loadAd(requireActivity(), it  ,this ,resources.getString(R.string.language_list_unitId)) }
+
+
     }
+
+
+
+
 
 
 private    fun setUpRecyclerView(){
@@ -90,19 +107,16 @@ private    fun setUpRecyclerView(){
         return  R.layout.language_list_dialog    }
 
    private fun dismissDialog() {
-        super.dismissDialog(TAG)
+        super.dismissDialog(TAG) }
 
-    }
      private fun startProgress() {
-         bind?.progressId?.visibility=View.VISIBLE
-    }
+         bind?.progressId?.visibility=View.VISIBLE }
 
     private   fun stopProgress() {
-         bind?.progressId?.visibility=View.GONE
-    }
+         bind?.progressId?.visibility=View.GONE }
 
-   private fun toast(value :String ){
-        Toast.makeText(requireContext() ,value , Toast.LENGTH_LONG).show() }
+   private fun toast(value: String){
+        Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show() }
 
     override fun clickItem(item: String) {
         val postParameters: MutableMap<String, String> = HashMap()
@@ -112,19 +126,28 @@ private    fun setUpRecyclerView(){
 
         startProgress()
         mViewModel.getUsers(postParameters).observe(this, Observer {
-       stopProgress()
-            if(it!=null){
+            stopProgress()
+            if (it != null) {
                 ScanDialogFragment.getInstance(it).showDialog(parentFragmentManager)
-            dismissDialog()
+                dismissDialog()
+
+
             }
 
         })
     }
 
     override fun close() {
-        dismissDialog()
+        InterstitialAds.show(requireActivity())
+        this.dismiss()
 
     }
+
+    override fun showAd() {
+        bind?.linearLayout?.visibility =View.VISIBLE }
+
+    override fun hideAd(){
+        bind?.linearLayout?.visibility =View.GONE }
 
 
 }

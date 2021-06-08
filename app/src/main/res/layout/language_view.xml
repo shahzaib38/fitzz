@@ -20,7 +20,7 @@
             android:text="@{language.name ,default =Language}"
             android:textSize="15sp"
             android:background="@drawable/ripple_effect_with_border"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
