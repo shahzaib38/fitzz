@@ -13,6 +13,7 @@ import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.MainDataBinding
 import imagetrack.app.trackobject.ext.setupWithNavController
+import imagetrack.app.trackobject.ui.dialogs.ExitDialogFragment
 import imagetrack.app.trackobject.viewmodel.MainViewModel
 
 @ExperimentalUseCaseGroup
@@ -69,5 +70,8 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
     }
 
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 
 }

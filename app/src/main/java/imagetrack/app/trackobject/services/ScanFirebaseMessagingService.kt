@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import imagetrack.app.trackobject.R
-import javax.inject.Inject
 
 class ScanFirebaseMessagingService  : FirebaseMessagingService() {
 
@@ -67,6 +66,12 @@ class ScanFirebaseMessagingService  : FirebaseMessagingService() {
 
 
     override fun onNewToken(token : String) {
+
+        if(token!=null){
+            println("token$token")
+
+        }
+
 
     }
 

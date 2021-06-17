@@ -5,7 +5,6 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.navigator.HistoryNavigator
-import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.repo.HistoryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

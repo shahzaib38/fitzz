@@ -14,13 +14,22 @@
     <string name="ad_attribution">Ad</string>
 
 
+    <!--    <string name="app_id">ca-app-pub-8453124532033807~1199249375</string>-->
+    <!--    <string name="banner_1">ca-app-pub-8453124532033807/7256503213</string>-->
+    <!--    <string name="full_screen_exit">ca-app-pub-8453124532033807/3027621777</string>-->
+    <!--    <string name="scan_editor_unitId">ca-app-pub-8453124532033807/6099026720</string>-->
+    <!--    <string name="language_list_unitId" >ca-app-pub-8453124532033807/5413249566</string>-->
+
+
 
 
 
     <!-- Test Ads -->
          <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
          <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
-         <string name="scan_editor_unitId">ca-app-pub-3940256099942544/1044960115</string>
+         <string name="banner_2">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="scan_editor_unitId">ca-app-pub-3940256099942544/1044960115</string>
          <string name="language_list_unitId" >ca-app-pub-3940256099942544/2247696110</string>
          <string name="full_screen_exit">ca-app-pub-3940256099942544/1033173712</string>
 
@@ -45,7 +54,7 @@
     <string name="delete_all">Delete All</string>
     <string name="history">History</string>
     <string name="edit_text">textvalue</string>
-    <string name="exit_description">Would you like to exit</string>
+    <string name="exit_description">Press Exit button to Close</string>
     <string name="text_editor">Text Editor</string>
     <string name="edit_value">editvalue</string>
 

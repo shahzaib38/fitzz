@@ -9,9 +9,6 @@ import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.LanguageViewDataBinding
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
-import imagetrack.app.trackobject.viewmodel.MainViewModel
-import imagetrack.app.translate.TranslateUtils
-
 
 
 class LanguageAdapter(private val mViewModel : LanguageListViewModel, private val onClickListener : OnItemClickListener<String>)   : BaseAdapter<LanguageSupportModel , LanguageViewDataBinding>(diffCallback) {

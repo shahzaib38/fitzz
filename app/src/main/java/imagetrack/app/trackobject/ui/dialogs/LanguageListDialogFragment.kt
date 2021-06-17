@@ -12,19 +12,15 @@ import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.LanguageAdapter
-import imagetrack.app.trackobject.ads.InterstitialAds
-import imagetrack.app.trackobject.ads.NativAdAdvance
-import imagetrack.app.trackobject.ads.OnAdVisibilityListener
 import imagetrack.app.trackobject.databinding.LanguageListDataBinding
 import imagetrack.app.trackobject.navigator.LanguageListNavigator
-import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
 import imagetrack.app.translate.TranslateUtils
 import imagetrack.app.utils.LanguageArray
 
 
 @AndroidEntryPoint
-class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator ,OnAdVisibilityListener {
+class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator  {
 
     private  var bind : LanguageListDataBinding?=null
     private val mViewModel by viewModels<LanguageListViewModel>()
@@ -59,10 +55,6 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
         languageAdapter= LanguageAdapter(mViewModel, this)
         setUpRecyclerView()
 
-        InterstitialAds.load(requireContext(),resources.getString(R.string.full_screen_exit))
-
-        bind?.let {
-            NativAdAdvance.loadAd(requireActivity(), it  ,this ,resources.getString(R.string.language_list_unitId)) }
 
 
     }
@@ -138,16 +130,11 @@ private    fun setUpRecyclerView(){
     }
 
     override fun close() {
-        InterstitialAds.show(requireActivity())
+
         this.dismiss()
 
     }
 
-    override fun showAd() {
-        bind?.linearLayout?.visibility =View.VISIBLE }
-
-    override fun hideAd(){
-        bind?.linearLayout?.visibility =View.GONE }
 
 
 }

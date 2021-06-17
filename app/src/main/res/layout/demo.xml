@@ -12,18 +12,30 @@
         </data>
 
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <imagetrack.app.trackobject.ui.TemplateView
-        android:id="@+id/template"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:gnt_template_type="@layout/gnt_medium_template_view" />
+
+
+        <Button
+            android:id="@+id/clickID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Click"
+            />
+
+
+
+        <Button
+            android:id="@+id/signInId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            />
+
 
     </LinearLayout>
 

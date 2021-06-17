@@ -6,11 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.work.impl.WorkDatabaseMigrations
 
 
 @Database(entities = [HistoryBean::class], version = 1)
 abstract class HistoryDatabase : RoomDatabase() {
+
     abstract fun userDao(): HistoryDao
 
 
@@ -23,8 +23,7 @@ abstract class HistoryDatabase : RoomDatabase() {
                 synchronized(HistoryDatabase::class.java) {
                     if (INSTANCE == null) {
                         INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            HistoryDatabase::class.java, HISTORY_DATABASE).addMigrations(
-                            WorkDatabaseMigrations.MIGRATION_1_2, MIGRATION_2_3).build()
+                            HistoryDatabase::class.java, HISTORY_DATABASE).build()
                     }
                 }
 

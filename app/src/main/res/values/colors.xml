@@ -12,5 +12,6 @@
     <color name="gray_50">#80836F6F</color>
     <color name="black">#000000</color>
     <color name="icon_pressed">#FF8A65</color>
+    <color name="gnt_blue">#329CCC</color>
 
 </resources>

@@ -1,8 +1,6 @@
 package imagetrack.app.trackobject.ui.fragment
 
-import android.animation.Animator
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,7 +16,6 @@ import androidx.camera.core.TorchState
 import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.R
@@ -32,7 +29,6 @@ import imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog
 import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.utils.BitmapUtils
 import imagetrack.app.utils.CameraPermissions
-import imagetrack.app.utils.CameraPermissions.hasPermissions
 import imagetrack.app.utils.CameraPermissions.isCameraPermissionGranted
 import imagetrack.app.utils.CameraPermissions.isGalleryPermissionGranted
 import imagetrack.app.utils.InternetConnection.isInternetAvailable
@@ -70,17 +66,13 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
         mScanFragmentDataBinding =getViewDataBinding()
         if (isCameraPermissionGranted(requireContext())) startCamera() else requestCameraPermission()
         mViewModel.setNavigator(this)
-        loadAds()
     }
 
    private  fun  toast(value: String){
         Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show()
     }
 
-   private  fun loadAds() {
-       mScanFragmentDataBinding?.include2?.adView?.run {
-           val adRequest = AdRequest.Builder().build()
-           this.loadAd(adRequest) } }
+
 
 
 

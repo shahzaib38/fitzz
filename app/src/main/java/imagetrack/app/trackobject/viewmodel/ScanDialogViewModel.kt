@@ -2,10 +2,8 @@ package imagetrack.app.trackobject.viewmodel
 
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import imagetrack.app.trackobject.database.local.history.HistoryBean
-import imagetrack.app.trackobject.navigator.MainNavigator
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.repo.MainRepository
 import kotlinx.coroutines.Dispatchers

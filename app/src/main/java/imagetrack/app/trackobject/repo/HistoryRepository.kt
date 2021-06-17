@@ -2,7 +2,6 @@ package imagetrack.app.trackobject.repo
 
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.database.local.history.HistoryDatabase
-import imagetrack.app.trackobject.database.local.history.IDataBaseHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 

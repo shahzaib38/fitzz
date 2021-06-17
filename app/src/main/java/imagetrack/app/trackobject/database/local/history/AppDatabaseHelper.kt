@@ -1,8 +1,5 @@
 package imagetrack.app.trackobject.database.local.history
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
 
 //@Singleton
 //class AppDatabaseHelper  @Inject constructor(private val historyDatabase: HistoryDatabase)  :  IDataBaseHelper {

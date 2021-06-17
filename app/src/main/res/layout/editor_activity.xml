@@ -101,15 +101,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="start"
-            android:textSize="16sp"
             android:background="@drawable/textlayoutdesign"
+            android:gravity="start"
             android:padding="16dp"
             android:text="@string/test_string"
             android:textColor="@color/black"
             android:textCursorDrawable="@drawable/cursor_color"
-            app:layout_constraintBottom_toTopOf="@+id/template"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -117,16 +116,6 @@
             app:layout_constraintVertical_weight="1" />
 
 
-        <imagetrack.app.trackobject.ui.TemplateView
-            android:id="@+id/template"
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:gnt_template_type="@layout/nativ_leftside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editorId" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

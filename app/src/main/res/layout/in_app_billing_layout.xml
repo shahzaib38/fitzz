@@ -5,9 +5,10 @@
 
     <data class ="InAppBillingDataBinding">
 
-        <variable
-            name="viewModel"
-            type="imagetrack.app.trackobject.viewmodel.MainViewModel" />
+<!--        <variable-->
+<!--            name="viewModel"-->
+<!--            type="imagetrack.app.trackobject.viewmodel.InAppViewModel" />-->
+<!-- -->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,13 +132,16 @@
             app:layout_constraintStart_toStartOf="@+id/textView11"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
+
+<!--        android:onClick="@{()->viewModel.buyBasic()}"-->
+
+
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/weekly_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:background="@drawable/okbutton"
-            android:text="@string/one_month_subscription"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/textView13"
@@ -145,16 +149,22 @@
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
 
+
+
+<!--        skuDetail="@{viewModel.skus}"-->
+<!--        android:onClick="@{()->viewModel.buyPremium()}"-->
+<!--        -->
         <Button
+            android:id="@+id/monthly_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/three_month_style"
-            android:text="@string/three_month_subscription"
             android:textAllCaps="false"
+
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintEnd_toEndOf="@+id/weekly_button"
+            app:layout_constraintStart_toStartOf="@+id/weekly_button"
+            app:layout_constraintTop_toBottomOf="@+id/weekly_button" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

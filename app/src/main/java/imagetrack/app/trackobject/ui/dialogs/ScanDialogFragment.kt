@@ -11,10 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ClipBoardManager
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.ads.InterstitialAds
-import imagetrack.app.trackobject.ads.NativAdAdvance
-import imagetrack.app.trackobject.ads.OnAdVisibilityListener
-import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.ScanDialogDataBinding
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.ui.activities.EditorActivity
@@ -23,7 +19,7 @@ import java.util.*
 
 
 @AndroidEntryPoint
- class ScanDialogFragment : BaseDialogFragment<ScanDialogViewModel, ScanDialogDataBinding>()  , ScanDialogNavigator , DialogInterface.OnDismissListener  ,OnAdVisibilityListener{
+ class ScanDialogFragment : BaseDialogFragment<ScanDialogViewModel, ScanDialogDataBinding>()  , ScanDialogNavigator , DialogInterface.OnDismissListener  {
 
 
     override fun onDismiss(dialog: DialogInterface) {}
@@ -44,7 +40,7 @@ import java.util.*
         mBinding = getViewDataBinding()
 
         mViewModel.setNavigator(this)
-        dialog?.setCanceledOnTouchOutside(false);
+        dialog?.setCanceledOnTouchOutside(false)
 
         val arguments = arguments?.run {
             get(KEY_VALUE) }
@@ -55,22 +51,15 @@ import java.util.*
 
             if(derivedText.isNotEmpty()){
 
-                translatedtext.text = derivedText
+                translatedtext.setText(derivedText)
 
             }else {
 
-                translatedtext.text = NO_TEXT_FOUND
+                translatedtext.setText(NO_TEXT_FOUND)
             }
 
         }?:throw NullPointerException("Scan Dialog Fragment   Data Binding is null")
 
-        InterstitialAds.load(requireContext(),resources.getString(R.string.full_screen_exit))
-      //  mBinding?.adView?.load()
-        isCancelable =false
-
-
-        mBinding?.let {
-            NativAdAdvance.loadAd(requireActivity(), it ,this ,resources.getString(R.string.scan_editor_unitId)) }
     }
 
 
@@ -135,7 +124,6 @@ import java.util.*
     override fun stopProgress() {}
 
     override fun exit() {
-        InterstitialAds.show(requireActivity())
             this.dismiss()
 
     }
@@ -143,37 +131,30 @@ import java.util.*
 //    saveToDataBase()
 
 
-
-    private fun  saveToDataBase(){
-
-        try{
-       mViewModel.insertHistory(HistoryBean(value =getText(),date = getDateTime().time.toString()))
-        } catch (e: Exception){
-
-            val mess =e.message
-            if(mess!=null) {
-                toast(mess)
-            }
-
-            val isShowing =dialog?.isShowing
-            if(isShowing!=null && isShowing ) {
-             toast("Showing ")
-                this.dismiss()
-            }else{
-                toast("Not Showing")
-            }
-
-        }
-    }
-
-    private fun getDateTime(): Date {
-        return  Calendar.getInstance().time }
+//
+//    private fun  saveToDataBase(){
+//
+//        try{
+//       mViewModel.insertHistory(HistoryBean(value =getText(),date = getDateTime().time.toString()))
+//        } catch (e: Exception){
+//
+//            val mess =e.message
+//            if(mess!=null) {
+//                toast(mess)
+//            }
+//
+//            val isShowing =dialog?.isShowing
+//            if(isShowing!=null && isShowing ) {
+//             toast("Showing ")
+//                this.dismiss()
+//            }else{
+//                toast("Not Showing")
+//            }
+//
+//        }
+//    }
 
 
-    override fun showAd() {
-        mBinding?.linearLayout2?.visibility =View.VISIBLE }
 
-    override fun hideAd(){
-        mBinding?.linearLayout2?.visibility =View.GONE }
 
 }
