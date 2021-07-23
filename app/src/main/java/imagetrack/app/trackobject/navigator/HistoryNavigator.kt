@@ -4,5 +4,5 @@ interface HistoryNavigator {
 
 
   fun   notifyDataBase()
-
+  fun deleteAll()
 }

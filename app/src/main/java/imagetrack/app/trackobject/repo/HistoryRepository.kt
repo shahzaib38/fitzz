@@ -16,5 +16,12 @@ class HistoryRepository  @Inject constructor(private val historyDatabase: Histor
        return true}
 
 
+    suspend fun deleteAll():Boolean{
+        historyDatabase.userDao().deleteAll()
+
+
+        return true
+    }
+
 
 }

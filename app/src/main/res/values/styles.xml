@@ -9,7 +9,8 @@
         <item name="windowNoTitle">true</item>
         <item name="android:navigationBarColor">@color/Red</item>
         <item name="android:navigationBarDividerColor">@color/Red</item>
-
+        <item name="android:windowEnterAnimation">@anim/left_to_right_slide_animation</item>
+<item name="android:windowExitAnimation">@anim/right_to_left_slide_animations</item>
     </style>
 
 <!--    <style name="navigationStyle">-->
@@ -32,10 +33,14 @@
         </style>
 
 
+    <style name="PauseDialogAnimation"   >
+        <item name="android:windowEnterAnimation">@anim/fadein_anim</item>
+    </style>
 
 
+    <style name="PauseDialog" >
+        <item name="android:windowAnimationStyle">@style/PauseDialogAnimation</item>
+    </style>
 
 
-
-
-</resources>
+    </resources>

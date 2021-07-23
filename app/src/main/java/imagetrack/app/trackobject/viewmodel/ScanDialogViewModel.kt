@@ -12,6 +12,16 @@ import kotlinx.coroutines.launch
 class ScanDialogViewModel @ViewModelInject constructor(private val mainRepository: MainRepository)  : BaseViewModel<ScanDialogNavigator>(mainRepository) {
 
 
+
+
+    val subscriptionLiveData = mainRepository.subscriptionLiveData
+
+
+
+
+
+
+
     fun  saveNext(){
 
         getNavigator().exit()
@@ -38,7 +48,6 @@ class ScanDialogViewModel @ViewModelInject constructor(private val mainRepositor
     }
 
     fun insertHistory(historyBean : HistoryBean){
-        throw NullPointerException("Just for Testing")
 
         viewModelScope.launch(Dispatchers.IO) {
             val isInserted  =    mainRepository.insertHistory(historyBean)

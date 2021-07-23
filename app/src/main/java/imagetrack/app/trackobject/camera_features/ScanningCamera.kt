@@ -34,32 +34,19 @@ class ScanningCamera private constructor(
     var fragmentManager :  FragmentManager? = null
 
     override  fun setFragmentManagerr(fragmentManager  : FragmentManager){
-        this.fragmentManager = fragmentManager
-    }
-
-
+        this.fragmentManager = fragmentManager }
 
 
     override fun captureImage(){
         imageCapture?.takePicture(
-            Executors.newSingleThreadExecutor(), ImageCaptureImpl.capture(
+            Executors.newSingleThreadExecutor(), ImageCaptureImpl.getInstance(
                 context,
-                this ,this))
-
-    }
-
-
-
-
-
+                this ,this)) }
 
     private var imageCapture : ImageCapture?=null
+
     override fun stop() {
-
-        progress.visibility= View.GONE
-
-
-    }
+        progress.visibility= View.GONE }
 
     @ExperimentalGetImage
     @ExperimentalUseCaseGroup
@@ -71,11 +58,8 @@ class ScanningCamera private constructor(
 
     override  fun startProgress(){
         Handler(Looper.getMainLooper()).post(Runnable {
-
             println("thread Name ${Thread.currentThread().name}")
-
             progress.visibility = View.VISIBLE
-
         })
 }
 
@@ -83,8 +67,9 @@ class ScanningCamera private constructor(
 
 
    override fun scanDocument(bitmap : Bitmap){
-        TextProcessAdapterFactory.createOnDeviceTextRecognizer(context).processImageProxy(bitmap, this,this)
-    }
+      val executors = Executors.newSingleThreadExecutor()
+       executors.submit(
+           Runnable{ TextProcessAdapterFactory.createOnCloudTextRecognizer(context).processImageProxy(bitmap, this,this) } ) }
 
 
    override fun stopProgress(){

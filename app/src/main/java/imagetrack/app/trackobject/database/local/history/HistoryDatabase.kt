@@ -8,7 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 
-@Database(entities = [HistoryBean::class], version = 1)
+@Database(entities = [HistoryBean::class], version = 1 ,exportSchema = false)
 abstract class HistoryDatabase : RoomDatabase() {
 
     abstract fun userDao(): HistoryDao

@@ -2,17 +2,26 @@ package imagetrack.app.trackobject.camera_features
 
 import android.content.Context
 import android.view.ScaleGestureDetector
+import androidx.annotation.MainThread
+import androidx.annotation.UiThread
 import androidx.camera.core.*
+import androidx.camera.core.CameraProvider
 import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
+import com.google.common.util.concurrent.ListenableFuture
 import imagetrack.app.view.GraphicOverlay
 import java.util.concurrent.Executors
 import imagetrack.app.trackobject.R
+import java.util.concurrent.CancellationException
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.RejectedExecutionException
+import kotlin.concurrent.thread
 
 
 @ExperimentalUseCaseGroupLifecycle
@@ -25,25 +34,28 @@ abstract class BaseCameraX( private val context: Context,
                              ICamera,IPreview ,ILifeCycleBinder {
 
 
-    private var cameraProvider: ProcessCameraProvider?=null
+    private var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>?=null
     private var camera: Camera? = null
+    private var cameraProvider : ProcessCameraProvider?=null
 
     override fun getCamera(): Camera? =camera
     override fun getCameraInfo() :CameraInfo?= camera?.cameraInfo
     override  fun getCameraControl() :CameraControl? = camera?.cameraControl
-    override fun getTorchState(): LiveData<Int> =camera?.cameraInfo?.torchState!!
-    override fun getZoomState(): LiveData<ZoomState> =camera?.cameraInfo?.zoomState!!
+    override fun getTorchState(): LiveData<Int>? =camera?.cameraInfo?.torchState
+    override fun getZoomState(): LiveData<ZoomState>? =camera?.cameraInfo?.zoomState
+
+
+
+
 
     companion object {
         private var mCameraSelector =CameraSelector.DEFAULT_BACK_CAMERA }
     init {
 
 
-
-            cameraProvider =  ProcessCameraProvider.getInstance(context).get()
-
-
+            cameraProvider = ProcessCameraProvider.getInstance(context).get()
     }
+
 
 
 
@@ -91,12 +103,28 @@ abstract class BaseCameraX( private val context: Context,
 
 
   override  fun provideSurface(preview : Preview){
-      preview.setSurfaceProvider(previewView.surfaceProvider) }
+      preview.setSurfaceProvider(previewView.surfaceProvider)
+
+  }
 
     override fun bindAllCameraXUseCases() {
-        if(cameraProvider!=null) {
-            cameraProvider!!.unbindAll()
-            providePreviewUseCase() } }
+
+            unbindAll()
+        providePreviewUseCase()
+
+        }
+
+
+    private fun unbindAll(){
+        val mCameraProvider = cameraProvider
+        if(mCameraProvider!=null) {
+            try {
+                mCameraProvider.unbindAll()
+            }catch (e :IllegalStateException){
+
+                println("UnBindAll Illegal State Exception ")
+
+            } } }
 
 
     //Method Modularization
@@ -104,11 +132,25 @@ abstract class BaseCameraX( private val context: Context,
             val previewUseCase= Preview.Builder()
             .setBackgroundExecutor(Executors.newSingleThreadExecutor())
             .setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
-        cameraProvider?.unbind(previewUseCase)
+
+        unbind(previewUseCase)
+
         provideSurface(previewUseCase)
         bindLifecycleView(previewUseCase)
 
     }
+
+    private fun unbind(useCase: UseCase){
+
+        try {
+            cameraProvider?.unbind(useCase)
+        }catch (e : IllegalStateException ){
+            println("Exception Occured in Thread Main ")
+        }
+
+    }
+
+
 
 
     override fun bindLifecycleView( useCase: UseCase){
@@ -138,17 +180,12 @@ abstract class BaseCameraX( private val context: Context,
     }
 
     override fun enableTorch() {
-
         when(camera?.cameraInfo?.torchState?.value) {
-         0 ->{   torchOn()
-         }
-         1->{ torchOff()
-        }
-            else->{
-                torchOff()
-            }
-        }
 
+         0->torchOn()
+         1-> torchOff()
+            else-> torchOff()
+        }
     }
 
 }

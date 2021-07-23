@@ -22,8 +22,8 @@ interface ICamera : LifecycleObserver ,ScaleGestureDetector.OnScaleGestureListen
     fun scanDocument(bitmap : Bitmap)
      fun getCameraInfo() : CameraInfo?
       fun getCameraControl() :CameraControl?
-     fun getTorchState(): LiveData<Int>
-     fun getZoomState(): LiveData<ZoomState>
+     fun getTorchState(): LiveData<Int>?
+     fun getZoomState(): LiveData<ZoomState>?
 
     fun setFragmentManagerr(fragmentManager : FragmentManager)
 

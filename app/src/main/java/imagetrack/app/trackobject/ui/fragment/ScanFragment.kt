@@ -13,12 +13,14 @@ import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ExperimentalUseCaseGroup
 import androidx.camera.core.TorchState
+import androidx.camera.core.ZoomState
 import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.R
+import imagetrack.app.trackobject.animations.animate
 import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.camera_features.ScanningCamera
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
@@ -63,14 +65,13 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mScanFragmentDataBinding =getViewDataBinding()
+        mScanFragmentDataBinding = getViewDataBinding()
         if (isCameraPermissionGranted(requireContext())) startCamera() else requestCameraPermission()
         mViewModel.setNavigator(this)
     }
 
    private  fun  toast(value: String){
-        Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show()
-    }
+        Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show() }
 
 
 
@@ -78,10 +79,24 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
 
 
    private  val torchState =  Observer<Int> {torchState ->
-       when(torchState){
-            TorchState.OFF -> { changeTorchState(R.drawable.ic_flash_off) }
-           TorchState.ON -> { changeTorchState(R.drawable.flashon) }
-            else ->{ changeTorchState(R.drawable.ic_flash_off) } } }
+
+       if(torchState!=null) {
+
+           when (torchState) {
+               TorchState.OFF -> {
+                   changeTorchState(R.drawable.ic_flash_off)
+               }
+               TorchState.ON -> {
+                   changeTorchState(R.drawable.flashon)
+               }
+               else -> {
+                   changeTorchState(R.drawable.ic_flash_off)
+               }
+           }
+
+       }
+
+   }
 
    private   fun  changeTorchState(state :Int =R.drawable.ic_flash_off){
        mScanFragmentDataBinding?.include2?.torch?.setImageResource(state) }
@@ -114,15 +129,9 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
     override fun capture() {
         iCamera.let {
             if(it is ScanningCamera){
-                if(isInternetAvailable(requireActivity())) {
-                    it.captureImage()
-                }else{
-                    showInternetConnectionDialog()
-                }
-
+                if(isInternetAvailable(requireActivity())) it.captureImage()
+                else showInternetConnectionDialog()
             } }
-
-
     }
 
     override fun showHistory() {
@@ -161,13 +170,28 @@ class ScanFragment :  BaseFragment<ScanViewModel, ScanFragmentDataBinding>() , S
     }
 
 
+    val zoomState =Observer<ZoomState>{zoomState->
+
+        if(zoomState!=null) {
+
+            val zoom = zoomState.zoomRatio
+            val zoomString = String.format("%.1f", zoom)
+            val createString = "$zoomString X"
+            mScanFragmentDataBinding?.include2?.zoomstate?.text = createString
+            mScanFragmentDataBinding?.include2?.zoomstate?.animate(R.anim.fade_in)
+        }
+    }
+
+
+
 
 @ExperimentalGetImage
 private fun startCamera() {
 
     mScanFragmentDataBinding?.include2?.let {previewBinding->
         iCamera =  mViewModel.provideScanCamera(requireContext(), this@ScanFragment, previewBinding.previewFinder,previewBinding. cameraProgress)
-        if(iCamera==null){toast("Restart App "); return}
+        iCamera?.getZoomState()?.observe(viewLifecycleOwner ,zoomState)
+
         val scaleGestureDetector = ScaleGestureDetector(context, iCamera)
 
         previewBinding.previewFinder.apply {

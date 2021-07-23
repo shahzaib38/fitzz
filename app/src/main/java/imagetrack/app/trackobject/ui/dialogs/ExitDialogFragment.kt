@@ -3,7 +3,6 @@ package imagetrack.app.trackobject.ui.dialogs
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
@@ -24,45 +23,27 @@ class ExitDialogFragment : BaseDialogFragment<ExitViewModel, ExitDataBinding>() 
 
 
     override fun getBindingVariable(): Int = BR.viewModel
-
     override fun getViewModel(): ExitViewModel = mViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         mBinding =getViewDataBinding()
-
         mViewModel.setNavigator(this)
         dialog?.setCanceledOnTouchOutside(false)
-
-
     }
 
 
     companion object{
 
-        @VisibleForTesting
-        const val KEY_VALUE ="textvalue"
-
         fun getInstance(): ExitDialogFragment {
-            val fragmentDialog = ExitDialogFragment()
-
-            return fragmentDialog
-        }
-
-
-    }
+            return ExitDialogFragment() } }
 
     override fun getLayoutId(): Int  = R.layout.exit_dialog
 
 
-
-
     override fun exit() {
-
-        requireActivity().finish()
-    }
+        requireActivity().finish() }
 
     override fun close() {
         this.dismiss()

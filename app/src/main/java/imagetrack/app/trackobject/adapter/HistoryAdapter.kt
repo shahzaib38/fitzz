@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.HistoryItemDataBinding
+import imagetrack.app.trackobject.ext.lessEqualTo
+import imagetrack.app.trackobject.ui.activities.HistoryListener
 
 val diffCallback = object : DiffUtil.ItemCallback<HistoryBean>() {
     override fun areItemsTheSame(oldItem: HistoryBean, newItem: HistoryBean): Boolean =
@@ -22,7 +23,7 @@ val diffCallback = object : DiffUtil.ItemCallback<HistoryBean>() {
 }
 
 
-class HistoryAdapter  constructor(private val onClickListener : OnItemClickListener<HistoryBean>)  : BaseAdapter<HistoryBean , HistoryItemDataBinding>(diffCallback) {
+class HistoryAdapter  constructor(private val historyListener : HistoryListener)  : BaseAdapter<HistoryBean , HistoryItemDataBinding>(diffCallback) {
 
 
 
@@ -36,16 +37,36 @@ class HistoryAdapter  constructor(private val onClickListener : OnItemClickListe
     override fun bind(binding: HistoryItemDataBinding, item: HistoryBean) {
         binding.apply {
             historyBean = item
-            historyId?.setOnClickListener {
-
-
-
+            shareId.setOnClickListener {
+                historyListener.share(this.historyId.text.toString())
             }
+
+            translateId.setOnClickListener {
+                historyListener.translate(this.historyId.text.toString())
+            }
+
+        }
+
+    }
+
+
+
+
+    override fun onDataChanged(values: Boolean) {
+      val dataSize = item?.size ?: return
+        if(values){
+            historyListener.show()
+
+        }else{
+            historyListener.hide()
+
         }
     }
 
-    override fun onDataChanged(values: Boolean) {
 
+    fun clearAll(){
+        item?.clear()
+        onDataChanged(false)
     }
 
 }

@@ -17,6 +17,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.ui.activities.BaseActivity
 
 val TAG = BaseDialogFragment::class.simpleName
@@ -53,7 +54,6 @@ abstract class BaseDialogFragment<VM : ViewModel,VDB : ViewDataBinding> : Dialog
         super.onCreate(savedInstanceState)
         mViewModel=getViewModel()
 
-        println("OnCreate")
 
     }
 
@@ -64,7 +64,7 @@ abstract class BaseDialogFragment<VM : ViewModel,VDB : ViewDataBinding> : Dialog
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        val dialog = Dialog(requireContext())
+        val dialog = Dialog(requireContext(),R.style.PauseDialog)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(root)

@@ -2,17 +2,16 @@ package imagetrack.app.trackobject.ui.dialogs
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.LanguageAdapter
 import imagetrack.app.trackobject.databinding.LanguageListDataBinding
+import imagetrack.app.trackobject.ext.fragmentRecycle
 import imagetrack.app.trackobject.navigator.LanguageListNavigator
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
 import imagetrack.app.translate.TranslateUtils
@@ -24,12 +23,7 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     private  var bind : LanguageListDataBinding?=null
     private val mViewModel by viewModels<LanguageListViewModel>()
-
-
-  private  var languageAdapter : LanguageAdapter?=null
-  private  var resultText :Any?=null
-
-
+    private  var resultText :Any?=null
 
     companion object{
 
@@ -52,38 +46,12 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
         bind= getViewDataBinding()
         mViewModel.setNavigator(this)
         resultText = arguments?.run { get(ScanDialogFragment.KEY_VALUE) }
-        languageAdapter= LanguageAdapter(mViewModel, this)
-        setUpRecyclerView()
+        val  languageAdapter= LanguageAdapter(mViewModel, this)
+        languageAdapter.setData(LanguageArray.arrayValues())
 
-
+        bind?.languagelistId?.fragmentRecycle(requireContext(),languageAdapter)
 
     }
-
-
-
-
-
-
-private    fun setUpRecyclerView(){
-
-       languageAdapter?.setData(LanguageArray.arrayValues())
-
-        bind?.languagelistId?.apply {
-
-            this.layoutManager =    LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-            )
-            adapter = languageAdapter
-
-
-        }
-    }
-
-
-
-
 
     override fun showDialog(fragment: FragmentManager) {
         super.show(fragment, TAG) }
@@ -107,8 +75,6 @@ private    fun setUpRecyclerView(){
     private   fun stopProgress() {
          bind?.progressId?.visibility=View.GONE }
 
-   private fun toast(value: String){
-        Toast.makeText(requireContext(), value, Toast.LENGTH_LONG).show() }
 
     override fun clickItem(item: String) {
         val postParameters: MutableMap<String, String> = HashMap()
@@ -117,23 +83,21 @@ private    fun setUpRecyclerView(){
         postParameters["key"] = TranslateUtils.SCANNER_KEY
 
         startProgress()
-        mViewModel.getUsers(postParameters).observe(this, Observer {
-            stopProgress()
-            if (it != null) {
-                ScanDialogFragment.getInstance(it).showDialog(parentFragmentManager)
-                dismissDialog()
+
+        mViewModel.getUsers(postParameters).observe(this,userObserver)
+    }
 
 
-            }
-
-        })
+  private   val userObserver = Observer<String?> { it ->
+        stopProgress()
+        if (it != null) {
+            ScanDialogFragment.getInstance(it).showDialog(parentFragmentManager)
+            dismissDialog()
+        }
     }
 
     override fun close() {
-
-        this.dismiss()
-
-    }
+        this.dismiss() }
 
 
 

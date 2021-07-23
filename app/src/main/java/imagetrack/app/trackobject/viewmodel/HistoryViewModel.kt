@@ -8,6 +8,7 @@ import imagetrack.app.trackobject.navigator.HistoryNavigator
 import imagetrack.app.trackobject.repo.HistoryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HistoryViewModel @ViewModelInject constructor(private val historyRepository : HistoryRepository)  : BaseViewModel<HistoryNavigator>(historyRepository) {
 
@@ -41,6 +42,17 @@ class HistoryViewModel @ViewModelInject constructor(private val historyRepositor
         }
     }
 
+
+    fun deleteAll(){
+        viewModelScope.launch(Dispatchers.IO) {
+         val updated =   historyRepository.deleteAll()
+
+            withContext(Dispatchers.Main) {
+                if (updated) getNavigator().deleteAll()
+            }
+
+        }
+    }
 
 
 }

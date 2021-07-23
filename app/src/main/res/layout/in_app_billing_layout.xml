@@ -5,10 +5,10 @@
 
     <data class ="InAppBillingDataBinding">
 
-<!--        <variable-->
-<!--            name="viewModel"-->
-<!--            type="imagetrack.app.trackobject.viewmodel.InAppViewModel" />-->
-<!-- -->
+        <variable
+            name="viewModel"
+            type="imagetrack.app.trackobject.viewmodel.InAppViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,155 +16,129 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/close_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-
-        <ImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
             android:src="@mipmap/ic_launcher"
-            android:layout_marginTop="48dp"
-
+            app:layout_constraintBottom_toTopOf="@+id/textView8"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="40dp"
             android:gravity="center"
             android:text="@string/app_name"
-            android:textSize="50sp"
             android:textColor="@color/Red"
+            android:textSize="50sp"
             android:textStyle="bold|italic"
+            app:layout_constraintBottom_toTopOf="@+id/description1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
 
-        <TextView
-            android:id="@+id/textView14"
+        <include
+            android:id="@+id/description1"
+            layout="@layout/features_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:text="@string/subscription_plans"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/weekly_button"
             app:layout_constraintEnd_toEndOf="@+id/textView8"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView8"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/features_top_dimensions"
-            android:drawableStart="@drawable/check_icon"
-            android:gravity="start"
-            android:text="@string/no_ads"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="@+id/textView14"
-            app:layout_constraintStart_toStartOf="@+id/textView14"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/features_top_dimensions"
-            android:gravity="start"
-            android:textStyle="italic"
-            android:text="@string/image_to_text"
-            android:drawableStart="@drawable/check_icon"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView9"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/textView9"
-            app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/features_top_dimensions"
-            android:gravity="start"
-            android:drawableStart="@drawable/check_icon"
-            android:textStyle="italic"
-            android:text="@string/translates_languages"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView10"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView10"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/check_icon"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/features_top_dimensions"
-            android:gravity="start"
-            android:textStyle="italic"
-            android:text="@string/unlimited_usage"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/textView11"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-
-<!--        android:onClick="@{()->viewModel.buyBasic()}"-->
-
-
-        <Button
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/weekly_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/okbutton"
+            android:onClick="@{()->viewModel.buyBasic()}"
+            android:orientation="vertical"
+            android:text="monthly Package "
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/textView13"
-            app:layout_constraintStart_toStartOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            app:layout_constraintEnd_toEndOf="@+id/description1"
+            app:layout_constraintStart_toStartOf="@+id/description1"
+            app:layout_constraintTop_toBottomOf="@+id/description1">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="@string/upgrade"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/textView19"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="@string/buy_monthly_package"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <ProgressBar
+            android:id="@+id/progressId"
+            android:layout_width="wrap_content"
+            android:indeterminateTint="@color/Red"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weekly_button" />
 
 
 
-
-<!--        skuDetail="@{viewModel.skus}"-->
-<!--        android:onClick="@{()->viewModel.buyPremium()}"-->
-<!--        -->
-        <Button
-            android:id="@+id/monthly_button"
+        <TextView
+            android:id="@+id/textView16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/three_month_style"
-            android:textAllCaps="false"
-
-            android:textColor="@color/white"
+            android:layout_marginBottom="32dp"
+            android:text="@string/note_description"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/weekly_button"
-            app:layout_constraintStart_toStartOf="@+id/weekly_button"
-            app:layout_constraintTop_toBottomOf="@+id/weekly_button" />
+            app:layout_constraintStart_toStartOf="@+id/weekly_button" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

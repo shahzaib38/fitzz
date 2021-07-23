@@ -17,6 +17,11 @@ import kotlinx.coroutines.Dispatchers
 class MainViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) : BaseViewModel<MainNavigator>(mainRepository) {
 
 
+
+//    val subscriptionDao = mainRepository.daoSubscriptions
+
+
+
    fun  saveNext(){
 
        getNavigator().exit()

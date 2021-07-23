@@ -5,10 +5,10 @@
 
         <data
             class="DemoDataBinding">
+
             <variable
                 name="viewModel"
-                type="imagetrack.app.trackobject.viewmodel.MainViewModel" />
-
+                type="imagetrack.app.trackobject.viewmodel.InAppViewModel" />
         </data>
 
 
@@ -21,6 +21,7 @@
 
         <Button
             android:id="@+id/clickID"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -30,11 +31,12 @@
 
 
         <Button
-            android:id="@+id/signInId"
+            android:text="Sign in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign In"
+            android:id="@+id/signIn"
             />
+
 
 
     </LinearLayout>

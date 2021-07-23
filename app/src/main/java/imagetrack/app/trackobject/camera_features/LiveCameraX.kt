@@ -22,16 +22,13 @@ internal class LiveCameraX private constructor(private val context: Context, pri
 
 
 
-
-         private  var visionImageProcessor= TextProcessAdapterFactory.createOnDeviceTextRecognizer(context)
-
+    private  var visionImageProcessor= TextProcessAdapterFactory.createOnDeviceTextRecognizer(context)
     var fragmentManager :  FragmentManager? = null
 
 
 
     override  fun setFragmentManagerr(fragmentManager  : FragmentManager){
-        this.fragmentManager = fragmentManager
-    }
+        this.fragmentManager = fragmentManager }
 
     override fun stop() {
         visionImageProcessor.run {
@@ -55,8 +52,7 @@ internal class LiveCameraX private constructor(private val context: Context, pri
                 .setBackgroundExecutor(Executors.newSingleThreadExecutor())
                 .build()
         imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(),TextAnalysis.of(graphics,context))
-        super.bindLifecycleView(imageAnalysis)
-    }
+        super.bindLifecycleView(imageAnalysis) }
 
 
     companion object{

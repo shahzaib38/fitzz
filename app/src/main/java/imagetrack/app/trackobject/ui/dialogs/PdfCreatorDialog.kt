@@ -112,5 +112,9 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
     override fun close() {
         dismissDialog() }
 
+    override fun openInternetDialog() {
+
+    }
+
 
 }

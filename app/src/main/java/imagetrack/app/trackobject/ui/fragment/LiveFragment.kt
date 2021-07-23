@@ -39,6 +39,9 @@ class LiveFragment : BaseFragment<MainViewModel, LiveFragmentDataBinding>() {
         mLiveFragmentDataBinding = getViewDataBinding()
         val isPermissionGranted =(hasPermissions(requireContext(),CAMERA_PERMISSION_ARRAY))
         if(isPermissionGranted) startCamera() else requestCameraPermission()
+
+
+
     }
 
     @ExperimentalGetImage

@@ -62,4 +62,5 @@ abstract class BaseAdapter< M: Model, VDB: ViewDataBinding>(diffCallback: DiffUt
 
     }
 
+
 }

@@ -14,4 +14,9 @@ interface HistoryDao {
 
     @Delete
     suspend    fun delete(historyBean: HistoryBean?)
+
+    @Query("DELETE FROM HistoryBean")
+    suspend fun deleteAll()
+
+
 }

@@ -5,4 +5,5 @@ interface PdfNavigator {
 
     fun generatePdf()
     fun close()
+   fun  openInternetDialog()
 }

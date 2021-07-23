@@ -18,13 +18,10 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
 
 
     companion object{
-
         private const val TAG :String= "ConnectionFragmentDialog"
-
-
         fun getInstance(): InternetConnectionDialog {
-            return InternetConnectionDialog()
-        }
+            return InternetConnectionDialog() }
+
     }
 
 
@@ -32,16 +29,8 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         bind= getViewDataBinding()
-
-        bind?.ok?.setOnClickListener {
-
-    //        println("dismiss" +
-  //                  "")
-            dismissDialog()
-//        dismiss()
-        }
+        bind?.ok?.setOnClickListener { dismissDialog() }
     }
 
 
@@ -62,7 +51,7 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
     override fun getLayoutId(): Int {
         return  R.layout.internet_coonection    }
 
-     fun dismissDialog() {
+   private   fun dismissDialog() {
         super.dismissDialog(TAG)
 
     }

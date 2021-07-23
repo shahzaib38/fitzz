@@ -17,22 +17,16 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
 
     fun showHistory(){
-
-        getNavigator().showHistory()
-    }
+        getNavigator().showHistory() }
 
     fun enableTorch(){
         getNavigator().enableTorch() }
 
     fun openGallery(){
-
-        getNavigator().openGallery()
-    }
+        getNavigator().openGallery() }
 
     fun capture(){
-        getNavigator().capture()
-
-    }
+        getNavigator().capture() }
 
     @ExperimentalUseCaseGroup
     @ExperimentalUseCaseGroupLifecycle
