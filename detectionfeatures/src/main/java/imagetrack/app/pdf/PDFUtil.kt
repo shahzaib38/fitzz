@@ -97,7 +97,7 @@ class PDFUtil private constructor(){
                  true
 
              } catch (exception: java.lang.Exception) {
-                 Log.e(TAG, exception.message)
+
                  false
              }
              return isPdfSuccessfullyGenerated

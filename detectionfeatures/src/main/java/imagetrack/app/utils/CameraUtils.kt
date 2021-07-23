@@ -12,10 +12,10 @@ object CameraUtils {
 
 
      fun hasBackCamera(cameraProvider :ProcessCameraProvider): Boolean {
-        return cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) ?: false }
+        return cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)  }
 
      fun hasFrontCamera(cameraProvider :ProcessCameraProvider): Boolean {
-        return cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA) ?: false }
+        return cameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)  }
 
 
 //    private fun aspectRatio(width: Int, height: Int): Int {

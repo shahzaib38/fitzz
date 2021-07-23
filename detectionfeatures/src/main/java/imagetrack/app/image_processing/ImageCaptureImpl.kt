@@ -8,14 +8,24 @@ import androidx.camera.core.ImageProxy
 import imagetrack.app.text_recognition.TextProcessAdapterFactory
 import imagetrack.app.trackobject.camera_features.OnProgression
 import imagetrack.app.trackobject.camera_features.OpenDialog
+import java.util.concurrent.locks.ReentrantLock
 
 
 class ImageCaptureImpl(private val context: Context, private val openDialog: OpenDialog, private val onProgression: OnProgression) : ImageCapture.OnImageCapturedCallback(){
 
+
+
+
     @ExperimentalGetImage
     override fun onCaptureSuccess(image: ImageProxy) {
-        println("ImageCaptureImpl Thread  Name ${Thread.currentThread().name}")
-        TextProcessAdapterFactory.createOnDeviceTextRecognizer(context).processImageProxy(image, openDialog,onProgression) }
+
+         val thread =   TextProcessAdapterFactory.createOnCloudTextRecognizer(context)
+
+                thread.processImageProxy(image, openDialog, onProgression)
+
+            println("ImageCaptureImpl Thread  Name ${Thread.currentThread().name}" + "Hascode " +thread.hashCode())
+
+    }
 
 
 
@@ -26,13 +36,17 @@ class ImageCaptureImpl(private val context: Context, private val openDialog: Ope
 
 
     companion object {
-     var imageCapture :ImageCapture.OnImageCapturedCallback?=null
-        fun capture(context: Context, openDialog: OpenDialog, onProgression: OnProgression)  :ImageCapture.OnImageCapturedCallback{
-            if(imageCapture==null){
-                imageCapture = ImageCaptureImpl(context, openDialog, onProgression)
-                return imageCapture!! }
-            return imageCapture!!
-        }
+
+        @Volatile var imageCapture :ImageCapture.OnImageCapturedCallback?=null
+
+        fun getInstance(context: Context, openDialog: OpenDialog, onProgression: OnProgression)  :ImageCapture.OnImageCapturedCallback{
+
+       if(imageCapture ==null ) {
+           synchronized(this) {
+               if (imageCapture == null) {
+                   imageCapture = ImageCaptureImpl(context, openDialog, onProgression)
+               } } }
+            return imageCapture!! }
 
     }
 

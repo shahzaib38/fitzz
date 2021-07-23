@@ -1,6 +1,7 @@
 package imagetrack.app.image_processing
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -38,6 +39,7 @@ class DeviceTextRecognizer(context : Context)  : VisionProcessorBase<FirebaseVis
 
     override fun detectInImage(image: FirebaseVisionImage): Task<FirebaseVisionText> {
 
+        Log.i("Thread","Device Text Recogni "+Thread.currentThread().name)
         return detector.processImage(image)
     }
 

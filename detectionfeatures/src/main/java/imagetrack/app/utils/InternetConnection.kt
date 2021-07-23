@@ -1,6 +1,7 @@
 package imagetrack.app.utils
 
 import android.app.Activity
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 object InternetConnection {
 
 
-    fun isInternetAvailable(activity : Activity) :Boolean{
+    fun isInternetAvailable(activity : Context) :Boolean{
         val connectivityManager= activity.getSystemService(AppCompatActivity.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val capabilities =

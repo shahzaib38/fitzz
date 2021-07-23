@@ -15,7 +15,7 @@ import javax.inject.Singleton
 object TranslateRetrofit {
 
 
-    const val BASE_URL = "https://www.googleapis.com/language/translate/"
+   private const val BASE_URL = "https://www.googleapis.com/language/translate/"
 
     @Singleton
     @Provides
@@ -29,12 +29,6 @@ object TranslateRetrofit {
     @Singleton
     @Provides
     fun getApiService() : TranslateApi{
-
-        return getRetrofit().create(TranslateApi::class.java)
-    }
-
-
-
-
+        return getRetrofit().create(TranslateApi::class.java) }
 
 }

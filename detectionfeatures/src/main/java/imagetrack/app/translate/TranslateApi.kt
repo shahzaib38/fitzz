@@ -4,6 +4,8 @@ import imagetrack.app.lanuguages.TranslateDetect
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
+
+
 interface TranslateApi {
 
 
