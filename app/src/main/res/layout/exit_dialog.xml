@@ -14,7 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@color/black_transparent"
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -34,16 +35,16 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/exit_close"
-                    android:layout_gravity="end"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp"
-                    android:onClick="@{()->viewModel.close()}"
+                <include
+                    android:id="@+id/ads_include"
+                    layout="@layout/ads_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toTopOf="@+id/emptyId"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constaintId" />
 
-                    />
 
                 <TextView
                     android:id="@+id/textView17"
@@ -52,6 +53,7 @@
                     android:background="@color/white"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/exit_description"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -60,17 +62,53 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
 
-
-                <Button
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/exit"
-                    android:text="Exit"
+                    android:layout_marginTop="16dp"
                     android:textColor="@color/white"
-                    android:onClick="@{()->viewModel.exit()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/template" />
+                    app:layout_constraintTop_toBottomOf="@+id/template">
+
+
+                    <Button
+                        android:id="@+id/noId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/exit_style"
+                        android:onClick="@{()->viewModel.close()}"
+
+                        android:text="No"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/yesId"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/yesId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/exit_style"
+                        android:onClick="@{()->viewModel.exit()}"
+                        android:text="yes"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/noId"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </LinearLayout>

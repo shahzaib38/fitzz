@@ -7,6 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import imagetrack.app.image_processing.CloudTextRecognition
+import imagetrack.app.image_processing.DeviceTextRecognizer
+import imagetrack.app.image_processing.VisionImageProcessor
 import imagetrack.app.trackobject.database.local.ILocalDataSource
 import imagetrack.app.trackobject.database.local.LocalDataSource
 import imagetrack.app.trackobject.database.local.history.HistoryDatabase
@@ -31,6 +34,13 @@ object InAppModule {
 
 
     @Provides
+    @Singleton
+    fun provideVisionImageProcessor(@ApplicationContext context : Context) :
+            VisionImageProcessor = CloudTextRecognition(context)
+
+
+
+    @Provides
     fun provideExecutors() : AppExecutors{
         return AppExecutors() }
 
@@ -49,6 +59,7 @@ object InAppModule {
     @Provides
     fun billingClientLifecyclle(application: Application) : BillingClientLifecycle {
         return BillingClientLifecycle.getInstance(application) }
+
 
 
 }

@@ -1,10 +1,10 @@
 package imagetrack.app.trackobject.ui.dialogs
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
@@ -12,7 +12,6 @@ import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.SubscriptionStatusDialogDataBinding
 import imagetrack.app.trackobject.inapppurchaseUtils.SubscriptionNote
 import imagetrack.app.trackobject.navigator.SubscriptionStatusNavigator
-import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
 
 
@@ -20,7 +19,9 @@ import imagetrack.app.trackobject.viewmodel.InAppViewModel
 class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, SubscriptionStatusDialogDataBinding>()  ,
     SubscriptionStatusNavigator, DialogInterface.OnDismissListener{
 
-
+    override fun onDismiss(dialog: DialogInterface) {
+        requireActivity().finish()
+    }
 
     private val mViewModel by viewModels<InAppViewModel>()
     private var mBinding : SubscriptionStatusDialogDataBinding?=null
@@ -69,15 +70,13 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
 
         mViewModel.setNavigator(this)
 
-
-
-
     }
 
 
 
     companion object{
-        private const val TAG : String="SubscriptionStatus"
+
+        private const val TAG : String="SubscriptionStatusDialog"
         private const val NO_TEXT_FOUND ="No Text found Try Again"
 
         @VisibleForTesting
@@ -101,9 +100,15 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
     }
 
     private fun openIntent(){
+
+        dismiss()
         requireActivity().finish()
-        val intent = Intent(requireActivity() ,MainActivity::class.java)
-        startActivity(intent)
+
+
     }
+
+    fun showDialog(fragment: FragmentManager) {
+        super.showDialogs(fragment, TAG) }
+
 
 }

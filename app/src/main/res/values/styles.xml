@@ -8,16 +8,9 @@
         <item name="colorAccent">#fff</item>
         <item name="windowNoTitle">true</item>
         <item name="android:navigationBarColor">@color/Red</item>
-        <item name="android:navigationBarDividerColor">@color/Red</item>
         <item name="android:windowEnterAnimation">@anim/left_to_right_slide_animation</item>
 <item name="android:windowExitAnimation">@anim/right_to_left_slide_animations</item>
     </style>
-
-<!--    <style name="navigationStyle">-->
-<!--        <item name="background">#FFFF</item>-->
-
-<!--    </style>-->
-
 
 
         <style name="AppTheme.AdAttribution">
@@ -25,7 +18,7 @@
             <item name="android:layout_height">wrap_content</item>
             <item name="android:layout_gravity">left</item>
             <item name="android:textColor">#FFFFFF</item>
-            <item name="android:textSize">40dp</item>
+            <item name="android:textSize">40sp</item>
             <item name="android:text">@string/ad_attribution</item>
             <item name="android:background">#FFCC66</item>
             <item name="android:width">15dp</item>

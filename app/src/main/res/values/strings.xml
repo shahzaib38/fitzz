@@ -8,25 +8,10 @@
     <string name="exit">Close</string>
     <string name="file_name">Write file name</string>
     <string name="generate_pdf">Generate Pdf</string>
-    <string name="pdf">.Pdf</string>
+    <string name="pdf">Create Pdf</string>
     <string name="text_value">textvalue</string>
     <string name="default_notification_channel_id">snaptalknotification</string>
     <string name="ad_attribution">Ad</string>
-
-
-
-
-
-    <!-- Test Ads -->
-         <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
-         <string name="banner_1">ca-app-pub-3940256099942544/6300978111</string>
-         <string name="banner_2">ca-app-pub-3940256099942544/6300978111</string>
-
-    <string name="scan_editor_unitId">ca-app-pub-3940256099942544/1044960115</string>
-         <string name="language_list_unitId" >ca-app-pub-3940256099942544/2247696110</string>
-         <string name="full_screen_exit">ca-app-pub-3940256099942544/1033173712</string>
-
-
 
 
 
@@ -38,25 +23,148 @@
     <string name="select_language">Select Language</string>
     <string name="one_month_subscription">1 Month Subscription</string>
     <string name="three_month_subscription">3 Month Subscription</string>
-    <string name="translates_languages">Translates more than 100+ languages (Upgrade) </string>
+    <string name="translates_languages">Translates more than 100+ languages (upgrade)</string>
     <string name="unlimited_usage">"Unlimited Usage "</string>
-    <string name="image_to_text">OCR  Recognition supports more than 100+ languages (Free) </string>
-    <string name="no_ads">No Ads (Free)</string>
+    <string name="image_to_text">OCR Optical Character Recognition (Free)</string>
+    <string name="no_ads">No Ads (upgrade)</string>
     <string name="subscription_plans">Subscription Plans :</string>
     <string name="save">Save</string>
     <string name="delete_all">Delete All</string>
     <string name="history">History</string>
     <string name="edit_text">textvalue</string>
-    <string name="exit_description">Press Exit button to Close</string>
+    <string name="exit_description">are you sure you want to close? </string>
     <string name="text_editor">Text Editor</string>
     <string name="edit_value">editvalue</string>
     <string name="date_text_size">8sp</string>
-    <string name="history_empty">Nothing in History</string>
+    <string name="history_empty">Empty</string>
     <string name="subscription_details">Subscription Details :</string>
     <string name="note">Note</string>
-    <string name="note_description">If you face any problem regarding Subscription feel free to contact us on developer email</string>
+    <string name="note_description">Auto Renew and cancel any time</string>
     <string name="upgrade">Upgrade</string>
     <string name="buy_monthly_package">Buy Monthly Package</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
+    <string name="subscription_note">Subscription Note</string>
+    <string name="subscription_message">"you have Purchased Monthly Package "</string>
+    <string name="starting_time">Starting Time</string>
+    <string name="expiry_time">Expiry Time</string>
+    <string name="order_id">Order Id</string>
+    <string name="proceed">Proceed</string>
+    <string name="default_option1">English</string>
+    <string name="default_option2">Urdu</string>
+    <string name="pdf_name">file name</string>
+    <string name="header_name">Header</string>
+    <string name="header_hint">Header (Optional)</string>
+    <string name="open_file">view</string>
+    <string name="open">Open</string>
+    <string name="share">Share</string>
+    <string name="start">Start</string>
+    <string name="advertisement">Advertisement</string>
+
+
+
+
+    <!-- Test Ads -->
+<!--    <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>-->
+
+<!--    <string name="launcher_native">ca-app-pub-3940256099942544/2247696110</string>-->
+<!--    <string name="history_native">ca-app-pub-3940256099942544/1044960115</string>-->
+<!--    <string name="all_pdf">ca-app-pub-3940256099942544/1044960115</string>-->
+<!--    <string name="pdf_creator">ca-app-pub-3940256099942544/2247696110</string>-->
+<!--    <string name="pdf_open">ca-app-pub-3940256099942544/2247696110</string>-->
+<!--    <string name="settings_native">ca-app-pub-3940256099942544/1044960115</string>-->
+<!--    <string name="subscription_native">ca-app-pub-3940256099942544/1044960115</string>-->
+<!--    <string name="exit_ads" >ca-app-pub-3940256099942544/1044960115</string>-->
+<!--    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>-->
+
+
+
+    <!-- Original  Ads -->
+    <string name="app_id">ca-app-pub-8453124532033807~1199249375</string>
+
+    <string name="launcher_native">ca-app-pub-8453124532033807/4816593974</string>
+    <string name="history_native">ca-app-pub-8453124532033807/2302466494</string>
+    <string name="all_pdf">ca-app-pub-8453124532033807/6503218340</string>
+    <string name="pdf_creator">ca-app-pub-8453124532033807/9877348967</string>
+    <string name="pdf_open">ca-app-pub-8453124532033807/8937809990</string>
+    <string name="settings_native">ca-app-pub-8453124532033807/4258831400</string>
+    <string name="subscription_native">ca-app-pub-8453124532033807/2755545020</string>
+    <string name="exit_ads" >ca-app-pub-8453124532033807/9909874649</string>
+         <string name="banner_ad">ca-app-pub-8453124532033807/4320799755</string>
+
+
+
+
+
+
+
+
+
+
+    <string name="view_pdf_files">Press button to view all pdf files</string>
+    <string name="pdf_description">Make sure to download any pdf reader to read files</string>
+    <string name="pdf_button">PDF</string>
+    <string name="instructionone">(1) Pinch to Zoom</string>
+    <string name="instructiontwo">(2) Ocr and translation support 150+ languages ,pdf creator only supports english (Latin) characters</string>
+    <string name="close">Close</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="flower1_name">Rose</string>
+    <string name="flower2_name">Freesia</string>
+    <string name="flower3_name">Lily</string>
+    <string name="flower4_name">Sunflower</string>
+    <string name="flower5_name">Peony</string>
+    <string name="flower6_name">Daisy</string>
+    <string name="flower7_name">Lilac</string>
+    <string name="flower8_name">Marigold</string>
+    <string name="flower9_name">Poppy</string>
+    <string name="flower10_name">Daffodil</string>
+    <string name="flower11_name">Dahlia</string>
+    <string name="flower12_name">Tulip</string>
+
+    <string name="flower1_description">Rose comes from the Latin word Rosa. There are over 100
+        species of the rose. </string>
+    <string name="flower2_description">Freesias bloom during spring and are native to
+        Africa.</string>
+    <string name="flower3_description">Lilies have the longest in vase lifespan of any cut
+        bloom.</string>
+    <string name="flower4_description">Mature Sunflowers face east and are native too the United
+        States.</string>
+    <string name="flower5_description">Peony plants can live to be 100 years old.</string>
+    <string name="flower6_description">Daisies are cousins with Sunflowers.</string>
+    <string name="flower7_description">Lilacs belong to the olive family.</string>
+    <string name="flower8_description">Marigolds come in orange, reed, maroon and yellow.</string>
+    <string name="flower9_description">Poppies can be over 3 feet tall.</string>
+    <string name="flower10_description">Daffodils are referred to as Lent Lilies in England</string>
+    <string name="flower11_description">Dahlia is named after the Swedish botanist Anders
+        Dahl</string>
+    <string name="flower12_description">There are over 150 species of tulips.</string>
+
+    <string name="flower_string">Flowers</string>
+    <string name="flower_finder">Flower finder</string>
+    <string name="flower_description_edit_text">Flower Description</string>
+    <string name="flower_name_edit_text">Flower Name</string>
+    <string name="done_button_text">Done</string>
+    <string name="fab_content_description">fab</string>
+    <string name="flower_image_content_description">Image of flower</string>
+    <string name="remove_this_flower">Remove this flower</string>
+    <string name="benefits">Benefits</string>
+    <string name="premium">PREMIUM</string>
+    <string name="subscribe_now">Subscribe now</string>
+    <string name="translate_features">Unlimited Translate, supports more than 100+ languages</string>
+
 
 </resources>

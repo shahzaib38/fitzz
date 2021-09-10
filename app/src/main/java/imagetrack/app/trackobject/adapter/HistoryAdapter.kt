@@ -11,15 +11,15 @@ import imagetrack.app.trackobject.ext.lessEqualTo
 import imagetrack.app.trackobject.ui.activities.HistoryListener
 
 val diffCallback = object : DiffUtil.ItemCallback<HistoryBean>() {
-    override fun areItemsTheSame(oldItem: HistoryBean, newItem: HistoryBean): Boolean =
-        false
+    override fun areItemsTheSame(oldItem: HistoryBean, newItem: HistoryBean):
+            Boolean = oldItem.id == newItem.id
 
     /**
      * Note that in kotlin, == checking on data classes compares all contents, but in Java,
      * typically you'll implement Object#equals, and use it to compare object contents.
      */
     override fun areContentsTheSame(oldItem: HistoryBean, newItem: HistoryBean): Boolean =
-        oldItem.equals(newItem)
+        oldItem == newItem
 }
 
 
@@ -31,42 +31,42 @@ class HistoryAdapter  constructor(private val historyListener : HistoryListener)
     override fun createBinding(
         inflater: LayoutInflater,
         parent: ViewGroup
-    ): HistoryItemDataBinding = DataBindingUtil.inflate(inflater, R.layout.history_item, parent, false)
+    ): HistoryItemDataBinding {
+
+        val binding : HistoryItemDataBinding =  DataBindingUtil.inflate(inflater, R.layout.history_item, parent, false)
+        binding.run {
+
+            shareId.setOnClickListener {
+
+             val text =   binding.historyId.text.toString()
+                historyListener.share(text) }
+
+            translateId.setOnClickListener {
+                val text =   binding.historyId.text.toString()
+                historyListener.translate(text) }
+        }
+
+
+        return binding
+    }
 
 
     override fun bind(binding: HistoryItemDataBinding, item: HistoryBean) {
         binding.apply {
-            historyBean = item
-            shareId.setOnClickListener {
-                historyListener.share(this.historyId.text.toString())
-            }
-
-            translateId.setOnClickListener {
-                historyListener.translate(this.historyId.text.toString())
-            }
-
-        }
-
-    }
+            historyBean = item } }
 
 
 
 
     override fun onDataChanged(values: Boolean) {
-      val dataSize = item?.size ?: return
         if(values){
             historyListener.show()
-
         }else{
-            historyListener.hide()
-
-        }
-    }
+            historyListener.hide() } }
 
 
     fun clearAll(){
         item?.clear()
-        onDataChanged(false)
-    }
+        onDataChanged(false) }
 
 }

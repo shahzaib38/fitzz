@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data
         class="LiveFragmentDataBinding">
@@ -8,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="imagetrack.app.trackobject.viewmodel.MainViewModel" />
+            type="imagetrack.app.trackobject.viewmodel.LiveViewModel" />
 
     </data>
 
@@ -16,27 +18,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.camera.view.PreviewView
-            android:id="@+id/preview_finder"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+
+        <include
+            android:id="@+id/include3"
+            layout="@layout/translate_options"
+            android:layout_width="411dp"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/include_preview_finder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:translateOption="@{viewModel}" />
+
+        <include
+            android:id="@+id/include_preview_finder"
+            layout="@layout/live_preview_layout"
+            android:layout_width="411dp"
+            android:layout_height="683dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <imagetrack.app.view.GraphicOverlay
-            android:id="@+id/graphics"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:textSize="25sp"
-            android:gravity="center"
-            android:textColor="#FFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/include3" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

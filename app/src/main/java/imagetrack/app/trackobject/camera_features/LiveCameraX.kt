@@ -1,34 +1,49 @@
 package imagetrack.app.trackobject.camera_features
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.util.Size
 import androidx.camera.core.*
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
-import androidx.camera.view.PreviewView
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleOwner
-import imagetrack.app.TextAnalysis
-import imagetrack.app.text_recognition.TextProcessAdapterFactory
-import imagetrack.app.view.GraphicOverlay
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import imagetrack.app.CallBack
+import imagetrack.app.image_processing.DeviceTextRecognizer
+import imagetrack.app.image_processing.VisionImageProcessor
+import imagetrack.app.lanuguages.TranslateDetect
+import imagetrack.app.trackobject.databinding.LiveFragmentDataBinding
+import imagetrack.app.translate.ITranslator
 import java.util.concurrent.Executors
+
 
 @ExperimentalGetImage
 @ExperimentalUseCaseGroup
-@ExperimentalUseCaseGroupLifecycle
-internal class LiveCameraX private constructor(private val context: Context, private val graphics: GraphicOverlay, lifecycleOwner: LifecycleOwner
-                 ,private val  previewView: PreviewView): BaseCameraX(context , graphics,lifecycleOwner,previewView)
-             ,IImageAnalysisUseCase{
+//@ExperimentalUseCaseGroupLifecycle
+internal class LiveCameraX  constructor(private val cameraMetaData : CameraMetaData , private val iTranslator : ITranslator?=null ): BaseCameraX(cameraMetaData) ,IImageAnalysisUseCase ,
+    CallBack {
+
+    private  var visionImageProcessor= DeviceTextRecognizer(cameraMetaData.getContext() )
+    private val translateTextLiveData  =MediatorLiveData<String?>()
+    private val progressLiveData  =MutableLiveData<Boolean>()
+    private var liveFragmentDataBinding : LiveFragmentDataBinding?=null
 
 
 
-    private  var visionImageProcessor= TextProcessAdapterFactory.createOnDeviceTextRecognizer(context)
-    var fragmentManager :  FragmentManager? = null
+    init {
+
+        val viewBindingLocal =    cameraMetaData.getViewDataBinding()
+
+        if(viewBindingLocal is LiveFragmentDataBinding){
+            liveFragmentDataBinding =    viewBindingLocal }
+
+//
+//        translateTextLiveData.addSource(visionImageProcessor.getTranslateTextLiveData()) {
+//            translateTextLiveData.postValue(it) }
+//
+    }
 
 
 
-    override  fun setFragmentManagerr(fragmentManager  : FragmentManager){
-        this.fragmentManager = fragmentManager }
 
     override fun stop() {
         visionImageProcessor.run {
@@ -36,7 +51,7 @@ internal class LiveCameraX private constructor(private val context: Context, pri
 
 
     override fun bindAllCameraXUseCases() {
-        super.bindAllCameraXUseCases()
+       // super.bindAllCameraXUseCases()
         bindImageAnalysis()
     }
 
@@ -44,34 +59,67 @@ internal class LiveCameraX private constructor(private val context: Context, pri
 
     }
 
+    override fun getProgressLiveData(): LiveData<Boolean> = progressLiveData
+
+    override fun getTranslatedLiveData(): LiveData<String?> = translateTextLiveData
+    override fun testClick() {
+
+
+    }
+
+    override fun onDisplayAdded(displayId: Int) {
+
+    }
+
+    override fun onDisplayRemoved(displayId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDisplayChanged(displayId: Int) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun bindImageAnalysis() {
         val imageAnalysis = ImageAnalysis.Builder()
-                .setTargetResolution(Size(1000, 720))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setBackgroundExecutor(Executors.newSingleThreadExecutor())
                 .build()
-        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(),TextAnalysis.of(graphics,context))
-        super.bindLifecycleView(imageAnalysis) }
+        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(),
+            { imageProxy ->
+
+                visionImageProcessor.processImageProxy(imageProxy)
+
+            })
 
 
-    companion object{
 
-        @Volatile
-        private var instance  : LiveCameraX?=null
+    //    super.bindLifecycleView(imageAnalysis)
 
-       internal  fun provideCamera(
-            context: Context,
-            graphics: GraphicOverlay,
-            lifecycleOwner: LifecycleOwner,
-            previewView: PreviewView
-        ): LiveCameraX {
-                 if (instance == null) {
-                     return LiveCameraX(context , graphics ,lifecycleOwner,previewView) }
-         return    LiveCameraX(context ,  graphics, lifecycleOwner, previewView)
-        }
+    }
 
 
-}
+
+
+    override  fun provideSurface(preview : Preview){
+        liveFragmentDataBinding?.includePreviewFinder?.previewFinder?.run{
+            preview.setSurfaceProvider(this.surfaceProvider) }
+    }
+
+    override fun translate(result: String) {
+        translateTextLiveData.postValue(result) }
+
+    private val translateObserver = Observer<TranslateDetect>{
+     val translation =   it?.getData()?.getTranslations()
+     translation?.forEach {
+
+         if(it!=null) {
+             translateTextLiveData.postValue(it.getTranslatedText())
+         }
+     }
+
+    }
+
+
 
 }

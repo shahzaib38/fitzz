@@ -5,7 +5,6 @@
 
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -24,21 +23,57 @@
         <activity android:name="imagetrack.app.trackobject.ui.DemoActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"
             tools:ignore="LockedOrientationActivity">
 
 
         </activity>
 
 
-        
+        <activity android:name=".ui.activities.LauncherActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
 
+        <activity android:name=".ui.activities.SettingsActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            >
+
+
+        </activity>
 
 
 
         <activity android:theme="@style/AppTheme"
-            android:name="imagetrack.app.trackobject.ui.activities.HistoryActivity">
+            android:name="imagetrack.app.trackobject.ui.activities.PdfActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            >
+
+
+        </activity>
+
+
+
+        <activity android:theme="@style/AppTheme"
+            android:name="imagetrack.app.trackobject.ui.activities.HistoryActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            >
+
+
         </activity>
 
         <activity android:name="imagetrack.app.trackobject.ui.activities.EditorActivity"
@@ -51,14 +86,25 @@
         <activity android:name="imagetrack.app.trackobject.ui.activities.MainActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="LockedOrientationActivity"
+            >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 
         </activity>
+        
+        <provider
+            android:authorities="imagetrack.app.trackobject.provider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+
+        </provider>
+        
+        
 
         <activity android:name="imagetrack.app.trackobject.ui.activities.FreeSubscriptionActivity"
             android:theme="@style/AppTheme"
@@ -71,7 +117,9 @@
         <activity android:name="imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            tools:ignore="LockedOrientationActivity">
+            tools:ignore="LockedOrientationActivity"
+            android:hardwareAccelerated="true"
+            >
 
         </activity>
 

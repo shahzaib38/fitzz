@@ -1,18 +1,16 @@
 package imagetrack.app.trackobject.camera_features
 
-import android.content.Context
 import android.graphics.Bitmap
+import android.hardware.display.DisplayManager
 import android.view.ScaleGestureDetector
-import android.widget.ProgressBar
 import androidx.camera.core.*
-import androidx.camera.view.PreviewView
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import imagetrack.app.view.GraphicOverlay
 
-interface ICamera : LifecycleObserver ,ScaleGestureDetector.OnScaleGestureListener {
+interface ICamera : LifecycleObserver ,
+    ScaleGestureDetector.OnScaleGestureListener,
+ DisplayManager.DisplayListener
+{
 
      fun startCamera()
      fun getCamera():Camera?
@@ -24,20 +22,56 @@ interface ICamera : LifecycleObserver ,ScaleGestureDetector.OnScaleGestureListen
       fun getCameraControl() :CameraControl?
      fun getTorchState(): LiveData<Int>?
      fun getZoomState(): LiveData<ZoomState>?
-
-    fun setFragmentManagerr(fragmentManager : FragmentManager)
-
+    fun getProgressLiveData() :LiveData<Boolean>
     fun enableTorch()
-
-
-
-
     fun setZoomRatio(delta : Float)
     fun startFocusAndMetering(point: MeteringPoint)
+    fun getTranslatedLiveData(): LiveData<String?>
+    fun testClick()
 
-    interface Factory {
-        fun setCamera(context : Context, graphics : GraphicOverlay?, lifecycleOwner  : LifecycleOwner, previewView: PreviewView,progressBar: ProgressBar):ICamera?
-    }
+
+//        companion object {
+//
+//        @Volatile
+//        private var INSTANCE: ICamera? = null
+//
+//        fun getInstance(cameraMetaData: CameraMetaData): ICamera =
+//            INSTANCE ?: synchronized(this) {
+//                INSTANCE ?: ScanningCamera(cameraMetaData).also { INSTANCE = it }
+//            }
+//    }
+//
+//    object CameraFactory{
+//
+//
+//        @Volatile
+//        private var INSTANCE: ICamera? = null
+//
+//        fun getScanInstance(cameraMetaData: CameraMetaData): ICamera =
+//            INSTANCE ?: synchronized(this) {
+//                INSTANCE ?: ScanningCamera(cameraMetaData).also { INSTANCE = it }
+//            }
+//
+//        fun getLiveInstance(cameraMetaData: CameraMetaData): ICamera =
+//            INSTANCE ?: synchronized(this) {
+//                INSTANCE ?: LiveCameraX(cameraMetaData).also { INSTANCE = it }
+//            }
+//
+//
+//
+//    }
+
+
+//
+//    interface CallBack{
+//
+//        fun translate(result :String )
+//
+//    }
+
+
+
+
 
 
 }

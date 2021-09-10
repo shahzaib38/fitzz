@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white" >
+
+
+        <com.google.android.ads.nativetemplates.TemplateView
+            android:id="@+id/adsId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gnt_outline_shape"
+            app:gnt_template_type="@layout/gnt_medium_template_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/advertiseId"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:text="@string/advertisement"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </LinearLayout>
+</layout>

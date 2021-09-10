@@ -1,42 +1,30 @@
 package imagetrack.app.trackobject.camera_features
 
-import android.content.Context
 import android.view.ScaleGestureDetector
-import androidx.annotation.MainThread
-import androidx.annotation.UiThread
+import android.view.Surface
 import androidx.camera.core.*
-import androidx.camera.core.CameraProvider
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
-import com.google.common.util.concurrent.ListenableFuture
-import imagetrack.app.view.GraphicOverlay
 import java.util.concurrent.Executors
 import imagetrack.app.trackobject.R
-import java.util.concurrent.CancellationException
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.RejectedExecutionException
-import kotlin.concurrent.thread
+import imagetrack.app.trackobject.databinding.LiveFragmentDataBinding
+import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
+import kotlinx.coroutines.Runnable
 
-
-@ExperimentalUseCaseGroupLifecycle
+//@ExperimentalUseCaseGroupLifecycle
 @ExperimentalGetImage
 @ExperimentalUseCaseGroup
-abstract class BaseCameraX( private val context: Context,
-                            private val graphics: GraphicOverlay?,
-                            private val lifecycleOwner: LifecycleOwner,
-                            private val  previewView: PreviewView) :
-                             ICamera,IPreview ,ILifeCycleBinder {
+abstract class BaseCameraX(private val  cameraMetaData: CameraMetaData) :
+                             ICamera ,ILifeCycleBinder {
 
 
-    private var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>?=null
     private var camera: Camera? = null
     private var cameraProvider : ProcessCameraProvider?=null
+    private var mScanFragmentDataBinding : ScanFragmentDataBinding?=null
 
     override fun getCamera(): Camera? =camera
     override fun getCameraInfo() :CameraInfo?= camera?.cameraInfo
@@ -44,16 +32,23 @@ abstract class BaseCameraX( private val context: Context,
     override fun getTorchState(): LiveData<Int>? =camera?.cameraInfo?.torchState
     override fun getZoomState(): LiveData<ZoomState>? =camera?.cameraInfo?.zoomState
 
-
-
-
-
     companion object {
         private var mCameraSelector =CameraSelector.DEFAULT_BACK_CAMERA }
+
     init {
+        val viewBindingLocal =    cameraMetaData.getViewDataBinding()
 
+        if(viewBindingLocal is ScanFragmentDataBinding){
+            mScanFragmentDataBinding =    viewBindingLocal }
+//
+////        try {
+////            cameraProvider = ProcessCameraProvider.getInstance(cameraMetaData.getContext()).get()
+////        }catch (e :Exception){
+////
+////           throw  Exception("Something Wrong "+e.message)
+////
+////        }
 
-            cameraProvider = ProcessCameraProvider.getInstance(context).get()
     }
 
 
@@ -62,9 +57,15 @@ abstract class BaseCameraX( private val context: Context,
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
    override fun onCameraDestroy(){
         println("OnDestroy")
-        context.resources.getDrawable(R.drawable.ic_flash_off,null )
+        cameraMetaData.getContext().resources.getDrawable(R.drawable.ic_flash_off,null )
+        stop()
+    }
 
-        stop() }
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate(){
+
+//        startCamera()
+    }
 
 
     override fun onScale(detector: ScaleGestureDetector?): Boolean {
@@ -86,64 +87,95 @@ abstract class BaseCameraX( private val context: Context,
     @ExperimentalGetImage
    override fun onCameraResume(){
         println("ON_RESUME")
-        bindAllCameraXUseCases()
+
+    //    startCamera()
     }
 
 
    abstract fun stop()
 
     override fun startCamera() {
-        bindAllCameraXUseCases()
+
+        val cameraProviderFuture = ProcessCameraProvider
+            .getInstance(cameraMetaData.getContext())
+        cameraProviderFuture.addListener(Runnable {
+            println("Start Camera")
+
+            cameraProvider =  cameraProviderFuture.get()
+            bindAllCameraXUseCases()
+
+        },ContextCompat.getMainExecutor(cameraMetaData.getContext()))
+
+
+
+
     }
+
+
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     override fun onCameraPause(){
      println("OnPause")
-        stop()
     }
 
 
-  override  fun provideSurface(preview : Preview){
-      preview.setSurfaceProvider(previewView.surfaceProvider)
+  //  override fun bindAllCameraXUseCases() {
 
-  }
+//            unbindAll()
+    //    providePreviewUseCase()
 
-    override fun bindAllCameraXUseCases() {
-
-            unbindAll()
-        providePreviewUseCase()
-
-        }
+      //  }
 
 
-    private fun unbindAll(){
+     fun unbindAll(){
         val mCameraProvider = cameraProvider
         if(mCameraProvider!=null) {
             try {
+
+                println("unbindall")
                 mCameraProvider.unbindAll()
-            }catch (e :IllegalStateException){
+            } catch (e :IllegalStateException ){
 
-                println("UnBindAll Illegal State Exception ")
+                throw IllegalStateException("Unbind all exceptions")
 
-            } } }
+             //   println("UnBindAll Illegal State Exception ")
+
+            }
+
+
+        } }
 
 
     //Method Modularization
-   override  fun providePreviewUseCase(){
-            val previewUseCase= Preview.Builder()
-            .setBackgroundExecutor(Executors.newSingleThreadExecutor())
-            .setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
+     fun providePreviewUseCase():Preview{
 
-        unbind(previewUseCase)
+        mScanFragmentDataBinding?.include2?.previewFinder?.display?.rotation.run {
 
-        provideSurface(previewUseCase)
-        bindLifecycleView(previewUseCase)
+            return Preview.Builder().also {
+
+                println("Preview usecase")
+            }
+
+                .setTargetRotation(this?:Surface.ROTATION_90)
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
+        }
 
     }
 
     private fun unbind(useCase: UseCase){
 
+     val mCameraProvider =   cameraProvider
         try {
-            cameraProvider?.unbind(useCase)
+
+            println("unbind")
+
+            if(mCameraProvider!=null) {
+                cameraProvider?.unbind(useCase)
+            }else{
+
+                throw NullPointerException("unBind Camera Provider must not be null")
+
+            }
+
         }catch (e : IllegalStateException ){
             println("Exception Occured in Thread Main ")
         }
@@ -153,15 +185,25 @@ abstract class BaseCameraX( private val context: Context,
 
 
 
-    override fun bindLifecycleView( useCase: UseCase){
-    camera=   cameraProvider?.bindToLifecycle(lifecycleOwner, mCameraSelector , useCase )
+    override fun bindLifecycleView( previewUseCase:  UseCase ,useCase2: UseCase){
+        val cameraProvider =cameraProvider
 
+        if(cameraProvider!=null) {
+            camera = cameraProvider.bindToLifecycle(
+                cameraMetaData.getLifecycleOwner(),
+                mCameraSelector,
+                previewUseCase,useCase2)
+
+        }else{
+            throw NullPointerException("Camera Provider must not be null")
+        }
     }
 
     override fun setZoomRatio(delta: Float) {
         val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 0F
 
         camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
+
     }
 
 
@@ -187,5 +229,10 @@ abstract class BaseCameraX( private val context: Context,
             else-> torchOff()
         }
     }
+
+   abstract fun provideSurface(preview : Preview)
+
+
+
 
 }

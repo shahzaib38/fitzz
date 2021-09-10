@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 class HistoryViewModel @ViewModelInject constructor(private val historyRepository : HistoryRepository)  : BaseViewModel<HistoryNavigator>(historyRepository) {
 
 
+    val subscriptionLiveData = historyRepository.subscriptionLiveData
 
     fun getAllHistoryData() = liveData(Dispatchers.IO) {
         // emit(Resource.loading(data = null))

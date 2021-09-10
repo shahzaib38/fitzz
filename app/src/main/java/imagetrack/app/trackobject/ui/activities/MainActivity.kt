@@ -1,27 +1,27 @@
 package imagetrack.app.trackobject.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.camera.core.ExperimentalUseCaseGroup
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import imagetrack.app.datastore.IDataStore
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.databinding.MainDataBinding
 import imagetrack.app.trackobject.ext.setupWithNavController
-import imagetrack.app.trackobject.ui.dialogs.ExitDialogFragment
+import imagetrack.app.trackobject.ui.dialogs.InstructionDialog
 import imagetrack.app.trackobject.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @ExperimentalUseCaseGroup
-@ExperimentalUseCaseGroupLifecycle
 @AndroidEntryPoint
 class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
 
@@ -46,15 +46,16 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
         mMainDataBinding = getViewDataBinding()
         setupBottomNavigationBar()
 
+       val isNew = IDataStore.getInstance(applicationContext).getWelcomeNote()
 
-
-
-
+        if(!isNew) {
+            InstructionDialog.getInstance().showDialog(supportFragmentManager)
+        }
 
     }
 
 
-    public fun   getDate( milliSeconds :Long , dateFormat :String) :String
+    public fun   getDate(milliSeconds: Long, dateFormat: String) :String
     {
         // Create a DateFormatter object for displaying date in specified format.
         val formatter = SimpleDateFormat.getDateInstance().format(dateFormat)
@@ -93,9 +94,5 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
         currentNavController = controller
     }
 
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 
 }

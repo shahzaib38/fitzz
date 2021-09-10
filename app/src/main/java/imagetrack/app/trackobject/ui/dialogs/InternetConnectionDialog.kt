@@ -38,8 +38,9 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
 
 
 
-    override fun showDialog(fragment: FragmentManager) {
-        super.show(fragment ,TAG) }
+    fun showDialog(fragment: FragmentManager) {
+        super.showDialogs(fragment ,TAG)
+    }
 
 
     override fun getBindingVariable(): Int {
@@ -51,7 +52,7 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
     override fun getLayoutId(): Int {
         return  R.layout.internet_coonection    }
 
-   private   fun dismissDialog() {
+    private   fun dismissDialog() {
         super.dismissDialog(TAG)
 
     }

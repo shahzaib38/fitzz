@@ -11,6 +11,9 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import imagetrack.app.trackobject.ui.activities.BaseActivity
+import imagetrack.app.trackobject.ui.activities.HistoryActivity
+import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
+import imagetrack.app.trackobject.ui.activities.MainActivity
 
 
 abstract class BaseFragment<VM : ViewModel, VDB: ViewDataBinding> : Fragment() {
@@ -51,13 +54,32 @@ abstract class BaseFragment<VM : ViewModel, VDB: ViewDataBinding> : Fragment() {
 
     }
 
+    override fun onDetach() {
+        mActivity =null
+        println("Fragment Detached")
+        super.onDetach()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if(context is BaseActivity<*, *>){
+         if(context is MainActivity){
             mActivity =context
-        }
+             println("MainActivity Fragment  Attached")
+
+         }else if(context is InAppPurchaseActivity){
+
+             mActivity =context
+             println("InappActivity Fragment  Attached")
+
+         }else if(context is HistoryActivity){
+             mActivity =context
+             println("InappActivity Fragment  Attached")
+
+
+         }
+
+
     }
 
 

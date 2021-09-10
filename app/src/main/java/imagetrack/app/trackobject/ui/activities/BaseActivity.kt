@@ -107,6 +107,17 @@ abstract class BaseActivity<out VM : ViewModel,out VDB : ViewDataBinding> : AppC
         startActivity(shareIntent)
     }
 
+    fun sharePdfFile(pdfUri :Uri){
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, pdfUri)
+            type = "application/pdf"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
 
 
     fun shareData(value :String ="no value was shared"){

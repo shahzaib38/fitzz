@@ -5,8 +5,10 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "de.mannodermaus.android-junit5"
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -14,22 +16,17 @@ android {
         applicationId "imagetrack.app.trackobject"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 7
-        versionName "3.0.1"
+        versionCode 14
+        versionName "3.6.1"
 
         testInstrumentationRunner "imagetrack.app.trackobject.CustomTestRunner"
 //            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // 2) Connect JUnit 5 to the runner
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
 
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        android.defaultConfig.manifestPlaceholders = [
-                'appAuthRedirectScheme': 'https'
-        ]
 
     }
-
 
     buildTypes {
         release {
@@ -65,7 +62,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    //Mlkit
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
+
 //    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -73,15 +73,9 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
 
 
-    //Glide Libraryw
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-
-
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.28-alpha"
     kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
-
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02"
     kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
 
@@ -105,17 +99,25 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    // CameraX core library using the camera2 implementation
-    def camerax_version = "1.0.0-rc03"
+//     CameraX core library using the camera2 implementation
+    def camerax_version = "1.0.0-alpha07"
     // The following line is optional, as the core library is included indirectly by camera-camera2
-    implementation "androidx.camera:camera-core:${camerax_version}"
-    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-core:1.1.0-alpha07"
+    implementation "androidx.camera:camera-camera2:1.1.0-alpha07"
     // If you want to additionally use the CameraX Lifecycle library
-    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:1.1.0-alpha07"
     // If you want to additionally use the CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha22"
-    // If you want to additionally use the CameraX Extensions library
-    implementation "androidx.camera:camera-extensions:1.0.0-alpha22"
+    implementation "androidx.camera:camera-view:1.0.0-alpha27"
+//    // If you want to additionally use the CameraX Extensions library
+//    implementation "androidx.camera:camera-extensions:1.0.0-alpha27"
+
+
+
+
+
+
+
+
 
 
     // Text Recognition
@@ -130,6 +132,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     //Ui Test
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
@@ -149,13 +152,10 @@ dependencies {
     // ...with Java.
     androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.28-alpha")
 
-
-
     //Gson Version
     implementation "com.google.code.gson:gson:2.8.2"
 
    //Room DataBase
-
     def room_version = "2.3.0"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
@@ -169,41 +169,23 @@ dependencies {
     //Cloud Function
     implementation "com.google.firebase:firebase-functions:12.0.1"
 
-
-
     implementation "com.google.firebase:firebase-auth-ktx:21.0.1"
 
     // [START gradle_firebase_ui_auth]
     implementation "com.firebaseui:firebase-ui-auth:7.2.0"
 
-
-    //OpenId OAuth 2.0
-    implementation 'net.openid:appauth:0.9.0'
-
-    //Deep Link
-    implementation 'com.google.firebase:firebase-dynamic-links'
-
     //Okio
     implementation 'com.squareup.okio:okio:2.10.0'
 
-
     //Pervious Version OAuth 2.0 "com.google.auth:google-auth-library-oauth2-http:0.3.0"
-
     // OAuth2 for Google API
-    implementation("com.google.auth:google-auth-library-oauth2-http:0.3.0")
-            {
+    implementation("com.google.auth:google-auth-library-oauth2-http:0.3.0") {
         exclude module: 'jsr305'
-        exclude module: 'httpclient'
-    }
+        exclude module: 'httpclient' }
 
-    //Retrofit
-
-    //Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-
-
-    // junit Testing
+   // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 
     //Jupitor for
@@ -216,11 +198,7 @@ dependencies {
     testImplementation "junit:junit:4.13"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.7.1"
 
-
-
-
     //Android Instrumental Test
-   // androidTestImplementation "androidx.test:runner:1.4.0"
     androidTestImplementation "org.junit.jupiter:junit-jupiter-api:5.7.1"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 
@@ -228,21 +206,32 @@ dependencies {
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:1.2.2"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:1.2.2"
     androidTestImplementation "androidx.test:runner:1.4.0"
-    //Mockito
 
+    //Mockito
     androidTestImplementation "org.mockito:mockito-android:3.3.3"
-//    androidTestImplementation "org.mockito:mockito-inline:3.7.7"
+
+    //  androidTestImplementation "org.mockito:mockito-inline:3.7.7"
     testImplementation "org.mockito:mockito-core:3.7.7"
-//
-//    //Hilt Testing
-//    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.35'
-//    // ...with Kotlin.
-//    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.35'
+
+    //Hilt Testing
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
 
+    //Admob Ads
+//    implementation 'com.google.android.gms:play-services-ads:20.2.0'
+
+    implementation project(':nativetemplate')
 
 
+    def paging_version = "3.0.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    // For Kotlin use paging-runtime-ktx
 
+
+    //Preference DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    //window
+    implementation 'androidx.window:window:1.0.0-alpha09'
 
 
 }

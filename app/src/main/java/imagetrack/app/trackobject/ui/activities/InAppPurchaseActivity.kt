@@ -5,33 +5,29 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
 import dagger.hilt.android.AndroidEntryPoint
-import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionJson
 import imagetrack.app.trackobject.databinding.InAppBillingDataBinding
-import imagetrack.app.trackobject.enum.ProgressStatus
+//import imagetrack.app.trackobject.ext.ads
+import imagetrack.app.trackobject.ext.internetConnectionDialog
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants
 import imagetrack.app.trackobject.inapppurchaseUtils.createTimeNote
-import imagetrack.app.trackobject.inapppurchaseUtils.getDateTime
-import imagetrack.app.trackobject.inapppurchaseUtils.purchaseForSku
 import imagetrack.app.trackobject.navigator.SubscriptionStatusNavigator
-import imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog
 import imagetrack.app.trackobject.ui.dialogs.SubscriptionStatusDialog
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
-import imagetrack.app.utils.CameraPermissions
-import imagetrack.app.utils.InternetConnection
-import java.lang.StringBuilder
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBinding>() ,SubscriptionStatusNavigator {
@@ -58,8 +54,38 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
             mViewModel.purchaseUpdate.observe(this, purchaseUpdateObserver)
             mViewModel.daoSubscriptions.observe(this, jsonObserver)
             mViewModel.deniedLiveData.observe(this, deniedFlowObserver)
+             mViewModel.skus.observe(this ,skuObserver)
 
+
+//        setupAds()
     }
+
+    private val skuObserver = Observer<Map<String,SkuDetails>> { sku ->
+
+        if(sku!=null){
+            val skuDetails = sku[Constants.BASIC_SKU]
+            if(skuDetails!=null) {
+                mMainDataBinding?.include4?.textView18?.buyConcat(skuDetails)
+
+
+            } } }
+
+  private   fun TextView.buyConcat(skuDetails: SkuDetails){
+      val price = skuDetails.price
+      val  concatString = price + "/month"
+      this.text = concatString }
+//
+//    private fun  setupAds(){
+//
+//        mMainDataBinding?.adsInclude?.apply {
+//
+//            val unitId=    resources.getString(R.string.subscription_native)
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                adsId.ads(this@InAppPurchaseActivity, unitId, advertiseId)
+//            }
+//        }
+//
+//    }
 
 
 
@@ -90,7 +116,11 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
     }
 
     private fun showInternetConnectionDialog(){
-        InternetConnectionDialog.getInstance().showDialog(supportFragmentManager) }
+        this.internetConnectionDialog()
+//        InternetConnectionDialog.getInstance().showDialog(supportFragmentManager)
+
+
+    }
 
     private val daoSubscriptionObserver = Observer<SubscriptionStatus> { subscriptionStatus ->
         Log.i("InAppPurchaseActivity" , "SubscriptionStatus")
@@ -109,7 +139,11 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
         finish()
         val intent = Intent(this ,MainActivity::class.java)
         startActivity(intent)
+
+
     }
+
+
     private val intialPurchaseObserver = Observer<List<Purchase>>{ purchaseList->
         Log.i("InAppPurchaseActivity" , "intialPurchaseObserver")
 

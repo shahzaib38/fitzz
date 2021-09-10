@@ -8,7 +8,6 @@ app:startDestination="@id/scanFragment"
 
 
 <fragment android:id="@+id/scanFragment"
-    tools:layout="@layout/scan_fragment"
     android:name="imagetrack.app.trackobject.ui.fragment.ScanFragment"
 
     />

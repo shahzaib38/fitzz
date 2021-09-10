@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.camera.core.ExperimentalUseCaseGroup
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,7 +16,7 @@ import imagetrack.app.trackobject.ext.setupWithNavController
 import imagetrack.app.trackobject.viewmodel.MainViewModel
 
 @ExperimentalUseCaseGroup
-@ExperimentalUseCaseGroupLifecycle
+//@ExperimentalUseCaseGroupLifecycle
 @AndroidEntryPoint
 class FreeSubscriptionActivity   : BaseActivity<MainViewModel, FreeSubscriptionDataBinding>() {
 

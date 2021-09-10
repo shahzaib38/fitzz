@@ -15,7 +15,7 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ExperimentalUseCaseGroup
 import androidx.camera.core.TorchState
 import androidx.camera.core.ZoomState
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +39,7 @@ import java.io.FileNotFoundException
 
 @ExperimentalGetImage
 @ExperimentalUseCaseGroup
-@ExperimentalUseCaseGroupLifecycle
+//@ExperimentalUseCaseGroupLifecycle
 @AndroidEntryPoint
 class FreeScanFragment :  BaseFragment<ScanViewModel, FreeScanFragmentDataBinding>() , ScanNavigator {
 
@@ -100,6 +100,10 @@ class FreeScanFragment :  BaseFragment<ScanViewModel, FreeScanFragmentDataBindin
         photoPickerIntent.type = "image/*"
         startActivityForResult(photoPickerIntent, RESULT_LOADING)
 
+
+    }
+
+    override fun enableTorch() {
 
     }
 
@@ -187,44 +191,44 @@ class FreeScanFragment :  BaseFragment<ScanViewModel, FreeScanFragmentDataBindin
 
     @ExperimentalGetImage
     private fun startCamera() {
-
-        mScanFragmentDataBinding?.include2?.let {previewBinding->
-            iCamera =  mViewModel.provideScanCamera(requireContext(), this, previewBinding.previewFinder,previewBinding. cameraProgress)
-            iCamera?.getZoomState()?.observe(viewLifecycleOwner ,zoomState)
-
-            if(iCamera==null){toast("Restart App "); return}
-            val scaleGestureDetector = ScaleGestureDetector(context, iCamera)
-
-            previewBinding.previewFinder.apply {
-                setOnTouchListener { _, event ->
-                    scaleGestureDetector.onTouchEvent(event)
-
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
-                        MotionEvent.ACTION_UP -> {
-                            val factory = this.meteringPointFactory
-                            val point = factory.createPoint(event.x, event.y)
-                            iCamera?.startFocusAndMetering(point)
-                            previewBinding.focusRing.animateFocusRing(event.x ,event.y)
-
-                            return@setOnTouchListener true }
-                        else -> return@setOnTouchListener false
-                    }
-
-                }
-
-            }
-
-            torchStates()
-            iCamera?.setFragmentManagerr(childFragmentManager)
-        }?:throw NullPointerException("Fragment DataBinding must not be null ")
+//
+//        mScanFragmentDataBinding?.include2?.let {previewBinding->
+//            iCamera =  mViewModel.provideScanCamera(requireContext(), this, previewBinding.previewFinder,previewBinding. cameraProgress)
+//            iCamera?.getZoomState()?.observe(viewLifecycleOwner ,zoomState)
+//
+//            if(iCamera==null){toast("Restart App "); return}
+//            val scaleGestureDetector = ScaleGestureDetector(context, iCamera)
+//
+//            previewBinding.previewFinder.apply {
+//                setOnTouchListener { _, event ->
+//                    scaleGestureDetector.onTouchEvent(event)
+//
+//                    when (event.action) {
+//                        MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
+//                        MotionEvent.ACTION_UP -> {
+//                            val factory = this.meteringPointFactory
+//                            val point = factory.createPoint(event.x, event.y)
+//                            iCamera?.startFocusAndMetering(point)
+//                            previewBinding.focusRing.animateFocusRing(event.x ,event.y)
+//
+//                            return@setOnTouchListener true }
+//                        else -> return@setOnTouchListener false
+//                    }
+//
+//                }
+//
+//            }
+//
+//            torchStates()
+//            iCamera?.setFragmentManagerr(childFragmentManager)
+//        }?:throw NullPointerException("Fragment DataBinding must not be null ")
 
 
     }
-
-
-    private  fun torchStates(){
-        iCamera?.getTorchState()?.observe(viewLifecycleOwner, torchState) }
+//
+//
+//    private  fun torchStates(){
+//        iCamera?.getTorchState()?.observe(viewLifecycleOwner, torchState) }
 
 
 
@@ -239,9 +243,9 @@ class FreeScanFragment :  BaseFragment<ScanViewModel, FreeScanFragmentDataBindin
         }else if(requestCode ==  CameraPermissions.CAMERA_GALLERY_PERMISSION){
             openIntent() }
     }
-
-    override fun enableTorch() {
-        iCamera?.enableTorch() }
+//
+//    override fun enableTorch() {
+//        iCamera?.enableTorch() }
 
 
 }

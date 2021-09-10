@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-
     >
 
     <data class="ScanDialogDataBinding">
@@ -19,13 +18,16 @@
         android:layout_height="match_parent"
         android:background="#000">
 
-        <ImageView
+        <Button
             android:id="@+id/viewOrderId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/view_item_icon"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/pdf_button"
+            android:onClick="@{()->viewModel.pdf()}"
+            android:text="@string/pdf_button"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
@@ -35,7 +37,7 @@
             android:id="@+id/constraintLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/textlayoutdesign"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
@@ -49,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/edit_icon_style"
-                android:onClick="@{()->viewModel.edit()}"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/sharedata"
                 app:layout_constraintEnd_toStartOf="@+id/sharedata"
@@ -71,6 +72,7 @@
             <ImageView
                 android:id="@+id/sharedata"
                 style="@style/shareimage"
+
                 android:onClick="@{()->viewModel.share()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/translate"
@@ -96,31 +98,63 @@
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/textlayoutdesign"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+            app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="1">
 
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/adView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/adview_style"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/bannerId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ScrollView
                 android:id="@+id/scrollView2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/constraintOkId"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_weight="1">
+                app:layout_constraintTop_toBottomOf="@+id/adView">
 
                 <EditText
                     android:id="@+id/translatedtext"
                     style="@style/translated_edit"
+                    android:minLines="15"
+                    android:gravity="start|top"
+                    android:background="@drawable/editor_style"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintTop_toBottomOf="parent" />
@@ -168,7 +202,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
 
-            app:layout_constraintGuide_begin="25dp"
+            app:layout_constraintGuide_begin="8dp"
 
             />
 
@@ -178,7 +212,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
 
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_end="8dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
@@ -192,3 +226,23 @@
 
 
 </layout>
+
+
+
+
+
+<!--<com.google.android.gms.ads.AdView-->
+<!--android:id="@+id/bannerId"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_alignParentBottom="true"-->
+<!--android:layout_centerHorizontal="true"-->
+<!--android:layout_marginTop="12dp"-->
+<!--android:layout_marginBottom="16dp"-->
+<!--ads:adSize="BANNER"-->
+<!--ads:adUnitId="@string/banner_ad"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toTopOf="parent" />-->
+

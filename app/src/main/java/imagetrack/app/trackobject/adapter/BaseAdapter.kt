@@ -9,7 +9,7 @@ import imagetrack.app.utils.Model
 import imagetrack.app.trackobject.viewholder.BaseViewHolder
 
 
-abstract class BaseAdapter< M: Model, VDB: ViewDataBinding>(diffCallback: DiffUtil.ItemCallback<M>) :
+abstract class BaseAdapter< M, VDB: ViewDataBinding>(diffCallback: DiffUtil.ItemCallback<M>) :
     RecyclerView.Adapter<BaseViewHolder<VDB>>() {
 
     open var item :ArrayList<M>?=ArrayList()

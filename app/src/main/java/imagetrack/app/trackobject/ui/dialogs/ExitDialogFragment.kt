@@ -1,15 +1,21 @@
 package imagetrack.app.trackobject.ui.dialogs
 
+import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.ExitDataBinding
+//import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.navigator.ExitNavigator
 import imagetrack.app.trackobject.viewmodel.ExitViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -22,6 +28,7 @@ class ExitDialogFragment : BaseDialogFragment<ExitViewModel, ExitDataBinding>() 
     private var mBinding  : ExitDataBinding? =null
 
 
+
     override fun getBindingVariable(): Int = BR.viewModel
     override fun getViewModel(): ExitViewModel = mViewModel
 
@@ -31,10 +38,32 @@ class ExitDialogFragment : BaseDialogFragment<ExitViewModel, ExitDataBinding>() 
         mBinding =getViewDataBinding()
         mViewModel.setNavigator(this)
         dialog?.setCanceledOnTouchOutside(false)
+
+//              setupAds()
     }
 
 
+     fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager, TAG)
+    }
+
+//    private fun  setupAds(){
+//
+//        mBinding?.adsInclude?.apply {
+//
+//            val unitId=    resources.getString(R.string.exit_ads)
+//            //adsId.ads(requireContext() ,unitId,advertiseId)
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                adsId.ads(requireContext(), unitId, advertiseId)
+//            }
+//        }
+//
+//    }
+
+
+
     companion object{
+        private const val TAG= "ExitDialogFragment"
 
         fun getInstance(): ExitDialogFragment {
             return ExitDialogFragment() } }

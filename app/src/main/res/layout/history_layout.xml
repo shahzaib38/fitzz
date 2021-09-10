@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data
-        class="HistoryDataBinding">
+    <data class="HistoryDataBinding">
 
         <variable
             name="viewModel"
@@ -21,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/Red"
-            app:layout_constraintBottom_toTopOf="@+id/history_recyclerview"
+            app:layout_constraintBottom_toTopOf="@+id/emptyId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,11 +29,11 @@
                 android:id="@+id/historyID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/history"
                 android:textColor="@color/white"
                 android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,37 +45,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:padding="15dp"
-
                 android:onClick="@{()->viewModel.deleteAll()}"
+
+                android:padding="15dp"
                 android:text="@string/delete_all"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/historyID"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/historyID" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/history_recyclerview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/emptyId"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:layoutAnimation="@anim/layout_animation"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constaintId" />
+            app:layout_constraintTop_toBottomOf="@+id/emptyId" />
 
         <include
-            app:layout_constraintTop_toBottomOf="@+id/history_recyclerview"
-           app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/emptyId"
-            android:visibility="gone"
             layout="@layout/empty_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            />
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/history_recyclerview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constaintId" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

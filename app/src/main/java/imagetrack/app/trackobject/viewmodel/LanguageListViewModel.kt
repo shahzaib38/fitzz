@@ -20,9 +20,15 @@ class LanguageListViewModel @ViewModelInject constructor(private val mainReposit
     fun getUsers(name: MutableMap<String, String>) = liveData(Dispatchers.IO) {
         try {
             mainRepository.getUsers(name).getData()?.getTranslations()?.forEach {
-                emit(it?.getTranslatedText()) }
+             emit(it?.getTranslatedText()) }
+
         } catch (exception: Exception) {
-            emit( exception.message ?: "Error Occurred!") }
+            emit( exception.message ?: "Error Occurred!")
+       // emit( "Error Occurred!")
+
+         }
+
+
     }
 
 

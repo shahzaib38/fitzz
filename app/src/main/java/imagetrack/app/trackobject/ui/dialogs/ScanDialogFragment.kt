@@ -7,8 +7,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+//import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ClipBoardManager
 import imagetrack.app.trackobject.BR
@@ -16,11 +17,16 @@ import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.ScanDialogDataBinding
-import imagetrack.app.trackobject.inapppurchaseUtils.createTimeNote
+import imagetrack.app.trackobject.ext.internetConnectionDialog
+import imagetrack.app.trackobject.ext.launchActivity
+import imagetrack.app.trackobject.ext.showLanguageList
+import imagetrack.app.trackobject.ext.showPdf
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.ui.activities.EditorActivity
 import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
+import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.ScanDialogViewModel
+import imagetrack.app.utils.CameraPermissions
 import imagetrack.app.utils.DateUtils
 import imagetrack.app.utils.InternetConnection
 
@@ -28,11 +34,11 @@ import imagetrack.app.utils.InternetConnection
 @AndroidEntryPoint
  class ScanDialogFragment : BaseDialogFragment<ScanDialogViewModel, ScanDialogDataBinding>()  , ScanDialogNavigator , DialogInterface.OnDismissListener  {
 
-
     override fun onDismiss(dialog: DialogInterface) {}
     private val mViewModel by viewModels<ScanDialogViewModel>()
     private var mBinding  :ScanDialogDataBinding? =null
     private var subscriptionStatus : SubscriptionStatus?=null
+    private var mMainActivity :MainActivity? =null
 
     override fun getBindingVariable(): Int =BR.viewModel
     override fun getViewModel(): ScanDialogViewModel = mViewModel
@@ -45,51 +51,94 @@ import imagetrack.app.utils.InternetConnection
         mViewModel.setNavigator(this)
         dialog?.setCanceledOnTouchOutside(false)
 
+
+        val baseActivitty  = getBaseActivity()
+
+        if(baseActivitty is MainActivity){
+            mMainActivity =baseActivitty }
+
         val arguments = arguments?.run { get(KEY_VALUE) }
 
         mBinding?.apply {
             val derivedText =arguments as? String
             this.translatedtext.translateText(derivedText) }
+//
+//        mBinding?.run{
+//            val adRequest = AdRequest.Builder().build()
+//            this.bannerId.loadAd(adRequest)
+//
+//        }
 
-        checkTranslationAvailable()
-
-        mBinding?.viewOrderId?.setOnClickListener {
-            val mSubscriptionStatus =subscriptionStatus
-
-            if(mSubscriptionStatus!=null) {
-                val subscriptionNote = createTimeNote(mSubscriptionStatus)
-                if (!mSubscriptionStatus.isExpired()) {
-                    SubscriptionDetailDialog.getInstance(subscriptionNote).showDialog(this.parentFragmentManager)
-                }
-
-            }
-
-        }
+    //    checkTranslationAvailable()
 
     }
 
-    private  fun EditText.translateText(derivedText :String?){
+    private fun requestGalleryPermission(){
+        requestPermissions(
+            CameraPermissions.GALLERY_ARRAY,
+            CameraPermissions.CAMERA_GALLERY_PERMISSION
+        )
+    }
+
+
+   private  fun openGallery(){
+
+            if (CameraPermissions.isGalleryPermissionGranted(requireContext()))
+            {
+                dismiss()
+                mMainActivity?.showPdf(getText())
+            } else
+            {
+                requestGalleryPermission() }
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+       if(requestCode == CameraPermissions.CAMERA_GALLERY_PERMISSION){
+           dismiss()
+           mMainActivity?.showPdf(getText())
+       }
+    }
+
+
+
+
+
+
+
+
+
+
+    private  fun EditText.translateText(derivedText: String?){
         val isTextNotNullAndEmpty = derivedText !=null && derivedText.isNotEmpty()
 
         if (isTextNotNullAndEmpty) {
             setText(derivedText)
         } else {
             setText(NO_TEXT_FOUND)
-        } }
+        }
+    }
 
 
 
 
 
     private fun openIntent(){
-        requireActivity().finish()
-        val intent = Intent(requireActivity() ,InAppPurchaseActivity::class.java)
-        requireActivity().startActivity(intent) }
+
+        mMainActivity?.launchActivity(InAppPurchaseActivity::class.java)
+
+    }
 
 
 
+    fun showDialog(fragment: FragmentManager) {
+        super.showDialogs(fragment, TAG) }
 
-        companion object{
+
+
+    companion object{
         private const val TAG : String="ScanDialogFragment"
          const val NO_TEXT_FOUND ="No Text found Try Again"
 
@@ -111,12 +160,12 @@ import imagetrack.app.utils.InternetConnection
 
     override fun copy() {
         ClipBoardManager.clipInstance(requireContext()).copy(getText())
-               toast("Copied") }
+               toast("Copied")
+    }
 
     override fun edit() {
-
-        val intent = Intent(context ,EditorActivity::class.java)
-        intent.putExtra(resources.getString(R.string.edit_value),getText())
+        val intent = Intent(context, EditorActivity::class.java)
+        intent.putExtra(resources.getString(R.string.edit_value), getText())
         startActivity(intent)
        this.dismiss()
     }
@@ -134,81 +183,67 @@ import imagetrack.app.utils.InternetConnection
     }
 
         override fun pdf() {
-        PdfCreatorDialog.getInstance(getText()).showDialog(childFragmentManager) }
-
-    private fun checkTranslationAvailable(){
-        mViewModel.subscriptionLiveData.observe(this , Observer<SubscriptionStatus>{
-            subscriptionStatus =  it
-
-            if(it!=null){
-                val isExpire = it.isExpired()
-                if(isExpire){
-                    invisibleOrder()
-                }
-
-                else {
-
-                    displayOrder()
-
-                }
-            }
-            else {
-                invisibleOrder()
-
-            }
 
 
+            openGallery()
 
 
+        }
 
-        })
+//    private fun checkTranslationAvailable(){
+//        mViewModel.subscriptionLiveData.observe(this , {
+//            subscriptionStatus =  it
+//
+//        })
+//    }
 
 
-    }
-
-
-   private fun displayOrder(){
-        mBinding?.viewOrderId?.visibility =View.VISIBLE }
-
-    private fun invisibleOrder(){
-        mBinding?.viewOrderId?.visibility =View.INVISIBLE }
 
 
 
 
     override fun translate() {
-      val subscriptionStatus =  subscriptionStatus
+
+        println("Translate")
+//      val subscriptionStatus =  subscriptionStatus
 
         if(!InternetConnection.isInternetAvailable(requireActivity()))
         {
-            InternetConnectionDialog.getInstance().showDialog(parentFragmentManager)
-            return
-        }
+
+            mMainActivity?.internetConnectionDialog()
 
 
-        if(subscriptionStatus!=null){
-            val isExpire = subscriptionStatus.isExpired()
-            if(isExpire){
-                openIntent()
-                invisibleOrder()
-            }
+            return }
 
-            else {
-                LanguageListDialogFragment.getInstance(getText()).showDialog(parentFragmentManager)
+//
+
+//
+//        if(subscriptionStatus!=null){
+//            val isExpire = subscriptionStatus.isExpired()
+//            if(isExpire){
+//                dismiss()
+//                openIntent()
+//            } else {
+
+
+
                 dismiss()
-                displayOrder()
 
-            }
-        }
-        else {
-        invisibleOrder()
-            openIntent() }
+                    mMainActivity?.showLanguageList(getText())
+
+//
+//
+//            }
+//        }
+//        else {
+//            openIntent() }
+//
 
     }
 
-    override fun startProgress() {}
+    override fun startProgress(){}
 
-    override fun stopProgress() {}
+    override fun stopProgress(){}
 
     override fun exit() {
           saveToDataBase()
@@ -219,10 +254,15 @@ import imagetrack.app.utils.InternetConnection
 
     private fun  saveToDataBase(){
 
-        if(getText().isEmpty())return
+        if(getText().isEmpty() || getText().trim() == NO_TEXT_FOUND)return
 
         try{
-       mViewModel.insertHistory(HistoryBean(value =getText(),date = DateUtils.getTime().toString()))
+       mViewModel.insertHistory(
+           HistoryBean(
+               value = getText().trim(),
+               date = DateUtils.getTime().toString()
+           )
+       )
         } catch (e: Exception){
 
             val mess =e.message

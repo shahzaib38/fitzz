@@ -2,132 +2,168 @@ package imagetrack.app.trackobject.camera_features
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.widget.ProgressBar
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ExperimentalUseCaseGroup
-import androidx.camera.core.ImageCapture
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
-import androidx.camera.view.PreviewView
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleOwner
-import imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment
-import imagetrack.app.image_processing.ImageCaptureImpl
-import imagetrack.app.text_recognition.TextProcessAdapterFactory
-import imagetrack.app.view.GraphicOverlay
+import android.hardware.display.DisplayManager
+import androidx.camera.core.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import imagetrack.app.CallBack
+import imagetrack.app.image_processing.DeviceTextRecognizer
+import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import java.util.concurrent.Executors
 
 
+class ScanningCamera  constructor(private val cameraMetaData: CameraMetaData) :
+    BaseCameraX(cameraMetaData) , ICaptureUseCase  ,CallBack  {
 
-class ScanningCamera private constructor(
-    private val context: Context,
-    private val graphics: GraphicOverlay?,
-    lifecycleOwner: LifecycleOwner, previewView: PreviewView, val progress: ProgressBar
-) : BaseCameraX(
-    context, graphics,
-    lifecycleOwner, previewView
-) ,ICaptureUseCase ,OpenDialog  , OnProgression{
+    private val progressStatus: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>()
+    private val translateText :MediatorLiveData<String?> = MediatorLiveData<String?>()
+    private val visionImageProcessor = DeviceTextRecognizer(
+        cameraMetaData.getContext()
+    )
+    private var mScanFragmentDataBinding : ScanFragmentDataBinding?=null
+    val executors = Executors.newSingleThreadExecutor()
 
-    var fragmentManager :  FragmentManager? = null
+   private  val displayManager by lazy {
+        cameraMetaData.getContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+    }
 
-    override  fun setFragmentManagerr(fragmentManager  : FragmentManager){
-        this.fragmentManager = fragmentManager }
+    init {
 
+
+
+
+
+        val viewBindingLocal =    cameraMetaData.getViewDataBinding()
+
+        if(viewBindingLocal is ScanFragmentDataBinding){
+            mScanFragmentDataBinding = viewBindingLocal
+        }
+
+
+
+        progressStatus.addSource(visionImageProcessor.getProgressLiveData()) {
+            progressStatus.postValue(it) }
+
+
+    }
 
     override fun captureImage(){
-        imageCapture?.takePicture(
-            Executors.newSingleThreadExecutor(), ImageCaptureImpl.getInstance(
-                context,
-                this ,this)) }
+
+        imageCapture?.takePicture(Executors.newSingleThreadExecutor(),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    visionImageProcessor.processImageProxy(image)
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    progressStatus.postValue(false)
+
+                }
+            }
+        )
+    }
+
+
 
     private var imageCapture : ImageCapture?=null
 
     override fun stop() {
-        progress.visibility= View.GONE }
+
+    translateText.postValue(null)
+    }
+
 
     @ExperimentalGetImage
     @ExperimentalUseCaseGroup
-    @ExperimentalUseCaseGroupLifecycle
+    //@ExperimentalUseCaseGroupLifecycle
     override fun bindAllCameraXUseCases() {
-        super.bindAllCameraXUseCases()
         provideImageUseCase()
+        displayManager.registerDisplayListener(this ,null )
     }
 
-    override  fun startProgress(){
-        Handler(Looper.getMainLooper()).post(Runnable {
-            println("thread Name ${Thread.currentThread().name}")
-            progress.visibility = View.VISIBLE
-        })
-}
+
+    override fun scanDocument(bitmap: Bitmap){
 
 
-
-
-   override fun scanDocument(bitmap : Bitmap){
-      val executors = Executors.newSingleThreadExecutor()
        executors.submit(
-           Runnable{ TextProcessAdapterFactory.createOnCloudTextRecognizer(context).processImageProxy(bitmap, this,this) } ) }
+           Runnable {
+               visionImageProcessor
+                   .processImageProxy(bitmap)
 
-
-   override fun stopProgress(){
-        Handler(Looper.getMainLooper()).post(Runnable {
-            println("thread Name ${Thread.currentThread().name}")
-            progress.visibility= View.GONE
-        })
-
-    }
+           }) }
 
 
     @ExperimentalGetImage
     @ExperimentalUseCaseGroup
-    @ExperimentalUseCaseGroupLifecycle
+//    @ExperimentalUseCaseGroupLifecycle
     override fun provideImageUseCase() {
-        imageCapture =
-            ImageCapture.Builder().setTargetAspectRatio(AspectRatio.RATIO_16_9).also {}
+
+      val preview =  providePreviewUseCase()
+
+        imageCapture = ImageCapture.Builder().setTargetAspectRatio(AspectRatio.RATIO_16_9)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 .build()
 
-        super.bindLifecycleView(imageCapture!!)
+        unbindAll()
+
+        super.bindLifecycleView(imageCapture!!,preview)
+        provideSurface(preview)
+
+
     }
-
-    companion object{
-
-        @Volatile
-        private var instance  : ScanningCamera?=null
-
-        @ExperimentalGetImage
-        @ExperimentalUseCaseGroup
-        @ExperimentalUseCaseGroupLifecycle
-        fun provideCamera(
-            context: Context, graphics: GraphicOverlay?,
-            lifecycleOwner: LifecycleOwner,
-            previewView: PreviewView, progress: ProgressBar
-        ):ICamera{
-
-            if(instance ==null){
-                return ScanningCamera(context, graphics, lifecycleOwner, previewView, progress) }
-            return ScanningCamera(context, graphics, lifecycleOwner, previewView, progress) } }
+//
+//    override fun bindLifecycleView(previewUseCase: UseCase, useCase2: UseCase) {
+//        provideImageUseCase()
+//    }
 
 
 
-    override fun openDialog(text: String) {
+    override fun getProgressLiveData(): LiveData<Boolean> {
+        return progressStatus }
 
-        fragmentManager?.let {fragmentManager->
-            ScanDialogFragment.getInstance(text).showDialog(fragmentManager)
-        }
+
+    override fun getTranslatedLiveData(): LiveData<String?> =translateText
+    override fun testClick() {
 
     }
 
-    override fun closeDialog() {
-        ScanDialogFragment.getInstance("").dismiss()
+    override fun onDisplayAdded(displayId: Int) {
+        println("DIsplay Added")
+    }
+
+    override fun onDisplayRemoved(displayId: Int) {
+
+        println("DIsplay removed")
+
+    }
+
+    override fun onDisplayChanged(displayId: Int) {
+        println("Display changed")
+
+
+
+    }
+
+
+    override  fun provideSurface(preview: Preview){
+        mScanFragmentDataBinding?.include2?.previewFinder?.run{
+
+            println("Provide Surface")
+
+            preview.setSurfaceProvider(this.surfaceProvider)
+
+
+        }?:throw NullPointerException("provide Surface Camera Provider must not be null")
+
+
 
     }
 
 
 
+    override fun translate(result: String) {
+        translateText.postValue(result)
+    }
 
 
 }

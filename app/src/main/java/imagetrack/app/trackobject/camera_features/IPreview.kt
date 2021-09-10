@@ -4,6 +4,4 @@ import androidx.camera.core.Preview
 
 interface IPreview {
 
-  fun  providePreviewUseCase()
-    fun provideSurface(preview : Preview)
 }

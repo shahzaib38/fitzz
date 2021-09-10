@@ -5,13 +5,11 @@
 
         <shape android:shape="oval">
             <stroke android:width="2dp"
-                android:color="#000" />
+                android:color="@color/black" />
             <size android:width="17dp"
                 android:height="17dp" />
             <solid android:color="@color/Red" />
         </shape>
-
-
 
     </item>
 
@@ -22,7 +20,7 @@
                 android:color="#000" />
             <size android:width="17dp"
                 android:height="17dp" />
-            <solid android:color="@color/ok_button_pressed" />
+            <solid android:color="@color/gnt_red" />
         </shape>
 
 

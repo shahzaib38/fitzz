@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
@@ -72,7 +73,7 @@ class SubscriptionDetailDialog : BaseDialogFragment<InAppViewModel, Subscription
 
 
     companion object{
-        private const val TAG : String="SubscriptionDetails"
+        private const val TAG : String="SubscriptionDetailsDialog"
         private const val NO_TEXT_FOUND ="No Text found Try Again"
 
         @VisibleForTesting
@@ -102,5 +103,11 @@ class SubscriptionDetailDialog : BaseDialogFragment<InAppViewModel, Subscription
         val intent = Intent(requireActivity() ,MainActivity::class.java)
         startActivity(intent)
     }
+
+
+    fun showDialog(fragment: FragmentManager) {
+        super.showDialogs(fragment, TAG) }
+
+
 
 }

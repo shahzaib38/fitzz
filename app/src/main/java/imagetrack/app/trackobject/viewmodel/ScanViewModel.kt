@@ -1,18 +1,27 @@
 package imagetrack.app.trackobject.viewmodel
 
-import android.content.Context
-import android.widget.ProgressBar
+import android.graphics.Bitmap
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ExperimentalUseCaseGroup
-import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
-import androidx.camera.view.PreviewView
+import androidx.camera.core.ImageProxy
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewModelScope
+import imagetrack.app.trackobject.camera_features.CameraMetaData
 import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.repo.ScanRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ScanViewModel  @ViewModelInject constructor(private val mainRepository : ScanRepository) : BaseViewModel<ScanNavigator>(mainRepository) {
+
+
+
+    val translateText  = mainRepository.translateLiveData
+    val progressLiveData = mainRepository.progressLiveData
+
+
 
 
 
@@ -26,13 +35,31 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
         getNavigator().openGallery() }
 
     fun capture(){
-        getNavigator().capture() }
-
-    @ExperimentalUseCaseGroup
-    @ExperimentalUseCaseGroupLifecycle
-    @ExperimentalGetImage
-    fun provideScanCamera(context : Context, lifecycleOwner  : LifecycleOwner, previewView: PreviewView, progress : ProgressBar) : ICamera?{
-        return   mainRepository.provideScanCamera(context  ,lifecycleOwner , previewView,progress)
+        getNavigator().capture()
 
     }
+
+
+    fun scanText(bitmap : Bitmap){
+
+        viewModelScope.launch(Dispatchers.IO) {
+            mainRepository.scanText(bitmap)
+        }
+
+        }
+
+    fun scanText(image: ImageProxy){
+
+        viewModelScope.launch(Dispatchers.IO) {
+            mainRepository.scanText(image)
+        }
+
+    }
+
+    fun stopImageProcessor() {
+
+        mainRepository.stopImageProcessor()
+    }
+
+
 }

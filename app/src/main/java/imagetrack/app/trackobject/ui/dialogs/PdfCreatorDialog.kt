@@ -4,14 +4,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import imagetrack.app.pdf.PDFMetaData
 import imagetrack.app.pdf.PDFUtil
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.PdfDataBinding
+//import imagetrack.app.trackobject.ext.ads
+import imagetrack.app.trackobject.ext.showOpenDialog
 import imagetrack.app.trackobject.navigator.PdfNavigator
+import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.PdfViewModel
+import kotlinx.android.synthetic.main.ads_layout.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , PdfNavigator  ,PDFUtil.PDFUtilListener{
@@ -20,6 +29,7 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
     private val mViewModel by viewModels<PdfViewModel>()
     private var mBinding  : PdfDataBinding? =null
     private var   argument :Any?=null
+    private var mMainActivity : MainActivity? =null
 
     override fun getBindingVariable(): Int = BR.viewModel
 
@@ -40,26 +50,56 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
 
         mBinding = getViewDataBinding()
 
-        mViewModel?.setNavigator(this)
-        dialog?.setCanceledOnTouchOutside(false);
+        mViewModel.setNavigator(this)
+        dialog?.setCanceledOnTouchOutside(false)
+
+
+        val baseActivitty  = getBaseActivity()
+
+        if(baseActivitty is MainActivity){
+            mMainActivity =baseActivitty }
+
+
 
         argument = arguments?.run {
-            this.get(KEY_VALUE) } as String
+            get(KEY_VALUE) } as String
 
+    //      setupAds()
     }
 
 
 
-  private   fun generatePdf(value :String){
-      val editable =    mBinding?.pdfEditText
-      val text=    editable?.text.toString()
-      val isEmpty = text.isEmpty()
+//    private fun  setupAds(){
+//
+//        mBinding?.adsInclude?.apply {
+//
+//            val unitId=    resources.getString(R.string.pdf_creator)
+//            //adsId.ads(requireContext() ,unitId,advertiseId)
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                adsId.ads(requireContext(), unitId, advertiseId)
+//            }
+//        }
+//
+//    }
 
-        if(isEmpty){
-            toast(" Name must not be empty")
-          } else {
-            toast(text)
-            PDFUtil.getInstance()?.generatePDF(value, text, this) }
+
+  private   fun generatePdf(value :String){
+
+      val text=    mBinding?.includePdf?.pdfEditText?.text.toString()
+      val header = mBinding?.includePdf?.headerEditText?.text.toString()
+
+      val pdMetadata = createMetaData(text ,header, value)
+
+        if(pdMetadata!=null ){
+
+            PDFUtil.getInstance(requireActivity()).generatePDF(pdMetadata, this)
+
+        } else {
+
+            toast("File Name must not be empty")
+        }
+
+
   }
 
     companion object{
@@ -84,6 +124,9 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
     }
 
 
+     fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager, TAG)
+    }
 
    private  fun toast(value : String){
 
@@ -93,7 +136,12 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
 
         progressStop()
         dismissDialog()
+
+        mMainActivity?.showOpenDialog()
+//        OpenPdfDialog.getInstance("").showDialog(requireActivity().supportFragmentManager)
+
         toast("Pdf Created")
+
     }
 
     override fun pdfGenerationFailure(exception: Exception?) {
@@ -115,6 +163,30 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
     override fun openInternetDialog() {
 
     }
+
+
+
+    private fun createMetaData(text :String ,header :String  ,data :String ) : PDFMetaData?{
+
+        val pdfMetaDataBuilder = PDFMetaData.Builder()
+        pdfMetaDataBuilder.setData(data.trim())
+
+        if(text.isEmpty()){
+            return null
+        }else{
+
+            pdfMetaDataBuilder.setFileName(text.trim()) }
+
+        if(header.isEmpty()){
+            pdfMetaDataBuilder.setHeader("")
+
+        }else{
+            pdfMetaDataBuilder.setHeader(header) }
+
+        return pdfMetaDataBuilder.builder()
+    }
+
+
 
 
 }

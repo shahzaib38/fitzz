@@ -4,18 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionApi
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
+import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionApi
 import imagetrack.app.trackobject.databinding.DemoDataBinding
+import imagetrack.app.trackobject.storage.Storage
 import imagetrack.app.trackobject.ui.activities.BaseActivity
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.concurrent.thread
 
 
 @AndroidEntryPoint
@@ -26,37 +23,20 @@ class DemoActivity : BaseActivity<InAppViewModel, DemoDataBinding>() {
     lateinit var subscriptionApi : SubscriptionApi
 
 
+    val storage = Storage(this)
+
+
     private var mLiveFragmentDataBinding: DemoDataBinding? = null
     private val mViewModel by viewModels<InAppViewModel>()
     override fun getBindingVariable(): Int  =BR.viewModel
     override fun getLayoutId(): Int  = R.layout.demo
     override fun getViewModel(): InAppViewModel = mViewModel
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mLiveFragmentDataBinding = getViewDataBinding()
-
-
-
-
-
-
-        mLiveFragmentDataBinding?.clickID?.setOnClickListener {
-
-
-
-
-        }
-
-
     }
-
-
-
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

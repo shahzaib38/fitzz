@@ -9,17 +9,11 @@
         android:id="@+id/scan"
         android:title="@string/scan" />
 
+
     <item
         android:id="@+id/live"
         android:title="@string/live"
         android:icon="@drawable/capture"
-
-
         />
-
-
-
-
-
 
 </menu>

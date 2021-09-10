@@ -21,6 +21,10 @@ class ScanDialogViewModel @ViewModelInject constructor(private val mainRepositor
 
 
 
+    fun pdf(){
+
+        getNavigator().pdf()
+    }
 
     fun  saveNext(){
 

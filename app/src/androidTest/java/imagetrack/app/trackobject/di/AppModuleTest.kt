@@ -13,6 +13,7 @@ import imagetrack.app.trackobject.database.local.inappdatabase.AppDatabase
 import imagetrack.app.trackobject.inapppurchaseUtils.AppExecutors
 import imagetrack.app.trackobject.inapppurchaseUtils.BillingClientLifecycle
 import imagetrack.app.trackobject.repo.InAppRepository
+import imagetrack.app.trackobject.token_loader.TokenLoader
 import javax.inject.Named
 
 
@@ -24,10 +25,9 @@ object AppModuleTest {
     @Named
     @Provides
     fun getInAppRepository(localDataSource: LocalDataSource ,
-                           billingClientLifecycle: BillingClientLifecycle)
-            : InAppRepository{
-
-        return InAppRepository(localDataSource ,billingClientLifecycle) }
+                           billingClientLifecycle: BillingClientLifecycle ,
+                           tokenLoader : TokenLoader): InAppRepository{
+        return InAppRepository(localDataSource ,billingClientLifecycle,tokenLoader) }
 
 
     @Named

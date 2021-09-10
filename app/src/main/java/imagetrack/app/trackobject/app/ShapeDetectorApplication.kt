@@ -2,6 +2,7 @@ package imagetrack.app.trackobject.app
 
 import android.app.Application
 import androidx.databinding.library.BuildConfig
+//import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -24,7 +25,15 @@ class ShapeDetectorApplication : Application() {
 
         }
 
+//        setupAdSdk()
+
     }
+//
+//    private fun setupAdSdk(){
+//
+//        MobileAds.initialize(this);
+//    }
+
 
 
 }

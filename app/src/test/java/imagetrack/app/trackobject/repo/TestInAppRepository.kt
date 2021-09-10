@@ -8,6 +8,7 @@ import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionJson
 import imagetrack.app.trackobject.inapppurchaseUtils.BillingClientLifecycle
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants
 import imagetrack.app.trackobject.inapppurchaseUtils.purchaseForSku
+import imagetrack.app.trackobject.token_loader.TokenLoader
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.Mockito
@@ -24,7 +25,7 @@ class TestInAppRepository {
         val billingClientLifecycle  =  mock(BillingClientLifecycle::class.java)
         val localDataSource = mock(LocalDataSource::class.java)
         val purchase =mock(Purchase::class.java)
-        val accessToken = mock(AccessToken::class.java)
+        val accessToken = mock(TokenLoader::class.java)
         val inAppRepository = InAppRepository(localDataSource,billingClientLifecycle,accessToken)
 
         Mockito.`when`(purchase.skus).thenReturn(arrayListOf(Constants.BASIC_SKU))
@@ -48,7 +49,7 @@ class TestInAppRepository {
         val billingClientLifecycle  =  mock(BillingClientLifecycle::class.java)
         val localDataSource = mock(LocalDataSource::class.java)
         val purchase =mock(Purchase::class.java)
-        val accessToken = mock(AccessToken::class.java)
+        val accessToken = mock(TokenLoader::class.java)
         val inAppRepository = InAppRepository(localDataSource,billingClientLifecycle,accessToken)
 
         Mockito.`when`(localDataSource.getPurchaseJson()).thenReturn(null)
@@ -74,7 +75,7 @@ class TestInAppRepository {
         val billingClientLifecycle  =  mock(BillingClientLifecycle::class.java)
         val localDataSource = mock(LocalDataSource::class.java)
         val purchase =mock(Purchase::class.java)
-        val accessToken = mock(AccessToken::class.java)
+        val accessToken = mock(TokenLoader::class.java)
         val inAppRepository = InAppRepository(localDataSource,billingClientLifecycle ,accessToken)
 
         Mockito.`when`(purchase.isAcknowledged).thenReturn(false)
@@ -98,7 +99,7 @@ class TestInAppRepository {
         //val purchase =mock(Purchase::class.java)
         val localDataSource = mock(LocalDataSource::class.java)
         val purchase =mock(Purchase::class.java)
-        val accessToken = mock(AccessToken::class.java)
+        val accessToken = mock(TokenLoader::class.java)
         val billingClientLifecycle  =  mock(BillingClientLifecycle::class.java)
 
         val inAppRepository = InAppRepository(localDataSource,billingClientLifecycle ,accessToken)
