@@ -1,45 +1,24 @@
 package imagetrack.app.trackobject.ui.fragment
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.hardware.Camera
 import android.hardware.display.DisplayManager
-import android.media.MediaScannerConnection
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.webkit.MimeTypeMap
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.Navigation
 import imagetrack.app.trackobject.databinding.CameraUiContainerBinding
 import imagetrack.app.trackobject.databinding.FragmentCameraBinding
-import imagetrack.app.trackobject.ui.activities.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
-import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.collections.ArrayList
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 typealias LumaListener = (luma: Double) -> Unit
 

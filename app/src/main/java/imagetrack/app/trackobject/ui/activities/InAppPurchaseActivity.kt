@@ -9,25 +9,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionJson
 import imagetrack.app.trackobject.databinding.InAppBillingDataBinding
-//import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.ext.internetConnectionDialog
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants
 import imagetrack.app.trackobject.inapppurchaseUtils.createTimeNote
 import imagetrack.app.trackobject.navigator.SubscriptionStatusNavigator
 import imagetrack.app.trackobject.ui.dialogs.SubscriptionStatusDialog
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBinding>() ,SubscriptionStatusNavigator {
@@ -57,7 +54,7 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
              mViewModel.skus.observe(this ,skuObserver)
 
 
-//        setupAds()
+        setupAds()
     }
 
     private val skuObserver = Observer<Map<String,SkuDetails>> { sku ->
@@ -74,18 +71,14 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
       val price = skuDetails.price
       val  concatString = price + "/month"
       this.text = concatString }
-//
-//    private fun  setupAds(){
-//
-//        mMainDataBinding?.adsInclude?.apply {
-//
-//            val unitId=    resources.getString(R.string.subscription_native)
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                adsId.ads(this@InAppPurchaseActivity, unitId, advertiseId)
-//            }
-//        }
-//
-//    }
+
+    private fun  setupAds(){
+        mMainDataBinding?.adsInclude?.apply {
+            val adRequest = AdRequest.Builder().build()
+            this.loadAd(adRequest)
+
+             }
+    }
 
 
 
@@ -129,7 +122,7 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
         if(subscriptionStatus!=null) {
            val subscriptionNote = createTimeNote(subscriptionStatus)
             if (!subscriptionStatus.isExpired()) {
-                SubscriptionStatusDialog.getInstance(subscriptionNote).showDialog(supportFragmentManager)
+                SubscriptionStatusDialog.getInstance(subscriptionNote).showDialog(this.supportFragmentManager)
             }
 
         }

@@ -9,9 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
-import java.util.concurrent.Executors
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.databinding.LiveFragmentDataBinding
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import kotlinx.coroutines.Runnable
 

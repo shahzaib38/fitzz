@@ -27,7 +27,7 @@ import imagetrack.app.trackobject.ext.toast
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.ui.activities.SettingsActivity
-import imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment
+import imagetrack.app.trackobject.ui.dialogs.ProgressDialogFragment
 import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.utils.BitmapUtils
 import imagetrack.app.utils.CameraPermissions
@@ -35,7 +35,6 @@ import imagetrack.app.utils.CameraPermissions.isCameraPermissionGranted
 import imagetrack.app.utils.CameraPermissions.isGalleryPermissionGranted
 import imagetrack.app.utils.InternetConnection.isInternetAvailable
 import java.io.FileNotFoundException
-import java.lang.NullPointerException
 import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
@@ -51,28 +50,32 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
     private val mViewModel by viewModels<ScanViewModel>()
     private var mScanFragmentDataBinding : ScanFragmentDataBinding? = null
-
     private var mMainActivity :MainActivity? =null
-
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
-
     private var cameraProvider: ProcessCameraProvider? = null
     private lateinit var windowManager: WindowManager
+    private   var progressDialog : ProgressDialogFragment?=null
+
+
 
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     }
 
 
-    companion object{
+
+
+
+
+    companion object {
 
 
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
+       private  const val RESULT_LOADING = 11122
 
-        const val RESULT_LOADING =11122 }
-
+    }
     override fun getBindingVariable(): Int = imagetrack.app.trackobject.BR.viewModel
     override fun getLayoutId(): Int = R.layout.scan_fragment
     override fun getViewModel(): ScanViewModel = mViewModel
@@ -81,6 +84,7 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        println("onViewCreated")
         mScanFragmentDataBinding = getViewDataBinding()
 
         val baseActivitty  = getBaseActivity()
@@ -92,6 +96,7 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
         if (isCameraPermissionGranted(requireContext())) startCamera() else requestCameraPermission()
         mViewModel.setNavigator(this)
+
     }
 
 
@@ -159,7 +164,7 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
                             val message =exception.message
                             if(message!=null){
 
-                            mScanFragmentDataBinding?.include2?.cameraProgress?.visibility =View.GONE
+                                mMainActivity?.progressInVisible()
 
 
                             }
@@ -247,9 +252,24 @@ private fun startCamera() {
 
     override fun onDestroyView() {
         mScanFragmentDataBinding = null
+
         super.onDestroyView()
+        progressDialog =null
+        cameraProvider=null
 
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        println("Detach")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("Destroy Fragment")
+
+    }
+
 
 
 
@@ -376,7 +396,7 @@ private fun startCamera() {
             val zoomString = String.format("%.1f", zoom)
             val createString = "$zoomString X"
             mScanFragmentDataBinding?.include2?.zoomstate?.text = createString
-            mScanFragmentDataBinding?.include2?.zoomstate?.animate(R.anim.fade_in)
+            val animate = mScanFragmentDataBinding?.include2?.zoomstate?.animate(R.anim.fade_in)
         }
     }
 
@@ -386,9 +406,11 @@ private fun startCamera() {
     //TranslateLiveData
     private val translatedObserver = Observer<String?>{
         if(it!=null){
-            ScanDialogFragment
-                .getInstance(it)
-                .showDialog(requireActivity().supportFragmentManager) } }
+
+            mMainActivity?.showScanDialog(it)
+
+
+        } }
 
 
 
@@ -399,11 +421,22 @@ private fun startCamera() {
         if(progressStatus!=null) {
             when (progressStatus) {
                 true -> {
-                    mScanFragmentDataBinding?.include2?.cameraProgress?.visibility =View.VISIBLE }
+                    mMainActivity?.progressVisible()
+                }
                 false -> {
-                    mScanFragmentDataBinding?.include2?.cameraProgress?.visibility =View.GONE }
-            }}
+                    mMainActivity?.progressInVisible()
+
+                } }}
     }
+
+
+
+
+
+
+
+
+
 
 
     //TorchLiveData
@@ -426,7 +459,44 @@ private fun startCamera() {
     }
 
 
+    override fun onStart() {
+        super.onStart()
+
+        println("onStart")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        println("onResume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+    println("oStop")
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        println("onPause")
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        println("OnSaveInstance")
+    }
 
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+
+        println("onRestoresaveInstance")
+    }
 
 }

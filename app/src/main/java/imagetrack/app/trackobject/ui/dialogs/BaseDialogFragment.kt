@@ -6,12 +6,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -22,22 +22,38 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.ui.activities.BaseActivity
-import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
-import imagetrack.app.trackobject.ui.activities.MainActivity
+//import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
 
 val TAG = BaseDialogFragment::class.simpleName
 
-abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : DialogFragment() {
+abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : DialogFragment() , FragmentManager.OnBackStackChangedListener{
 
+
+    override fun onBackStackChanged() {
+
+//       val count = fragmentFragmentManager?.backStackEntryCount
+//        Log.i("count" , "${count} ")
+//        for(i :Int in 0 until count step 1){
+//
+//       val entry =     fragmentFragmentManager?.getBackStackEntryAt(i)
+//
+//            Log.i("count entry" , "${entry.name } ")
+//
+//
+//
+//        }
+//
+//        println("BackStack Changed ")
+    }
 
     private var mActivity: BaseActivity<*, *>? = null
     private var mViewDataBinding :VDB?=null
     private var mRootView: View? = null
     private  var mViewModel :VM? =null
-
-
+    private  var fragmentFragmentManager : FragmentManager? =null
     abstract fun getBindingVariable(): Int
     abstract fun getViewModel(): VM?
+
     @LayoutRes
     abstract fun getLayoutId(): Int
 
@@ -64,6 +80,11 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
             setVariable(getBindingVariable(), mViewModel)
             lifecycleOwner = this@BaseDialogFragment
             executePendingBindings() }
+
+        fragmentFragmentManager=   requireActivity().supportFragmentManager
+
+        Log.i("fragment " ,"Fragment Manger instance ${ fragmentFragmentManager}")
+        //fragmentFragmentManager.addOnBackStackChangedListener(this)
         return mViewDataBinding?.root }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +93,7 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
 
 
     }
+
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -121,25 +143,17 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
     }
 
 
-    open fun showDialogs(fragmentManager: FragmentManager, tag :String){
-
-        try {
-            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            val prevFragment: Fragment? = fragmentManager.findFragmentByTag(tag)
-            if (prevFragment != null) {
-                transaction.remove(prevFragment)
-            }
-            transaction.addToBackStack(null)
-            show(transaction, tag)
-        }catch (e :IllegalStateException){
-
-            Toast.makeText(requireActivity() ,e?.message ,Toast.LENGTH_LONG).show()
-        }
-
+    open fun showDialogs( fragmentManager: FragmentManager , tag :String){
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        val prevFragment: Fragment? = fragmentManager.findFragmentByTag(tag)
+        if (prevFragment != null) {
+            transaction.remove(prevFragment) }
+        transaction.addToBackStack(tag)
+        show(transaction, tag)
     }
 
 
-    open    fun dismissDialog(tag: String?){
+    open fun dismissDialog(tag: String?){
 
         dismiss()
 

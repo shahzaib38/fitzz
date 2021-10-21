@@ -3,8 +3,6 @@ package imagetrack.app.trackobject.ui.fragment
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
@@ -13,18 +11,13 @@ import androidx.camera.core.ExperimentalUseCaseGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
-import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.*
-import imagetrack.app.trackobject.camera_features.CameraMetaData
 import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.camera_features.LangOptions
 import imagetrack.app.trackobject.databinding.LiveFragmentDataBinding
-import imagetrack.app.trackobject.ext.animateFocusRing
 import imagetrack.app.trackobject.navigator.LiveNavigator
 import imagetrack.app.trackobject.viewmodel.LiveViewModel
 import imagetrack.app.utils.CameraPermissions.CAMERA_PERMISSION
-import imagetrack.app.utils.CameraPermissions.CAMERA_PERMISSION_ARRAY
-import imagetrack.app.utils.CameraPermissions.hasPermissions
 
 
 @ExperimentalGetImage

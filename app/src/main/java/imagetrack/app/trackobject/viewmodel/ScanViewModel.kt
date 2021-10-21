@@ -1,14 +1,10 @@
 package imagetrack.app.trackobject.viewmodel
 
 import android.graphics.Bitmap
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ExperimentalUseCaseGroup
 import androidx.camera.core.ImageProxy
 //import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import imagetrack.app.trackobject.camera_features.CameraMetaData
-import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.repo.ScanRepository
 import kotlinx.coroutines.Dispatchers

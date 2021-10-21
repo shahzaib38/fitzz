@@ -42,7 +42,7 @@
     <string name="note_description">Auto Renew and cancel any time</string>
     <string name="upgrade">Upgrade</string>
     <string name="buy_monthly_package">Buy Monthly Package</string>
-    <string name="ok">OK</string>
+    <string name="ok">Ok</string>
     <string name="subscription_note">Subscription Note</string>
     <string name="subscription_message">"you have Purchased Monthly Package "</string>
     <string name="starting_time">Starting Time</string>
@@ -64,32 +64,17 @@
 
 
     <!-- Test Ads -->
-<!--    <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>-->
+    <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
 
-<!--    <string name="launcher_native">ca-app-pub-3940256099942544/2247696110</string>-->
-<!--    <string name="history_native">ca-app-pub-3940256099942544/1044960115</string>-->
-<!--    <string name="all_pdf">ca-app-pub-3940256099942544/1044960115</string>-->
-<!--    <string name="pdf_creator">ca-app-pub-3940256099942544/2247696110</string>-->
-<!--    <string name="pdf_open">ca-app-pub-3940256099942544/2247696110</string>-->
-<!--    <string name="settings_native">ca-app-pub-3940256099942544/1044960115</string>-->
-<!--    <string name="subscription_native">ca-app-pub-3940256099942544/1044960115</string>-->
-<!--    <string name="exit_ads" >ca-app-pub-3940256099942544/1044960115</string>-->
-<!--    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>-->
-
-
-
-    <!-- Original  Ads -->
-    <string name="app_id">ca-app-pub-8453124532033807~1199249375</string>
-
-    <string name="launcher_native">ca-app-pub-8453124532033807/4816593974</string>
-    <string name="history_native">ca-app-pub-8453124532033807/2302466494</string>
-    <string name="all_pdf">ca-app-pub-8453124532033807/6503218340</string>
-    <string name="pdf_creator">ca-app-pub-8453124532033807/9877348967</string>
-    <string name="pdf_open">ca-app-pub-8453124532033807/8937809990</string>
-    <string name="settings_native">ca-app-pub-8453124532033807/4258831400</string>
-    <string name="subscription_native">ca-app-pub-8453124532033807/2755545020</string>
-    <string name="exit_ads" >ca-app-pub-8453124532033807/9909874649</string>
-         <string name="banner_ad">ca-app-pub-8453124532033807/4320799755</string>
+    <string name="launcher_native">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="history_native">ca-app-pub-3940256099942544/1044960115</string>
+    <string name="all_pdf">ca-app-pub-3940256099942544/1044960115</string>
+    <string name="pdf_creator">ca-app-pub-3940256099942544/1044960115</string>
+    <string name="pdf_open">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="settings_native">ca-app-pub-3940256099942544/1044960115</string>
+    <string name="subscription_native">ca-app-pub-3940256099942544/1044960115</string>
+    <string name="exit_ads" >ca-app-pub-3940256099942544/1044960115</string>
+    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>
 
 
 
@@ -165,6 +150,7 @@
     <string name="premium">PREMIUM</string>
     <string name="subscribe_now">Subscribe now</string>
     <string name="translate_features">Unlimited Translate, supports more than 100+ languages</string>
+    <string name="processing">please wait.. processing Text</string>
 
 
 </resources>

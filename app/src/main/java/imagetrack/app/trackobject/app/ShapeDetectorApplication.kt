@@ -2,7 +2,9 @@ package imagetrack.app.trackobject.app
 
 import android.app.Application
 import androidx.databinding.library.BuildConfig
-//import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.MobileAds
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -10,13 +12,14 @@ import timber.log.Timber
 class ShapeDetectorApplication : Application() {
 
 
+
     override fun onCreate() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            Timber.plant( object : Timber.DebugTree() {
+            Timber.plant(object : Timber.DebugTree() {
                 override fun createStackElementTag(element: StackTraceElement): String? {
-                    return super.createStackElementTag(element) + ':'+element.lineNumber
+                    return super.createStackElementTag(element) + ':' + element.lineNumber
 
                 }
             }
@@ -25,14 +28,27 @@ class ShapeDetectorApplication : Application() {
 
         }
 
-//        setupAdSdk()
+        setupAdSdk()
+        setupLeakCanary();
+    }
+
+    private fun setupAdSdk(){
+
+        MobileAds.initialize(this)
+    }
+
+    private fun setupLeakCanary():RefWatcher {
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+
+            return RefWatcher.DISABLED;
+
+        }
+
+        return LeakCanary.install(this);
 
     }
-//
-//    private fun setupAdSdk(){
-//
-//        MobileAds.initialize(this);
-//    }
+
 
 
 

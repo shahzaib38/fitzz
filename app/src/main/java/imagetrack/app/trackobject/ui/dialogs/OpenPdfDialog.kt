@@ -5,7 +5,6 @@ import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
@@ -16,9 +15,6 @@ import imagetrack.app.trackobject.navigator.PdfNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.ui.activities.PdfActivity
 import imagetrack.app.trackobject.viewmodel.PdfViewModel
-import kotlinx.android.synthetic.main.ads_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -53,7 +49,7 @@ class OpenPdfDialog : BaseDialogFragment<PdfViewModel, PdfOpenDataBinding>()  ,P
 
 
     fun showDialog(fragmentManager: FragmentManager) {
-        super.showDialogs(fragmentManager, TAG)
+        super.showDialogs(fragmentManager ,TAG)
     }
 
 
@@ -104,7 +100,6 @@ class OpenPdfDialog : BaseDialogFragment<PdfViewModel, PdfOpenDataBinding>()  ,P
 
 
     override fun generatePdf() {
-
         dismiss()
         mMainActivity?.launchActivity(PdfActivity::class.java)
     }

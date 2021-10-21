@@ -10,6 +10,10 @@ class LanguageListViewModel @ViewModelInject constructor(private val mainReposit
 
 
 
+    val subscriptionLiveData = mainRepository.subscriptionLiveData
+
+
+
     fun  close(){
         getNavigator().close()
 

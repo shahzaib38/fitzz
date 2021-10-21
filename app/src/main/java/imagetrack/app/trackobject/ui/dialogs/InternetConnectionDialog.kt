@@ -38,8 +38,8 @@ class InternetConnectionDialog : BaseDialogFragment<MainViewModel, ConnectionDia
 
 
 
-    fun showDialog(fragment: FragmentManager) {
-        super.showDialogs(fragment ,TAG)
+    fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager,TAG)
     }
 
 

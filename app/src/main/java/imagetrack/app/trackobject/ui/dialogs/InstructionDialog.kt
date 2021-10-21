@@ -11,7 +11,7 @@ import imagetrack.app.datastore.WelcomeNote
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.InstructionDataBinding
-//import imagetrack.app.trackobject.ext.ads
+import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.navigator.InstructionNavigator
 import imagetrack.app.trackobject.viewmodel.InstructionViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,23 +32,22 @@ class InstructionDialog  : BaseDialogFragment<InstructionViewModel, InstructionD
         mInstructionDataBinding =  getViewDataBinding()
 
         mViewModel.setNavigator(this)
-//        setupAds()
+        setupAds()
 
 
     }
 
 
-//    private fun  setupAds(){
-//        mInstructionDataBinding?.adsInclude?.apply {
-//
-//            val unitId=    resources.getString(R.string.settings_native)
-//          //  adsId.ads(requireContext() ,unitId,advertiseId)
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                adsId.ads(requireContext(), unitId, advertiseId)
-//            }
-//        }
-//
-//    }
+    private fun  setupAds(){
+        mInstructionDataBinding?.adsInclude?.apply {
+
+            val unitId=    resources.getString(R.string.settings_native)
+
+                adsId.ads(requireContext(), unitId, advertiseId)
+
+        }
+
+    }
 
 
     override fun getBindingVariable(): Int = BR.viewModel
@@ -66,8 +65,8 @@ class InstructionDialog  : BaseDialogFragment<InstructionViewModel, InstructionD
 
 
 
-    fun showDialog(fragment: FragmentManager) {
-        super.showDialogs(fragment , TAG)
+    fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager ,TAG)
     }
 
 

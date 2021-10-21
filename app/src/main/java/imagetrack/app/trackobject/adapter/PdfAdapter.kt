@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import imagetrack.app.pdf.PdfBean
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.PdfItemDataBinding
 import imagetrack.app.trackobject.ui.activities.PDFListener

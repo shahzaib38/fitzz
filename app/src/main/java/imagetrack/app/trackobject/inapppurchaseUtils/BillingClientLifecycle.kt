@@ -8,7 +8,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import com.android.billingclient.api.*
-import imagetrack.app.trackobject.database.local.LocalDataSource
 
 class BillingClientLifecycle private constructor(
     private val app: Application

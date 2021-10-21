@@ -5,13 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.database.local.history.HistoryDao
 import imagetrack.app.trackobject.database.local.history.HistoryDatabase
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

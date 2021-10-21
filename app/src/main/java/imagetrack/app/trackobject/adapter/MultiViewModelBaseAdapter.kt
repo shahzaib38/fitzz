@@ -3,23 +3,12 @@ package imagetrack.app.trackobject.adapter
 
 
 
-import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.MainThread
 import androidx.databinding.ViewDataBinding
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DiffUtil.DiffResult
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import imagetrack.app.trackobject.common.CustomDiffUtils
 import imagetrack.app.trackobject.viewholder.BaseViewHolder
-import imagetrack.app.utils.Model
-
-
-
 
 
 //   open var item :ArrayList<M>?=ArrayList()
@@ -110,11 +99,21 @@ import imagetrack.app.utils.Model
 
 
 abstract class MultiViewModelBaseAdapter<M , VDB : ViewDataBinding>(private var diffCallback: DiffUtil.ItemCallback<M>) :
-    ListAdapter<M, BaseViewHolder<VDB>>(diffCallback) {
+//    ListAdapter<M, BaseViewHolder<VDB>>(diffCallback)
+    RecyclerView.Adapter<BaseViewHolder<VDB>>()
+{
 
 
-//
-//    open var item :ArrayList<M>?=ArrayList()
+
+    open var item :ArrayList<M>  = ArrayList()
+
+    fun setData(arrayList : ArrayList<M>){
+        item.clear()
+        item.addAll(arrayList)
+        notifyDataSetChanged()
+    }
+
+
 
 
 
@@ -128,12 +127,13 @@ abstract class MultiViewModelBaseAdapter<M , VDB : ViewDataBinding>(private var 
 
     abstract fun createBinding(viewType: Int, inflater: LayoutInflater, parent: ViewGroup):VDB
 
+
     override fun onBindViewHolder(holder: BaseViewHolder<VDB>, position: Int) {
 
-       val item = getItem(position)
+       val items = item[position]
 
-        if(item!=null) {
-            bind(holder.mBinding,item , position)
+        if(items!=null) {
+            bind(holder.mBinding,items , position)
             holder.mBinding.executePendingBindings()
         }
     }

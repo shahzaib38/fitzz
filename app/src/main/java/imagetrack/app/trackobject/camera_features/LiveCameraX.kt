@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import imagetrack.app.CallBack
 import imagetrack.app.image_processing.DeviceTextRecognizer
-import imagetrack.app.image_processing.VisionImageProcessor
 import imagetrack.app.lanuguages.TranslateDetect
 import imagetrack.app.trackobject.databinding.LiveFragmentDataBinding
 import imagetrack.app.translate.ITranslator

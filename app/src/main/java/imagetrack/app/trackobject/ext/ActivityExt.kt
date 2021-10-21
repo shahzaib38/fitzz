@@ -1,7 +1,6 @@
 package imagetrack.app.trackobject.ext
 
 import  android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,10 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import imagetrack.app.trackobject.helpers.*
-import imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog
-import imagetrack.app.trackobject.ui.dialogs.LanguageListDialogFragment
-import imagetrack.app.trackobject.ui.dialogs.OpenPdfDialog
-import imagetrack.app.trackobject.ui.dialogs.PdfCreatorDialog
+import imagetrack.app.trackobject.ui.dialogs.*
 import java.io.File
 
 
@@ -35,35 +31,40 @@ fun Activity.tryOpenPathIntent(path: String, openAsType: Int = OPEN_AS_DEFAULT) 
 }
 
 
+/** Instruction Dialog Fragment **/
+fun AppCompatActivity.showInstructionDialog(){
+    InstructionDialog.getInstance().showDialog(this.supportFragmentManager) }
 
-fun Activity.launchActivity(className : Class<out Activity>){
+/** Activity Launcher **/
+fun AppCompatActivity.launchActivity(className : Class<out Activity>){
     val intent =Intent(this , className)
     startActivity(intent) }
 
 
- fun Activity.toast(name :String ){
-    Toast.makeText(this ,name , Toast.LENGTH_LONG).show()
+ fun AppCompatActivity.toast(name :String ){
+    Toast.makeText(this ,name , Toast.LENGTH_LONG).show() }
 
-}
 
-fun AppCompatActivity.showPdf(text :String ){
+/** PDF  Dialog Fragment **/
+fun AppCompatActivity.showPdf(text :String){
+    PdfCreatorDialog.getInstance(text).showDialog(this.supportFragmentManager) }
 
-    PdfCreatorDialog.getInstance(text).showDialog(this.supportFragmentManager)
-}
 
+/** InternetConnection  Dialog Fragment **/
+fun AppCompatActivity.internetConnectionDialog(){
+    InternetConnectionDialog.getInstance().showDialog(this.supportFragmentManager) }
+
+
+/** Language List  Dialog Fragment **/
 fun AppCompatActivity.showLanguageList(text :String ){
+    LanguageListDialogFragment.getInstance(text).showDialog(this.supportFragmentManager) }
 
-    println("Language list ")
-    LanguageListDialogFragment.getInstance(text).showDialog(this.supportFragmentManager)
 
-}
 
+/** Open Dialog Fragment **/
 fun AppCompatActivity.showOpenDialog(){
+    OpenPdfDialog.getInstance("").showDialog(this.supportFragmentManager) }
 
-    OpenPdfDialog.getInstance("").showDialog(this.supportFragmentManager)
-
-
-}
 
 
 fun isNougatPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
@@ -81,9 +82,3 @@ private fun getMimeType(type : Int) =when(type){
 
 
 }
-
-fun AppCompatActivity.internetConnectionDialog(){
-
-    InternetConnectionDialog.getInstance().showDialog(this.supportFragmentManager)
-}
-

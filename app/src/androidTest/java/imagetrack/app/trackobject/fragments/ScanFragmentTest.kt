@@ -6,12 +6,10 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import imagetrack.app.trackobject.ui.fragment.ScanFragment
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.MediumTest
-import androidx.test.runner.AndroidJUnit4
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.utils.FragmentLauncher.launchFragmentInHiltContainer
 import org.junit.Before

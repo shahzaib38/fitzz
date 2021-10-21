@@ -107,8 +107,8 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
 
     }
 
-    fun showDialog(fragment: FragmentManager) {
-        super.showDialogs(fragment, TAG) }
+    fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager ,TAG) }
 
 
 }

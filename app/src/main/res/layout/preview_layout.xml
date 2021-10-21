@@ -119,17 +119,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/preview_finder" />
 
-        <ProgressBar
-            android:id="@+id/camera_progress"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:elevation="12dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/preview_finder"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_finder" />
+<!--        <ProgressBar-->
+<!--            android:id="@+id/camera_progress"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:elevation="12dp"-->
+<!--            android:visibility="visible"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/preview_finder"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/preview_finder" />-->
 
 
 

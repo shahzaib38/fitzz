@@ -1,22 +1,16 @@
 package imagetrack.app.trackobject.ui.activities
 
+//import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.google.android.ads.nativetemplates.NativeTemplateStyle
-//import com.google.android.gms.ads.admanager.AdManagerAdRequest
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-//import imagetrack.app.trackobject.ads.NativeAds
 import imagetrack.app.trackobject.databinding.LauncherDataBinding
-//import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.ext.launchActivity
 import imagetrack.app.trackobject.viewmodel.LauncherViewModel
-import kotlinx.android.synthetic.main.ads_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LauncherActivity : BaseActivity<LauncherViewModel, LauncherDataBinding>() {
@@ -33,7 +27,7 @@ class LauncherActivity : BaseActivity<LauncherViewModel, LauncherDataBinding>() 
 
     companion object{
 
-        const val VERSION_ID ="Version 3.6.1"
+//        const val VERSION_ID ="Version 3.4.1"
 
     }
 
@@ -51,23 +45,18 @@ class LauncherActivity : BaseActivity<LauncherViewModel, LauncherDataBinding>() 
             finish()
             this.launchActivity(MainActivity::class.java) }
 
-        mLauncherDataBinding?.versionId?.text =VERSION_ID
+       // mLauncherDataBinding?.versionId?.text =VERSION_ID
 
-     //   setupAds()
+        setupAds()
     }
 
-//private fun  setupAds(){
-//
-//        mLauncherDataBinding?.adsInclude?.apply {
-//
-//            val unitId=    resources.getString(R.string.launcher_native)
-//         //   adsId.ads(this@LauncherActivity ,unitId ,advertiseId)
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                adsId.ads(this@LauncherActivity, unitId, advertiseId)
-//            }
-//        }
-//
-//    }
+private fun  setupAds(){
 
+    mLauncherDataBinding?.adsInclude?.apply {
+        val adRequest = AdRequest.Builder().build()
+        this.loadAd(adRequest)
+    }
+
+}
 
 }

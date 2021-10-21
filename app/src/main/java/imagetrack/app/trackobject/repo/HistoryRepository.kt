@@ -9,7 +9,11 @@ import javax.inject.Singleton
 
 
 @Singleton
-class HistoryRepository  @Inject constructor(private val historyDatabase: HistoryDatabase ,private val localDataSource: ILocalDataSource): BaseRepository() {
+class HistoryRepository  @Inject constructor(private val historyDatabase: HistoryDatabase ,
+
+                                             private val localDataSource: ILocalDataSource
+
+): BaseRepository() {
 
 
 

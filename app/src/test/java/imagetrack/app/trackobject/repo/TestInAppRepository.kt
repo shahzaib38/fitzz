@@ -1,13 +1,11 @@
 package imagetrack.app.trackobject.repo
 
 import com.android.billingclient.api.Purchase
-import com.google.auth.oauth2.AccessToken
 import imagetrack.app.trackobject.database.local.LocalDataSource
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionApi
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionJson
 import imagetrack.app.trackobject.inapppurchaseUtils.BillingClientLifecycle
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants
-import imagetrack.app.trackobject.inapppurchaseUtils.purchaseForSku
 import imagetrack.app.trackobject.token_loader.TokenLoader
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

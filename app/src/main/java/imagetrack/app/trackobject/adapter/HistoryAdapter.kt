@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.HistoryItemDataBinding
-import imagetrack.app.trackobject.ext.lessEqualTo
 import imagetrack.app.trackobject.ui.activities.HistoryListener
 
 val diffCallback = object : DiffUtil.ItemCallback<HistoryBean>() {

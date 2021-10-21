@@ -1,11 +1,9 @@
 package imagetrack.app.trackobject.camera_features
 
-import androidx.test.core.app.ApplicationProvider
 import imagetrack.app.trackobject.getOrAwaitValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.manipulation.Ordering
 import org.mockito.Mockito.mock
 
 class ScanningCameraTest {

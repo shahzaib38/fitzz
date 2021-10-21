@@ -1,7 +1,6 @@
 package imagetrack.app.trackobject.token_loader
 
 import android.content.Context
-import com.google.auth.oauth2.AccessToken
 import com.google.auth.oauth2.GoogleCredentials
 import dagger.hilt.android.qualifiers.ApplicationContext
 import imagetrack.app.trackobject.camera_features.R

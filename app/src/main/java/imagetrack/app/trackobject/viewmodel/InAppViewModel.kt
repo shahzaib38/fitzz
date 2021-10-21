@@ -1,9 +1,7 @@
 package imagetrack.app.trackobject.viewmodel
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
-import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.BillingFlowParams

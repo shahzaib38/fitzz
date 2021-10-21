@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.pdf.PDFMetaData
 import imagetrack.app.pdf.PDFUtil
@@ -18,9 +17,6 @@ import imagetrack.app.trackobject.ext.showOpenDialog
 import imagetrack.app.trackobject.navigator.PdfNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.PdfViewModel
-import kotlinx.android.synthetic.main.ads_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , PdfNavigator  ,PDFUtil.PDFUtilListener{
@@ -59,31 +55,16 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
         if(baseActivitty is MainActivity){
             mMainActivity =baseActivitty }
 
-
-
         argument = arguments?.run {
             get(KEY_VALUE) } as String
 
-    //      setupAds()
     }
 
 
 
-//    private fun  setupAds(){
-//
-//        mBinding?.adsInclude?.apply {
-//
-//            val unitId=    resources.getString(R.string.pdf_creator)
-//            //adsId.ads(requireContext() ,unitId,advertiseId)
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                adsId.ads(requireContext(), unitId, advertiseId)
-//            }
-//        }
-//
-//    }
-
-
   private   fun generatePdf(value :String){
+
+
 
       val text=    mBinding?.includePdf?.pdfEditText?.text.toString()
       val header = mBinding?.includePdf?.headerEditText?.text.toString()
@@ -125,7 +106,7 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
 
 
      fun showDialog(fragmentManager: FragmentManager) {
-        super.showDialogs(fragmentManager, TAG)
+        super.showDialogs(fragmentManager ,TAG)
     }
 
    private  fun toast(value : String){
@@ -138,7 +119,6 @@ class PdfCreatorDialog : BaseDialogFragment<PdfViewModel, PdfDataBinding>()  , P
         dismissDialog()
 
         mMainActivity?.showOpenDialog()
-//        OpenPdfDialog.getInstance("").showDialog(requireActivity().supportFragmentManager)
 
         toast("Pdf Created")
 

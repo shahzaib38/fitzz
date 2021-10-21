@@ -1,32 +1,24 @@
 package imagetrack.app.trackobject.ui.activities
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.pdf.PDFUtil
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.PdfAdapter
 import imagetrack.app.trackobject.databinding.PdfViewDataBinding
-//import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.ext.recycle
-import imagetrack.app.trackobject.ext.toast
+//import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.ext.tryOpenPathIntent
 import imagetrack.app.trackobject.helpers.APPLICATION_ID
 import imagetrack.app.trackobject.helpers.OPEN_AS_PdF
 import imagetrack.app.trackobject.storage.Storage
 import imagetrack.app.trackobject.viewmodel.PdfViewModel
 import imagetrack.app.utils.CameraPermissions
-import kotlinx.android.synthetic.main.ads_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 interface PDFListener {

@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import imagetrack.app.trackobject.ui.activities.BaseActivity
 import imagetrack.app.trackobject.ui.activities.HistoryActivity
-import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
+//import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
 import imagetrack.app.trackobject.ui.activities.MainActivity
 
 
@@ -67,12 +67,15 @@ abstract class BaseFragment<VM : ViewModel, VDB: ViewDataBinding> : Fragment() {
             mActivity =context
              println("MainActivity Fragment  Attached")
 
-         }else if(context is InAppPurchaseActivity){
+         }
+//         else if(context is InAppPurchaseActivity){
+//
+//             mActivity =context
+//             println("InappActivity Fragment  Attached")
+//
+//         }
 
-             mActivity =context
-             println("InappActivity Fragment  Attached")
-
-         }else if(context is HistoryActivity){
+         else if(context is HistoryActivity){
              mActivity =context
              println("InappActivity Fragment  Attached")
 

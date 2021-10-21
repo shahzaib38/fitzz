@@ -9,19 +9,19 @@ import imagetrack.app.trackobject.inapppurchaseUtils.conCatePrice
 import imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment
 
 
-fun TextView.monthlyPackage(map : Map<String,SkuDetails>?){
+fun TextView.monthlyPackage(map : Map<String,SkuDetails>?) {
 
 
-    if(map!=null) {
+    if (map != null) {
         val skuDetails = map[Constants.BASIC_SKU]
 
-     val subscriptionPeriod =   skuDetails?.subscriptionPeriod
+        val subscriptionPeriod = skuDetails?.subscriptionPeriod
         val price = skuDetails?.price
 
-        val concatPrice = conCatePrice(price,subscriptionPeriod)
-            this.text = concatPrice
+        val concatPrice = conCatePrice(price, subscriptionPeriod)
+        this.text = concatPrice
     }
-
+}
 
     fun EditText.translateText(derivedText :String?){
         val isTextNotNullAndEmpty = derivedText !=null && derivedText.isNotEmpty()
@@ -39,4 +39,3 @@ fun TextView.monthlyPackage(map : Map<String,SkuDetails>?){
 
 
 
-}

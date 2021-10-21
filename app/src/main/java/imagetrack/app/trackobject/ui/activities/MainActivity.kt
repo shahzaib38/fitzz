@@ -1,11 +1,11 @@
 package imagetrack.app.trackobject.ui.activities
 
-import android.content.Intent
+//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
+
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.camera.core.ExperimentalUseCaseGroup
-//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,8 +14,11 @@ import imagetrack.app.datastore.IDataStore
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.MainDataBinding
+import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import imagetrack.app.trackobject.ext.setupWithNavController
-import imagetrack.app.trackobject.ui.dialogs.InstructionDialog
+import imagetrack.app.trackobject.ext.showInstructionDialog
+import imagetrack.app.trackobject.ui.dialogs.ProgressDialogFragment
+import imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment
 import imagetrack.app.trackobject.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,6 +31,8 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
    private val mViewModel by viewModels<MainViewModel>()
     private var currentNavController: LiveData<NavController>? = null
     private var mMainDataBinding : MainDataBinding?=null
+
+    private   var progressDialog : ProgressDialogFragment?=null
 
 
 
@@ -44,12 +49,15 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
         )
 
         mMainDataBinding = getViewDataBinding()
+
+        progressDialog = ProgressDialogFragment.getInstance()
+
         setupBottomNavigationBar()
 
        val isNew = IDataStore.getInstance(applicationContext).getWelcomeNote()
 
         if(!isNew) {
-            InstructionDialog.getInstance().showDialog(supportFragmentManager)
+            this.showInstructionDialog()
         }
 
     }
@@ -75,24 +83,49 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
 
 
 
-    override fun onSupportNavigateUp(): Boolean {
-        return currentNavController?.value?.navigateUp() ?: false
+
+        override fun onSupportNavigateUp(): Boolean {
+            return currentNavController?.value?.navigateUp() ?: false
+        }
+
+
+
+        private fun setupBottomNavigationBar() {
+            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
+            val navGraphIds = listOf(R.navigation.scan, R.navigation.live_nav)
+            val controller = bottomNavigationView.setupWithNavController(
+                navGraphIds = navGraphIds,
+                fragmentManager = supportFragmentManager,
+                containerId = R.id.nav_host_container,
+                intent = intent
+            )
+
+            currentNavController = controller
+        }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        println("Destroy MainActivity")
+
+    }
+
+     fun progressInVisible(){
+        progressDialog?.dismiss()
+
+
     }
 
 
 
-    private fun setupBottomNavigationBar() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        val navGraphIds = listOf(R.navigation.scan, R.navigation.live_nav)
-        val controller = bottomNavigationView.setupWithNavController(
-            navGraphIds = navGraphIds,
-            fragmentManager = supportFragmentManager,
-            containerId = R.id.nav_host_container,
-            intent = intent
-        )
+     fun progressVisible(){
+        progressDialog?.showDialog(this.supportFragmentManager) }
 
-        currentNavController = controller
-    }
+    fun showScanDialog(it: String) {
+        ScanDialogFragment
+            .getInstance(it)
+            .showDialog(this.supportFragmentManager) }
 
 
 }

@@ -1,37 +1,39 @@
 package imagetrack.app.trackobject.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import imagetrack.app.lanuguages.LanguageSupportModel
 import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.LanguageViewDataBinding
-import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
+import imagetrack.app.trackobject.databinding.NativeAdsDataBinding
+import imagetrack.app.trackobject.model.Ads
+import imagetrack.app.lanuguages.BaseLanguageModel
 
 
 class LanguageAdapter(
-    private val context: Context,
-    private val mViewModel: LanguageListViewModel,
     private val onClickListener: OnItemClickListener<String>,
-    private val lifecycleScope: LifecycleCoroutineScope
-) : MultiViewModelBaseAdapter<LanguageSupportModel, LanguageViewDataBinding>(diffCallback) {
+) : MultiViewModelBaseAdapter<BaseLanguageModel, ViewDataBinding>(diffCallback) {
 
 
 
 
 
     companion object {
+        private const val LANGUAGE_ITEMS  =1
+        private const  val NATIVE_ADS  =2
 
 
-        val diffCallback = object : DiffUtil.ItemCallback<LanguageSupportModel>() {
+
+        val diffCallback = object : DiffUtil.ItemCallback<BaseLanguageModel>() {
             override fun areItemsTheSame(
-                oldItem: LanguageSupportModel,
-                newItem: LanguageSupportModel
-            ): Boolean =oldItem.id == newItem.id
+                oldItem: BaseLanguageModel,
+                newItem: BaseLanguageModel
+            ): Boolean = oldItem.ids == newItem.ids
 
 
 
@@ -40,8 +42,8 @@ class LanguageAdapter(
              * typically you'll implement Object#equals, and use it to compare object contents.
              */
             override fun areContentsTheSame(
-                oldItem: LanguageSupportModel,
-                newItem: LanguageSupportModel
+                oldItem: BaseLanguageModel,
+                newItem: BaseLanguageModel
             ): Boolean = oldItem == newItem
 
 
@@ -49,34 +51,93 @@ class LanguageAdapter(
     }
 
 
+    override fun getItemViewType(position: Int): Int {
+
+      val baseLanguageModel =  item[position]
+
+        if (baseLanguageModel is Ads) {
+            return NATIVE_ADS; }
+
+        return LANGUAGE_ITEMS }
+
+    override fun createBinding(viewType: Int, inflater: LayoutInflater, parent: ViewGroup): ViewDataBinding =
+        when(viewType){
+
+            NATIVE_ADS ->{
+                val binding : NativeAdsDataBinding =        DataBindingUtil.inflate(inflater, R.layout.ads_language_layout, parent, false)
+
+                binding }
+
+            else ->{
+                val binding : LanguageViewDataBinding=        DataBindingUtil.inflate(inflater, R.layout.language_view, parent, false)
+                binding.root.setOnClickListener {
+                    val key = binding.language?.languageKey
+                    if (key != null) {
+                        onClickListener.clickItem(key)
+                    } }
+
+               binding
+            } }
 
 
-    override fun createBinding(viewType: Int, inflater: LayoutInflater, parent: ViewGroup): LanguageViewDataBinding {
 
-       val binding : LanguageViewDataBinding=        DataBindingUtil.inflate(inflater, R.layout.language_view, parent, false)
 
-        binding?.root?.setOnClickListener {
+    override fun onDataChanged(values: Boolean) {}
 
-                        val key = binding?.language?.languageKey
-                        if (key != null) {
-                            onClickListener.clickItem(key) } }
+    override fun bind(binding: ViewDataBinding, item: BaseLanguageModel, position: Int) {
 
-        return binding
+
+        when(binding){
+
+            is NativeAdsDataBinding ->{
+
+                if(item is Ads){
+                    val   nativeAds =   item.nativeAds
+
+                    if(nativeAds!=null){
+
+                         binding.apply {
+
+
+                                 this@apply.includeId.adsId.setNativeAd(nativeAds)
+
+
+
+                             binding.includeId.advertiseId.visibility =View.GONE
+                             binding.includeId.adsId.visibility =View.VISIBLE
+
+
+                         }
+
+
+                       }else{
+                        binding.includeId.advertiseId.visibility =View.VISIBLE
+                        binding.includeId.adsId.visibility =View.GONE
+
+                    }
+
+
+
+
+                 }
+
+
+             }
+
+            is LanguageViewDataBinding ->{
+                binding.apply {
+                    if(item is LanguageSupportModel)
+                        language = item } }
+
+        }
+
+
+
     }
 
+    override fun getItemCount(): Int {
 
-
-
-    override fun onDataChanged(values: Boolean) {
-
-    }
-
-    override fun bind(binding: LanguageViewDataBinding, item: LanguageSupportModel, position: Int) {
-
-        binding.apply {
-            language = item }
-
-
+        return item.size
     }
 
 }

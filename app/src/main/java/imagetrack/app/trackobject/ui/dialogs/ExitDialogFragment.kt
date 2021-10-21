@@ -1,12 +1,9 @@
 package imagetrack.app.trackobject.ui.dialogs
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
@@ -14,8 +11,6 @@ import imagetrack.app.trackobject.databinding.ExitDataBinding
 //import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.navigator.ExitNavigator
 import imagetrack.app.trackobject.viewmodel.ExitViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -43,8 +38,8 @@ class ExitDialogFragment : BaseDialogFragment<ExitViewModel, ExitDataBinding>() 
     }
 
 
-     fun showDialog(fragmentManager: FragmentManager) {
-        super.showDialogs(fragmentManager, TAG)
+     fun showDialog() {
+        super.showDialogs(requireActivity().supportFragmentManager ,TAG)
     }
 
 //    private fun  setupAds(){

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"  tools:node="remove"/>
 
 
@@ -29,7 +30,7 @@
         </activity>
 
 
-        <activity android:name=".ui.activities.LauncherActivity"
+        <activity android:name="imagetrack.app.trackobject.ui.activities.LauncherActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
@@ -43,11 +44,10 @@
         </activity>
 
 
-        <activity android:name=".ui.activities.SettingsActivity"
+        <activity android:name="imagetrack.app.trackobject.ui.activities.SettingsActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            >
+            tools:ignore="LockedOrientationActivity">
 
 
         </activity>

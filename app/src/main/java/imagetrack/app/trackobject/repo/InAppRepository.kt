@@ -1,18 +1,14 @@
 package imagetrack.app.trackobject.repo
 
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
-import com.google.auth.oauth2.AccessToken
-import com.google.auth.oauth2.GoogleCredentials
 import imagetrack.app.trackobject.database.local.ILocalDataSource
 import imagetrack.app.trackobject.database.local.LocalDataSource
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionApi
-import imagetrack.app.trackobject.enum.ProgressStatus
 import imagetrack.app.trackobject.inapppurchaseUtils.BillingClientLifecycle
 import imagetrack.app.trackobject.inapppurchaseUtils.ContentResource
 import imagetrack.app.trackobject.inapppurchaseUtils.purchaseForSku

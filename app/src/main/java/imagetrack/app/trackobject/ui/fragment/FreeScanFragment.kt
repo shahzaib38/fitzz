@@ -6,8 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -25,11 +23,8 @@ import imagetrack.app.trackobject.animations.animate
 import imagetrack.app.trackobject.camera_features.ICamera
 import imagetrack.app.trackobject.camera_features.ScanningCamera
 import imagetrack.app.trackobject.databinding.FreeScanFragmentDataBinding
-import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
-import imagetrack.app.trackobject.ext.animateFocusRing
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.ui.activities.HistoryActivity
-import imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog
 import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.utils.BitmapUtils
 import imagetrack.app.utils.CameraPermissions
@@ -121,7 +116,9 @@ class FreeScanFragment :  BaseFragment<ScanViewModel, FreeScanFragmentDataBindin
 
 
     private fun showInternetConnectionDialog(){
-        InternetConnectionDialog.getInstance().showDialog(childFragmentManager) }
+        //InternetConnectionDialog.getInstance().showDialog()
+
+    }
 
     override fun capture() {
         iCamera.let {

@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
@@ -105,8 +104,8 @@ class SubscriptionDetailDialog : BaseDialogFragment<InAppViewModel, Subscription
     }
 
 
-    fun showDialog(fragment: FragmentManager) {
-        super.showDialogs(fragment, TAG) }
+    fun showDialog() {
+        super.showDialogs(requireActivity().supportFragmentManager ,TAG) }
 
 
 

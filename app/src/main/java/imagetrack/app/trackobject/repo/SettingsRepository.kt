@@ -6,7 +6,14 @@ import javax.inject.Singleton
 
 
 @Singleton
-class SettingsRepository @Inject constructor( private val localDataSource: ILocalDataSource): BaseRepository() {
+class SettingsRepository @Inject constructor(
+
+    private val localDataSource: ILocalDataSource
+
+
+)
+
+    : BaseRepository() {
 
     val subscriptionLiveData = localDataSource.getSubscriptionJsonLiveData()
 

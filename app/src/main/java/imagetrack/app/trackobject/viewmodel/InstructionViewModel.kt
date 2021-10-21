@@ -1,7 +1,6 @@
 package imagetrack.app.trackobject.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import imagetrack.app.datastore.WelcomeNote
 import imagetrack.app.trackobject.navigator.InstructionNavigator
 import imagetrack.app.trackobject.repo.MainRepository
 

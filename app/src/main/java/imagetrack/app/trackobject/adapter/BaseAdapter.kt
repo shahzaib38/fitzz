@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import imagetrack.app.utils.Model
 import imagetrack.app.trackobject.viewholder.BaseViewHolder
 
 

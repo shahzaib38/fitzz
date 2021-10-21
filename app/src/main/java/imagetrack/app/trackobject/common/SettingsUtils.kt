@@ -12,11 +12,13 @@ object SettingsUtils {
     )
 
 
-
+    const val EMAIL: String="crystalbusinessapps@gmail.com"
     const val HISTORY = "History"
     const val VIEW_PDF= "All Pdf Files"
     const val PURCHASE_REPORT = "Purchase Report"
      const val SHARE_APP ="Share App"
+
+    const val CONTACT_DEVELOPER ="Contact us"
 
 
 }

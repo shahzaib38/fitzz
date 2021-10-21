@@ -9,21 +9,18 @@ import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-//import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ClipBoardManager
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.databinding.ScanDialogDataBinding
 import imagetrack.app.trackobject.ext.internetConnectionDialog
-import imagetrack.app.trackobject.ext.launchActivity
 import imagetrack.app.trackobject.ext.showLanguageList
 import imagetrack.app.trackobject.ext.showPdf
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.ui.activities.EditorActivity
-import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.ScanDialogViewModel
 import imagetrack.app.utils.CameraPermissions
@@ -37,8 +34,7 @@ import imagetrack.app.utils.InternetConnection
     override fun onDismiss(dialog: DialogInterface) {}
     private val mViewModel by viewModels<ScanDialogViewModel>()
     private var mBinding  :ScanDialogDataBinding? =null
-    private var subscriptionStatus : SubscriptionStatus?=null
-    private var mMainActivity :MainActivity? =null
+    private var mainActivity :MainActivity?=null
 
     override fun getBindingVariable(): Int =BR.viewModel
     override fun getViewModel(): ScanDialogViewModel = mViewModel
@@ -48,28 +44,26 @@ import imagetrack.app.utils.InternetConnection
         super.onViewCreated(view, savedInstanceState)
 
         mBinding = getViewDataBinding()
+        var baseActivity =   getBaseActivity()
+
+        if(baseActivity is MainActivity){
+            mainActivity = baseActivity
+        }
+
+
         mViewModel.setNavigator(this)
         dialog?.setCanceledOnTouchOutside(false)
-
-
-        val baseActivitty  = getBaseActivity()
-
-        if(baseActivitty is MainActivity){
-            mMainActivity =baseActivitty }
-
         val arguments = arguments?.run { get(KEY_VALUE) }
 
         mBinding?.apply {
             val derivedText =arguments as? String
             this.translatedtext.translateText(derivedText) }
-//
-//        mBinding?.run{
-//            val adRequest = AdRequest.Builder().build()
-//            this.bannerId.loadAd(adRequest)
-//
-//        }
 
-    //    checkTranslationAvailable()
+        mBinding?.run{
+            val adRequest = AdRequest.Builder().build()
+            this.bannerId.loadAd(adRequest)
+
+        }
 
     }
 
@@ -80,17 +74,6 @@ import imagetrack.app.utils.InternetConnection
         )
     }
 
-
-   private  fun openGallery(){
-
-            if (CameraPermissions.isGalleryPermissionGranted(requireContext()))
-            {
-                dismiss()
-                mMainActivity?.showPdf(getText())
-            } else
-            {
-                requestGalleryPermission() }
-    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -98,17 +81,9 @@ import imagetrack.app.utils.InternetConnection
     ) {
        if(requestCode == CameraPermissions.CAMERA_GALLERY_PERMISSION){
            dismiss()
-           mMainActivity?.showPdf(getText())
+          mainActivity?.showPdf(getText())
        }
     }
-
-
-
-
-
-
-
-
 
 
     private  fun EditText.translateText(derivedText: String?){
@@ -122,19 +97,8 @@ import imagetrack.app.utils.InternetConnection
     }
 
 
-
-
-
-    private fun openIntent(){
-
-        mMainActivity?.launchActivity(InAppPurchaseActivity::class.java)
-
-    }
-
-
-
-    fun showDialog(fragment: FragmentManager) {
-        super.showDialogs(fragment, TAG) }
+    fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager ,TAG) }
 
 
 
@@ -183,62 +147,30 @@ import imagetrack.app.utils.InternetConnection
     }
 
         override fun pdf() {
+            val activity = mainActivity
+            if (activity != null) {
+                if (CameraPermissions.isGalleryPermissionGranted(activity)) {
+                    dismiss()
+                    activity.showPdf(getText())
+                } else {
+                    requestGalleryPermission()
+                }
 
-
-            openGallery()
-
-
+            }
         }
-
-//    private fun checkTranslationAvailable(){
-//        mViewModel.subscriptionLiveData.observe(this , {
-//            subscriptionStatus =  it
-//
-//        })
-//    }
-
 
 
 
 
 
     override fun translate() {
-
-        println("Translate")
-//      val subscriptionStatus =  subscriptionStatus
-
-        if(!InternetConnection.isInternetAvailable(requireActivity()))
-        {
-
-            mMainActivity?.internetConnectionDialog()
-
-
-            return }
-
-//
-
-//
-//        if(subscriptionStatus!=null){
-//            val isExpire = subscriptionStatus.isExpired()
-//            if(isExpire){
-//                dismiss()
-//                openIntent()
-//            } else {
-
-
-
-                dismiss()
-
-                    mMainActivity?.showLanguageList(getText())
-
-//
-//
-//            }
-//        }
-//        else {
-//            openIntent() }
-//
-
+        val activity =mainActivity
+        if(activity!=null) {
+            if (!InternetConnection.isInternetAvailable(activity)) {
+                mainActivity?.internetConnectionDialog()
+                return } }
+        dismiss()
+        mainActivity?.showLanguageList(getText())
     }
 
     override fun startProgress(){}
@@ -281,6 +213,12 @@ import imagetrack.app.utils.InternetConnection
         }
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mBinding =null
+        println("ScanDialog Fragment DestroyView")
+    }
 
 
 

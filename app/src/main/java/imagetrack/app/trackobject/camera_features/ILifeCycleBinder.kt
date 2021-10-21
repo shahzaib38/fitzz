@@ -1,6 +1,5 @@
 package imagetrack.app.trackobject.camera_features
 
-import androidx.camera.core.ImageCapture
 import androidx.camera.core.UseCase
 
 interface ILifeCycleBinder {
