@@ -21,5 +21,7 @@
     <color name="black_transparent">#BF000000</color>
     <color name="brown_color">#200D0B</color>
     <color name="gray_20">#33836F6F</color>
-
+    <color name="light_gray">#E5E5E5</color>
+    <color name="light_blue">#0095FD</color>
+    <color name="divider_color">#4D909093</color>
 </resources>

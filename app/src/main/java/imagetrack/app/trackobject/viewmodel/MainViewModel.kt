@@ -2,10 +2,12 @@ package imagetrack.app.trackobject.viewmodel
 
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
 import imagetrack.app.trackobject.navigator.MainNavigator
 import imagetrack.app.trackobject.repo.MainRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 
 class MainViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) : BaseViewModel<MainNavigator>(mainRepository) {
 
@@ -52,6 +54,10 @@ class MainViewModel @ViewModelInject constructor(private val mainRepository: Mai
 
     fun getUsers(name: MutableMap<String, String>) = liveData(Dispatchers.IO) {
 
+
+
+
+
 //        try {
 //            mainRepository.getUsers(name).getData()?.getTranslations()?.forEach {
 //
@@ -64,6 +70,9 @@ class MainViewModel @ViewModelInject constructor(private val mainRepository: Mai
 
             emit( "Error Occurred!")
     //    }
+
+
+
 
 
     }

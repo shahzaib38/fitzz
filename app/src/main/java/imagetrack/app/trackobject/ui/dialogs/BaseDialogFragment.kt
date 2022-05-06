@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,25 +25,8 @@ import imagetrack.app.trackobject.ui.activities.BaseActivity
 
 val TAG = BaseDialogFragment::class.simpleName
 
-abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : DialogFragment() , FragmentManager.OnBackStackChangedListener{
+abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : DialogFragment() {
 
-
-    override fun onBackStackChanged() {
-
-//       val count = fragmentFragmentManager?.backStackEntryCount
-//        Log.i("count" , "${count} ")
-//        for(i :Int in 0 until count step 1){
-//
-//       val entry =     fragmentFragmentManager?.getBackStackEntryAt(i)
-//
-//            Log.i("count entry" , "${entry.name } ")
-//
-//
-//
-//        }
-//
-//        println("BackStack Changed ")
-    }
 
     private var mActivity: BaseActivity<*, *>? = null
     private var mViewDataBinding :VDB?=null
@@ -81,10 +63,7 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
             lifecycleOwner = this@BaseDialogFragment
             executePendingBindings() }
 
-        fragmentFragmentManager=   requireActivity().supportFragmentManager
 
-        Log.i("fragment " ,"Fragment Manger instance ${ fragmentFragmentManager}")
-        //fragmentFragmentManager.addOnBackStackChangedListener(this)
         return mViewDataBinding?.root }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,20 +106,16 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
             mActivity =context
         //    getBaseActivity()?.onFragmentAttached()
             println("DIalog is Attached ") }
-
-
     }
 
 
 
     fun  getBaseActivity():BaseActivity<*, *>?{
-        return mActivity
-    }
+        return mActivity }
 
 
     override fun getContext(): Context? {
-        return super.getContext()
-    }
+        return super.getContext() }
 
 
     open fun showDialogs( fragmentManager: FragmentManager , tag :String){
@@ -149,17 +124,11 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
         if (prevFragment != null) {
             transaction.remove(prevFragment) }
         transaction.addToBackStack(tag)
-        show(transaction, tag)
-    }
+        show(transaction, tag) }
 
 
     open fun dismissDialog(tag: String?){
-
-        dismiss()
-
-//        getBaseActivity()?.onFragmentDetached(tag)
-
-    }
+        dismiss() }
 
 
 

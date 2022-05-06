@@ -55,8 +55,8 @@ class LanguageAdapter(
 
       val baseLanguageModel =  item[position]
 
-        if (baseLanguageModel is Ads) {
-            return NATIVE_ADS; }
+//        if (baseLanguageModel is Ads) {
+//            return NATIVE_ADS; }
 
         return LANGUAGE_ITEMS }
 

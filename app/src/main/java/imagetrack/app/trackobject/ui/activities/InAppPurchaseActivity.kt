@@ -1,47 +1,77 @@
 package imagetrack.app.trackobject.ui.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
 import imagetrack.app.trackobject.database.local.inappdatabase.SubscriptionJson
+import imagetrack.app.trackobject.database.preferences.AdThreshold
 import imagetrack.app.trackobject.databinding.InAppBillingDataBinding
-import imagetrack.app.trackobject.ext.internetConnectionDialog
+import imagetrack.app.trackobject.ext.subscriptionStatusDialog
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants
 import imagetrack.app.trackobject.inapppurchaseUtils.createTimeNote
 import imagetrack.app.trackobject.navigator.SubscriptionStatusNavigator
-import imagetrack.app.trackobject.ui.dialogs.SubscriptionStatusDialog
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBinding>() ,SubscriptionStatusNavigator {
+class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBinding>() ,SubscriptionStatusNavigator , FragmentManager.OnBackStackChangedListener {
 
     private val mViewModel by viewModels<InAppViewModel>()
 
-    private var mMainDataBinding: InAppBillingDataBinding? = null
+    private var mInAppBillingDataBinding: InAppBillingDataBinding? = null
 
     override fun getBindingVariable(): Int = BR.viewModel
     override fun getLayoutId(): Int = R.layout.in_app_billing_layout
     override fun getViewModel(): InAppViewModel = mViewModel
 
+
+    override fun onBackStackChanged() {
+
+//        val count = this.supportFragmentManager.backStackEntryCount
+//        Log.i("count" , "${count} ")
+//        for(i :Int in 0 until count step 1){
+//
+//            val entry =this.supportFragmentManager?.getBackStackEntryAt(i)
+//
+//            Log.i("count entry" , "${entry.name } ")
+//
+//        }
+//        println("BackStack Changed ")
+//
+//
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            mMainDataBinding = getViewDataBinding()
+        mInAppBillingDataBinding = getViewDataBinding()
             lifecycle.addObserver(mViewModel.billingClientLifecycle)
             mViewModel.setNavigator(this)
             mViewModel.buyEvent.observe(this, billingFlowObserver)
@@ -54,7 +84,11 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
              mViewModel.skus.observe(this ,skuObserver)
 
 
-        setupAds()
+
+        if(!AdThreshold.getInstance(this).isMaxClickedPerformed()) {
+            setupAds() }
+
+        this.supportFragmentManager.addOnBackStackChangedListener(this)
     }
 
     private val skuObserver = Observer<Map<String,SkuDetails>> { sku ->
@@ -62,7 +96,7 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
         if(sku!=null){
             val skuDetails = sku[Constants.BASIC_SKU]
             if(skuDetails!=null) {
-                mMainDataBinding?.include4?.textView18?.buyConcat(skuDetails)
+                mInAppBillingDataBinding?.include4?.textView18?.buyConcat(skuDetails)
 
 
             } } }
@@ -73,34 +107,37 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
       this.text = concatString }
 
     private fun  setupAds(){
-        mMainDataBinding?.adsInclude?.apply {
+        mInAppBillingDataBinding?.adsInclude?.apply {
             val adRequest = AdRequest.Builder().build()
             this.loadAd(adRequest)
+            this.adListener =object : AdListener(){
 
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    lifecycleScope.launch(Dispatchers.IO){
+                        AdThreshold.getInstance(this@InAppPurchaseActivity).save(1) }
+                }
+
+            }
              }
     }
 
 
 
     private fun startProgress(){
-        mMainDataBinding?.progressId?.visibility = View.VISIBLE }
+        mInAppBillingDataBinding?.progressId?.visibility = View.VISIBLE }
 
     private fun stopProgress(){
-        mMainDataBinding?.progressId?.visibility = View.INVISIBLE }
+        mInAppBillingDataBinding?.progressId?.visibility = View.INVISIBLE }
 
 
     private val progressObserver= Observer<Boolean>{progressStatus ->
 
         if(progressStatus!=null ){
-            Log.i("InAppPurchase" , "Progress is not null")
 
             if(progressStatus) {
-
-                Log.i("InAppPurchase" , "true")
                 startProgress()
             }else{
-                Log.i("InAppPurchase" , "true")
-
                 stopProgress()
             }
 
@@ -108,40 +145,19 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
         }
     }
 
-    private fun showInternetConnectionDialog(){
-        this.internetConnectionDialog()
-//        InternetConnectionDialog.getInstance().showDialog(supportFragmentManager)
 
-
-    }
 
     private val daoSubscriptionObserver = Observer<SubscriptionStatus> { subscriptionStatus ->
-        Log.i("InAppPurchaseActivity" , "SubscriptionStatus")
-
 
         if(subscriptionStatus!=null) {
            val subscriptionNote = createTimeNote(subscriptionStatus)
             if (!subscriptionStatus.isExpired()) {
-                SubscriptionStatusDialog.getInstance(subscriptionNote).showDialog(this.supportFragmentManager)
-            }
 
-        }
-
-    }
-    private fun openIntent(){
-        finish()
-        val intent = Intent(this ,MainActivity::class.java)
-        startActivity(intent)
-
-
-    }
-
+                this.subscriptionStatusDialog(subscriptionNote) } } }
 
     private val intialPurchaseObserver = Observer<List<Purchase>>{ purchaseList->
-        Log.i("InAppPurchaseActivity" , "intialPurchaseObserver")
 
         if(purchaseList!=null && purchaseList.isNotEmpty()) {
-            Log.i("InAppPurchaseActivity" , "intialPurchaseObserver Second")
 
             mViewModel.processInit(purchaseList)
 
@@ -156,18 +172,15 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
 
 
     private val billingFlowObserver =Observer<BillingFlowParams> {
-        Log.i("InAppPurchaseActivity" , "BillingFlowObserver")
         it?.let {
             mViewModel.launchBillingFlow(this,it) } }
 
     private val purchaseUpdateObserver =Observer<List<Purchase>> {purchaseList->
-        Log.i("InAppPurchaseActivity" , "Purchase Update Observer")
         purchaseList?.let {
             mViewModel.processPurchaseList(purchaseList ,this ) } }
 
 
     private val jsonObserver =Observer<SubscriptionJson>{subscriptionJson->
-        Log.i("InAppPurchaseActivity" , "JsonObserver")
         if(subscriptionJson!=null){
                 val purchases =subscriptionJson.listFromJsonString(subscriptionJson.purchaseJson)
                 if(purchases!=null){
@@ -180,12 +193,63 @@ class InAppPurchaseActivity : BaseActivity<InAppViewModel, InAppBillingDataBindi
 
             } }
 
-
-  private   fun toast(name :String ){
-        Toast.makeText(this ,name,Toast.LENGTH_LONG).show() }
-
     override fun proceed() {
 
     }
 
+
+    public override fun onPause() {
+        mInAppBillingDataBinding?.adsInclude?.apply {
+            this.pause()
+            println("Pause" + this)
+
+        }
+        super.onPause()
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        mInAppBillingDataBinding?.adsInclude?.apply {
+            this.resume()
+
+            println("Resume" + this)
+        }
+
+    }
+
+
+    public override fun onDestroy() {
+        mInAppBillingDataBinding?.adsInclude?.apply {
+            this.destroy()
+            println("onDestroy"+this)
+
+        }
+
+        super.onDestroy()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+

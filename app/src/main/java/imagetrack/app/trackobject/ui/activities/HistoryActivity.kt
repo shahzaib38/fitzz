@@ -6,17 +6,21 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.adapter.HistoryAdapter
+import imagetrack.app.trackobject.database.preferences.AdThreshold
 import imagetrack.app.trackobject.databinding.HistoryDataBinding
 import imagetrack.app.trackobject.ext.recycle
-import imagetrack.app.trackobject.ext.showLanguageList
-//import imagetrack.app.trackobject.ext.ads
+//import imagetrack.app.trackobject.ext.showLanguageList
 import imagetrack.app.trackobject.navigator.HistoryNavigator
 import imagetrack.app.trackobject.viewmodel.HistoryViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 interface  HistoryListener{
@@ -46,22 +50,45 @@ class HistoryActivity : BaseActivity<HistoryViewModel, HistoryDataBinding>() , H
         mHistoryDataBinding = getViewDataBinding()
         mViewModel.setNavigator(this)
         mHistoryAdapter= HistoryAdapter(this)
+      //  setUpRecyclerView()
+
+        if(!AdThreshold.getInstance(this).isMaxClickedPerformed()) {
+            setupAds() }
+
+
         setUpRecyclerView()
 
-        setupAds()
     }
 
     private fun  setupAds(){
         mHistoryDataBinding?.adsInclude?.apply {
             val adRequest = AdRequest.Builder().build()
             this.loadAd(adRequest)
+            this.adListener =object : AdListener(){
 
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    lifecycleScope.launch(Dispatchers.IO){
+                        AdThreshold.getInstance(this@HistoryActivity).save(1) }
+
+
+                }
+
+            }
         }
     }
 
     private fun setUpRecyclerView(){
-        mViewModel.getAllHistoryData().observe(this, Observer { mHistoryAdapter?.setData(it as ArrayList) })
-            mHistoryDataBinding?.historyRecyclerview?.recycle(this ,mHistoryAdapter)
+        mViewModel.state.observe(this, Observer {
+
+            println("History "+ Thread.currentThread().name)
+            mHistoryAdapter?.setData(it as ArrayList)
+
+
+        })
+
+
+        mHistoryDataBinding?.historyRecyclerview?.recycle(this ,mHistoryAdapter)
     }
 
     override fun notifyDataBase() {
@@ -102,9 +129,44 @@ class HistoryActivity : BaseActivity<HistoryViewModel, HistoryDataBinding>() , H
     }
 
     override fun translate(data: String) {
-        this.showLanguageList(data)
+//        this.showLanguageList(data)
+    }
+
+
+    // Called when leaving the activity
+    public override fun onPause() {
+        mHistoryDataBinding?.adsInclude?.apply {
+            this.pause()
+            println("Pause" + this)
+
+        }
+        super.onPause()
+    }
+
+    // Called when returning to the activity
+    public override fun onResume() {
+        super.onResume()
+        mHistoryDataBinding?.adsInclude?.apply {
+            this.resume()
+
+            println("Resume" + this)
+        }
 
     }
+
+    // Called before the activity is destroyed
+    public override fun onDestroy() {
+        mHistoryDataBinding?.adsInclude?.apply {
+            this.destroy()
+            println("onDestroy"+this)
+
+        }
+
+        super.onDestroy()
+    }
+
+
+
 
 
 }

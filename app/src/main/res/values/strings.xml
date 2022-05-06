@@ -63,6 +63,7 @@
 
 
 
+
     <!-- Test Ads -->
     <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>
 
@@ -75,6 +76,21 @@
     <string name="subscription_native">ca-app-pub-3940256099942544/1044960115</string>
     <string name="exit_ads" >ca-app-pub-3940256099942544/1044960115</string>
     <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>
+
+
+
+    <!-- Original  Ads -->
+<!--    <string name="app_id">ca-app-pub-8453124532033807~1199249375</string>-->
+
+<!--    <string name="launcher_native">ca-app-pub-8453124532033807/4816593974</string>-->
+<!--    <string name="history_native">ca-app-pub-8453124532033807/2302466494</string>-->
+<!--    <string name="all_pdf">ca-app-pub-8453124532033807/6503218340</string>-->
+<!--    <string name="pdf_creator">ca-app-pub-8453124532033807/9877348967</string>-->
+<!--    <string name="pdf_open">ca-app-pub-8453124532033807/8937809990</string>-->
+<!--    <string name="settings_native">ca-app-pub-8453124532033807/4258831400</string>-->
+<!--    <string name="subscription_native">ca-app-pub-8453124532033807/2755545020</string>-->
+<!--    <string name="exit_ads" >ca-app-pub-8453124532033807/9909874649</string>-->
+<!--    <string name="banner_ad">ca-app-pub-8453124532033807/4320799755</string>-->
 
 
 
@@ -147,10 +163,23 @@
     <string name="flower_image_content_description">Image of flower</string>
     <string name="remove_this_flower">Remove this flower</string>
     <string name="benefits">Benefits</string>
-    <string name="premium">PREMIUM</string>
+    <string name="premium">TRY PREMIUM</string>
     <string name="subscribe_now">Subscribe now</string>
     <string name="translate_features">Unlimited Translate, supports more than 100+ languages</string>
-    <string name="processing">please wait.. processing Text</string>
+    <string name="processing">processing Text</string>
+    <string name="txt">.txt</string>
+    <string name="speak">speak</string>
+    <string name="accessibility_service_label">Sb Scanner</string>
+    <string name="accessibility_service_description">Accessibility Service Description</string>
+    <string name="tap_to_scan">Tap to Scan is Running</string>
+    <string name="no_interet_connection">" Internet Connection is not Available "</string>
+    <string name="auto_detected">Auto Detected</string>
+    <string name="urdu_language">Urdu</string>
+    <string name="tap_to_write_text">Tap to write text</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scanned_text">Scanned Text</string>
+    <string name="options">Options</string>
 
 
 </resources>

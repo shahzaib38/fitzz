@@ -6,6 +6,7 @@ interface ScanDialogNavigator {
     fun  dismissDialog()
 
 
+    fun speak()
     fun pdf()
 
     fun startProgress();

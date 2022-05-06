@@ -6,5 +6,5 @@ fun enableTorch()
 fun openGallery()
     fun capture()
 
-   fun  showHistory()
+   fun  showSettings()
 }

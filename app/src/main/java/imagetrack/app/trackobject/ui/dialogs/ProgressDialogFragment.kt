@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
+import imagetrack.app.trackobject.database.preferences.AdThreshold
 import imagetrack.app.trackobject.databinding.ProgressDataBinding
 import imagetrack.app.trackobject.ext.ads
 import imagetrack.app.trackobject.ui.activities.MainActivity
@@ -34,23 +36,31 @@ class ProgressDialogFragment : BaseDialogFragment<ProgressViewModel, ProgressDat
             mainActivity = baseActivity
         }
 
-        setupAds()
+
+//        mainActivity?.let {
+//            if (!AdThreshold.getInstance(it).isMaxClickedPerformed()) {
+//                setupAds()
+//            }
+//
+//        }
+
 
     }
 
 
 
-
-    private fun  setupAds(){
-        mProgressDataBinding?.adsInclude?.apply {
-            val unitId=    resources.getString(R.string.pdf_creator)
-                adsId.ads(requireContext(), unitId, advertiseId) }
-    }
+//
+//    private fun  setupAds(){
+//        mProgressDataBinding?.adsInclude?.apply {
+//            val unitId=    resources.getString(R.string.pdf_creator)
+//                adsId.ads(lifecycleScope ,requireContext(), unitId, advertiseId) }
+//    }
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         mProgressDataBinding =null
+        println("Progress Dialog ")
+        super.onDestroyView()
 
     }
 

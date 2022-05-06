@@ -36,53 +36,6 @@
             android:layout_height="match_parent"
             >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/include"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
-
-                <ImageView
-                    android:id="@+id/gallery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/gallery_style"
-                    android:onClick="@{()->previewLayout.openGallery()}"
-                    app:layout_constraintBottom_toBottomOf="@+id/history_databaseId"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/history_databaseId" />
-
-
-                <ImageView
-                    android:id="@+id/history_databaseId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="visible"
-                    android:background="@drawable/settings_icon"
-                    android:onClick="@{()->previewLayout.showHistory()}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/gallery"
-                    app:layout_constraintStart_toEndOf="@+id/torch"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/torch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/ripple_effect_scanfragment_borderless"
-                    android:src="@drawable/flash_icon"
-                    app:layout_constraintBottom_toBottomOf="@+id/history_databaseId"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/history_databaseId" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <TextView

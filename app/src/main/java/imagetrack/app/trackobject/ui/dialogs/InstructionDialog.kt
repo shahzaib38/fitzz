@@ -40,13 +40,8 @@ class InstructionDialog  : BaseDialogFragment<InstructionViewModel, InstructionD
 
     private fun  setupAds(){
         mInstructionDataBinding?.adsInclude?.apply {
-
             val unitId=    resources.getString(R.string.settings_native)
-
-                adsId.ads(requireContext(), unitId, advertiseId)
-
-        }
-
+                adsId.ads( lifecycleScope,requireContext(), unitId, advertiseId) }
     }
 
 
@@ -60,20 +55,16 @@ class InstructionDialog  : BaseDialogFragment<InstructionViewModel, InstructionD
         private const val TAG :String= "InstructionFragmentDialog"
         fun getInstance(): InstructionDialog {
             return InstructionDialog() }
-
     }
 
 
 
     fun showDialog(fragmentManager: FragmentManager) {
-        super.showDialogs(fragmentManager ,TAG)
-    }
+        super.showDialogs(fragmentManager ,TAG) }
 
 
     private   fun dismissDialog() {
-        super.dismissDialog(TAG)
-
-    }
+        super.dismissDialog(TAG) }
 
     override fun close() {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -81,6 +72,13 @@ class InstructionDialog  : BaseDialogFragment<InstructionViewModel, InstructionD
         }
         this.dismiss()
     }
+
+    override fun onDestroyView() {
+        mInstructionDataBinding = null
+        println("instruction Dialog ")
+        super.onDestroyView()
+    }
+
 
 
 }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import imagetrack.app.trackobject.helpers.*
+import imagetrack.app.trackobject.inapppurchaseUtils.SubscriptionNote
 import imagetrack.app.trackobject.ui.dialogs.*
 import java.io.File
 
@@ -31,6 +32,13 @@ fun Activity.tryOpenPathIntent(path: String, openAsType: Int = OPEN_AS_DEFAULT) 
 }
 
 
+
+/** Scan Dialog Fragment **/
+ fun AppCompatActivity.showScanDialog(it: String) {
+        ScanDialogFragment
+            .getInstance(it)
+            .showDialog(this.supportFragmentManager) }
+
 /** Instruction Dialog Fragment **/
 fun AppCompatActivity.showInstructionDialog(){
     InstructionDialog.getInstance().showDialog(this.supportFragmentManager) }
@@ -40,6 +48,18 @@ fun AppCompatActivity.launchActivity(className : Class<out Activity>){
     val intent =Intent(this , className)
     startActivity(intent) }
 
+/** Subscription Status Dialog **/
+fun AppCompatActivity.subscriptionStatusDialog(subscriptionNote: SubscriptionNote){
+    SubscriptionStatusDialog.getInstance(subscriptionNote)
+        .showDialog(this.supportFragmentManager)
+}
+
+
+
+/** Subscription Detail Dialog **/
+fun AppCompatActivity.subscriptionDetailDialog(subscriptionNote: SubscriptionNote){
+    SubscriptionDetailDialog.getInstance(subscriptionNote)
+        .showDialog(this.supportFragmentManager) }
 
  fun AppCompatActivity.toast(name :String ){
     Toast.makeText(this ,name , Toast.LENGTH_LONG).show() }
@@ -56,9 +76,9 @@ fun AppCompatActivity.internetConnectionDialog(){
 
 
 /** Language List  Dialog Fragment **/
-fun AppCompatActivity.showLanguageList(text :String ){
-    LanguageListDialogFragment.getInstance(text).showDialog(this.supportFragmentManager) }
-
+//fun AppCompatActivity.showLanguageList(text :String ){
+//    LanguageListDialogFragment.getInstance(text).showDialog(this.supportFragmentManager) }
+//
 
 
 /** Open Dialog Fragment **/

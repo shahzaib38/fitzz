@@ -9,7 +9,7 @@ import imagetrack.app.ClipBoardManager
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.EditorDataBinding
-import imagetrack.app.trackobject.ext.showLanguageList
+//import imagetrack.app.trackobject.ext.showLanguageList
 import imagetrack.app.trackobject.viewmodel.EditorViewModel
 import imagetrack.app.trackobject.navigator.EditorNavigator
 
@@ -84,7 +84,7 @@ class EditorActivity  :   BaseActivity<EditorViewModel, EditorDataBinding>()   ,
 
 
     override fun translate() {
-        this?.showLanguageList(getText())
+       // this?.showLanguageList(getText())
 
      //   LanguageListDialogFragment.getInstance(getText()).showDialog()
     }

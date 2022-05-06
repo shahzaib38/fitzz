@@ -12,6 +12,7 @@ import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.SubscriptionStatusDialogDataBinding
 import imagetrack.app.trackobject.inapppurchaseUtils.SubscriptionNote
 import imagetrack.app.trackobject.navigator.SubscriptionStatusNavigator
+import imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity
 import imagetrack.app.trackobject.viewmodel.InAppViewModel
 
 
@@ -20,16 +21,17 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
     SubscriptionStatusNavigator, DialogInterface.OnDismissListener{
 
     override fun onDismiss(dialog: DialogInterface) {
-        requireActivity().finish()
+        mInAppPurchaseActivity?.finish()
+
     }
 
     private val mViewModel by viewModels<InAppViewModel>()
     private var mBinding : SubscriptionStatusDialogDataBinding?=null
+    private var mInAppPurchaseActivity : InAppPurchaseActivity?=null
+
 
     override fun getBindingVariable(): Int  =BR.viewModel
-
     override fun getViewModel(): InAppViewModel=mViewModel
-
     override fun getLayoutId(): Int =R.layout.subscription_status_dialog
 
 
@@ -37,6 +39,12 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
         super.onViewCreated(view, savedInstanceState)
 
         mBinding = getViewDataBinding()
+
+        /*** Attached Activity reference ***/
+        val   baseActivity  = getBaseActivity()
+        if(baseActivity is InAppPurchaseActivity){
+            mInAppPurchaseActivity =baseActivity }
+
 
         dialog?.let {
             it.setCanceledOnTouchOutside(false)
@@ -102,8 +110,9 @@ class SubscriptionStatusDialog : BaseDialogFragment<InAppViewModel, Subscription
     private fun openIntent(){
 
         dismiss()
-        requireActivity().finish()
+        mInAppPurchaseActivity?.finish()
 
+        println("OpenIntent ")
 
     }
 

@@ -3,15 +3,16 @@ package imagetrack.app.trackobject.ext
 import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.ads.nativetemplates.TemplateView
 import com.google.android.gms.ads.AdRequest
 import imagetrack.app.trackobject.ads.NativeAds
 import imagetrack.app.trackobject.ads.NativeProgressAds
 
 
- fun TemplateView.ads(context: Context, unitId: String, textView: TextView){
+ fun TemplateView.ads(lifecycleScope: LifecycleCoroutineScope, context: Context, unitId: String, textView: TextView){
 
-    val loaded=   NativeAds.intializeNativeAds(context, unitId
+    val loaded=   NativeAds.intializeNativeAds( lifecycleScope,context, unitId
         , this, textView
     ){
 
@@ -23,9 +24,9 @@ import imagetrack.app.trackobject.ads.NativeProgressAds
 }
 
 
- fun TemplateView.ads(context: Context, unitId: String, textView: ImageView){
+ fun TemplateView.ads(lifecycleScope: LifecycleCoroutineScope,context: Context, unitId: String, textView: ImageView){
 
-    val loaded=   NativeProgressAds.intializeNativeAds(context, unitId
+    val loaded=   NativeProgressAds.intializeNativeAds( lifecycleScope,context, unitId
         , this, textView
     ){
 

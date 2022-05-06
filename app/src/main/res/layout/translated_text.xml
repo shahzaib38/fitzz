@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:ads="http://schemas.android.com/apk/res-auto">
 
     <data class="ScanDialogDataBinding">
         <variable
@@ -16,234 +16,68 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000">
+        android:background="@color/light_gray">
 
-        <Button
-            android:id="@+id/viewOrderId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/pdf_button"
-            android:onClick="@{()->viewModel.pdf()}"
-            android:text="@string/pdf_button"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/textlayoutdesign"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed">
-
-
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/edit_icon_style"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/sharedata"
-                app:layout_constraintEnd_toStartOf="@+id/sharedata"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/copy"
-                app:layout_constraintTop_toTopOf="@+id/sharedata" />
-
-
-            <ImageView
-                android:id="@+id/copy"
-                style="@style/CopyImage"
-                android:onClick="@{()->viewModel.copy()}"
-                app:layout_constraintBottom_toBottomOf="@+id/edit"
-                app:layout_constraintEnd_toStartOf="@+id/edit"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/edit" />
-
-            <ImageView
-                android:id="@+id/sharedata"
-                style="@style/shareimage"
-
-                android:onClick="@{()->viewModel.share()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/translate"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/edit"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/translate"
-                style="@style/translate_style"
-                android:onClick="@{()->viewModel.translate()}"
-                app:layout_constraintBottom_toBottomOf="@+id/sharedata"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/sharedata"
-                app:layout_constraintTop_toTopOf="@+id/sharedata" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/textlayoutdesign"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintVertical_weight="1">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/adView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/adview_style"
-                app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.gms.ads.AdView
-                    android:id="@+id/bannerId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="12dp"
-                    ads:adSize="BANNER"
-                    ads:adUnitId="@string/banner_ad"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ScrollView
-                android:id="@+id/scrollView2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintOkId"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/adView">
-
-                <EditText
-                    android:id="@+id/translatedtext"
-                    style="@style/translated_edit"
-                    android:minLines="15"
-                    android:gravity="start|top"
-                    android:background="@drawable/editor_style"
-                    app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="parent" />
-
-            </ScrollView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintOkId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scrollView2">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/ok"
-                    style="@style/ok_style"
-                    android:onClick="@{()->viewModel.saveNext()}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/translateId"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/translateId"
-                    style="@style/translateId_style"
-                    android:onClick="@{()->viewModel.translate()}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/ok"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
+            android:id="@+id/guideline10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
-            app:layout_constraintGuide_begin="8dp"
-
+            app:layout_constraintGuide_begin="20dp"
+        />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp"
             />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/adviewId"
+            layout="@layout/ads_layout_translated"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/top_sectionnId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            app:layout_constraintGuide_end="8dp" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/top_sectionnId"
+            layout="@layout/translate_top_section"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintBottom_toTopOf="@+id/option_sectionId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toBottomOf="@+id/adviewId" />
+
+        <include
+            android:id="@+id/option_sectionId"
+            layout="@layout/scan_option_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            bind:scanOptionViewModel="@{viewModel}"
+            app:layout_constraintBottom_toTopOf="@+id/translatedId"
+            app:layout_constraintEnd_toStartOf="@+id/guideline11"
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toBottomOf="@+id/top_sectionnId" />
+
+        <include
+            android:id="@+id/translatedId"
+            layout="@layout/translated_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline11"
+            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintTop_toBottomOf="@+id/option_sectionId" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
 </layout>
-
-
-
-
-
-<!--<com.google.android.gms.ads.AdView-->
-<!--android:id="@+id/bannerId"-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_alignParentBottom="true"-->
-<!--android:layout_centerHorizontal="true"-->
-<!--android:layout_marginTop="12dp"-->
-<!--android:layout_marginBottom="16dp"-->
-<!--ads:adSize="BANNER"-->
-<!--ads:adUnitId="@string/banner_ad"-->
-<!--app:layout_constraintBottom_toBottomOf="parent"-->
-<!--app:layout_constraintEnd_toEndOf="parent"-->
-<!--app:layout_constraintStart_toStartOf="parent"-->
-<!--app:layout_constraintTop_toTopOf="parent" />-->
-

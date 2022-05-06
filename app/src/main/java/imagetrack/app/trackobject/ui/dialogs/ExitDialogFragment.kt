@@ -14,20 +14,17 @@ import imagetrack.app.trackobject.viewmodel.ExitViewModel
 
 
 @AndroidEntryPoint
-class ExitDialogFragment : BaseDialogFragment<ExitViewModel, ExitDataBinding>()  ,ExitNavigator {
+class ExitDialogFragment : BaseBottomSheetDialog<ExitViewModel, ExitDataBinding>()  ,ExitNavigator {
 
 
     override fun onDismiss(dialog: DialogInterface) {}
-
     private val mViewModel by viewModels<ExitViewModel>()
     private var mBinding  : ExitDataBinding? =null
-
-
 
     override fun getBindingVariable(): Int = BR.viewModel
     override fun getViewModel(): ExitViewModel = mViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState : Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding =getViewDataBinding()

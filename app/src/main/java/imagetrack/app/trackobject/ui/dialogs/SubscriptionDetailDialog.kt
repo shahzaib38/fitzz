@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.trackobject.BR
@@ -97,16 +98,15 @@ class SubscriptionDetailDialog : BaseDialogFragment<InAppViewModel, Subscription
 
     }
 
-    private fun openIntent(){
-        requireActivity().finish()
-        val intent = Intent(requireActivity() ,MainActivity::class.java)
-        startActivity(intent)
+
+
+    fun showDialog(fragmentManager: FragmentManager) {
+        super.showDialogs(fragmentManager ,TAG) }
+
+    override fun onDestroyView() {
+        mBinding =null
+        super.onDestroyView()
     }
-
-
-    fun showDialog() {
-        super.showDialogs(requireActivity().supportFragmentManager ,TAG) }
-
 
 
 }

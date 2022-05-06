@@ -3,10 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        />-->
 
     <data>
 
@@ -27,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/textlayoutdesign">
+            >
 
             <TextView
                 android:id="@+id/textView19"
@@ -39,7 +35,8 @@
                 android:gravity="center"
                 android:text="@string/translate_features"
                 android:textSize="20sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/sf_pro_displat"
+                android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/textView18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,9 +52,9 @@
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/buy_monthly_package"
-                android:textColor="@color/gnt_red"
+                android:textColor="@color/gnt_blue"
                 android:textSize="32sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toTopOf="@+id/weekly_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,6 +70,7 @@
                 android:background="@drawable/okbutton"
                 android:onClick="@{()->buyViewModel.buyBasic()}"
                 android:text="@string/subscribe_now"
+                android:fontFamily="@font/poppins_semibold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/textView16"
@@ -91,6 +89,7 @@
                 android:gravity="center"
                 android:text="@string/note_description"
                 android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

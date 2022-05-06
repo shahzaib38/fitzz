@@ -1,40 +1,63 @@
 package imagetrack.app.trackobject.ui.activities
 
-//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
-
+import android.app.IntentService
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
+import android.widget.RemoteViews
 import androidx.activity.viewModels
 import androidx.camera.core.ExperimentalUseCaseGroup
+import androidx.core.app.NotificationCompat
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import imagetrack.app.ClipBoardManager
 import imagetrack.app.datastore.IDataStore
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.databinding.MainDataBinding
-import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import imagetrack.app.trackobject.ext.setupWithNavController
 import imagetrack.app.trackobject.ext.showInstructionDialog
+import imagetrack.app.trackobject.notifications.Channels
+import imagetrack.app.trackobject.services.ScanFirebaseMessagingService
+import imagetrack.app.trackobject.services.ScanFirebaseMessagingService.Companion.NOTIFICATION_ID
+import imagetrack.app.trackobject.services.ScanService
 import imagetrack.app.trackobject.ui.dialogs.ProgressDialogFragment
-import imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment
+import imagetrack.app.trackobject.ui.dialogs.SpeakingDialogFragment
 import imagetrack.app.trackobject.viewmodel.MainViewModel
-import java.text.SimpleDateFormat
-import java.util.*
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 @ExperimentalUseCaseGroup
 @AndroidEntryPoint
-class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
+class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() , FragmentManager.OnBackStackChangedListener {
 
-   private val mViewModel by viewModels<MainViewModel>()
+
+
+    override fun onBackStackChanged() {
+       val count = this.supportFragmentManager.backStackEntryCount
+        Log.i("count" , "${count} ")
+        for(i :Int in 0 until count step 1){
+       val entry =this.supportFragmentManager?.getBackStackEntryAt(i)
+            Log.i("count entry" , "${entry.name } ") }
+        println("BackStack Changed ")
+
+
+    }
+
+    private val mViewModel by viewModels<MainViewModel>()
     private var currentNavController: LiveData<NavController>? = null
     private var mMainDataBinding : MainDataBinding?=null
-
-    private   var progressDialog : ProgressDialogFragment?=null
-
-
+   // private var progressDialog : ProgressDialogFragment?=null
 
     override fun getBindingVariable(): Int = BR.viewModel
     override fun getLayoutId(): Int = R.layout.activity_main
@@ -43,89 +66,62 @@ class MainActivity   : BaseActivity<MainViewModel, MainDataBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         mMainDataBinding = getViewDataBinding()
 
-        progressDialog = ProgressDialogFragment.getInstance()
 
-        setupBottomNavigationBar()
-
-       val isNew = IDataStore.getInstance(applicationContext).getWelcomeNote()
-
-        if(!isNew) {
-            this.showInstructionDialog()
-        }
+        // Remaining code
 
     }
 
-
-    public fun   getDate(milliSeconds: Long, dateFormat: String) :String
-    {
-        // Create a DateFormatter object for displaying date in specified format.
-        val formatter = SimpleDateFormat.getDateInstance().format(dateFormat)
-
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
-        val  calendar = Calendar.getInstance();
-        calendar.timeInMillis = milliSeconds;
-        return formatter.format(calendar.time);
-    }
-
-
-
-
-
-
-
-
-
-
-
-        override fun onSupportNavigateUp(): Boolean {
-            return currentNavController?.value?.navigateUp() ?: false
-        }
-
-
-
-        private fun setupBottomNavigationBar() {
-            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
-            val navGraphIds = listOf(R.navigation.scan, R.navigation.live_nav)
-            val controller = bottomNavigationView.setupWithNavController(
-                navGraphIds = navGraphIds,
-                fragmentManager = supportFragmentManager,
-                containerId = R.id.nav_host_container,
-                intent = intent
-            )
-
-            currentNavController = controller
-        }
-
-
-    override fun onDestroy() {
+    override fun onDestroy(){
         super.onDestroy()
-
-        println("Destroy MainActivity")
-
     }
 
-     fun progressInVisible(){
-        progressDialog?.dismiss()
-
-
-    }
-
-
-
-     fun progressVisible(){
-        progressDialog?.showDialog(this.supportFragmentManager) }
-
-    fun showScanDialog(it: String) {
-        ScanDialogFragment
-            .getInstance(it)
-            .showDialog(this.supportFragmentManager) }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+//       val isNew = IDataStore.getInstance(applicationContext).getWelcomeNote()
+//        if(!isNew) {
+//            this.showInstructionDialog() }
+//
+//        this.supportFragmentManager.addOnBackStackChangedListener(this)
+//
+////       startService(Intent(this ,ScanService::class.java))
+//        val navHostFragment = supportFragmentManager.findFragmentById(
+//            R.id.nav_host_container
+//        ) as NavHostFragment
+//
+//        val  navController = navHostFragment.navController
+//
+
+//        // Setup the bottom navigation view with navController
+//        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
+//
+//        bottomNavigationView.setupWithNavController(navController)

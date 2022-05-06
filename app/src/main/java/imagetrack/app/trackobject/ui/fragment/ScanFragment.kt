@@ -15,19 +15,23 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.window.WindowManager
+import androidx.work.Worker
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.R
+import imagetrack.app.trackobject.ScanNavigatorDirections
 import imagetrack.app.trackobject.animations.animate
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
-import imagetrack.app.trackobject.ext.internetConnectionDialog
 import imagetrack.app.trackobject.ext.scaleGestureDetector
 import imagetrack.app.trackobject.ext.toast
+import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.ui.activities.SettingsActivity
-import imagetrack.app.trackobject.ui.dialogs.ProgressDialogFragment
 import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.utils.BitmapUtils
 import imagetrack.app.utils.CameraPermissions
@@ -55,13 +59,10 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var cameraProvider: ProcessCameraProvider? = null
     private lateinit var windowManager: WindowManager
-    private   var progressDialog : ProgressDialogFragment?=null
-
-
+   // private var mNavController : NavController?=null
 
     private val displayManager by lazy {
-        requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-    }
+        requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager }
 
 
 
@@ -69,7 +70,6 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
 
     companion object {
-
 
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
@@ -93,9 +93,11 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
         windowManager = WindowManager(view.context)
 
-
-        if (isCameraPermissionGranted(requireContext())) startCamera() else requestCameraPermission()
+        if (isCameraPermissionGranted(requireContext()))
+            startCamera() else requestCameraPermission()
         mViewModel.setNavigator(this)
+        mViewModel.translateText.observe( viewLifecycleOwner , translatedObserver)
+
 
     }
 
@@ -117,7 +119,9 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
 
    private   fun  changeTorchState(state :Int =R.drawable.ic_flash_off){
-       mScanFragmentDataBinding?.include2?.torch?.setImageResource(state)
+       mScanFragmentDataBinding?.actionButtonId?.cameraOptionId?.torch?.setImageResource(state)
+
+
    }
 
     private fun openIntent(){
@@ -134,7 +138,10 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
           } else { requestGalleryPermission() }
 
       }else{
-          mMainActivity?.internetConnectionDialog()
+
+          val action =  ScanNavigatorDirections.actionGlobalInternetConnectionDialog()
+          findNavController().navigate(action)
+//          mMainActivity?.internetConnectionDialog()
 
       }
     }
@@ -154,8 +161,9 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
                 imageCapture.takePicture(Executors.newSingleThreadExecutor(),
                     object : ImageCapture.OnImageCapturedCallback() {
                         override fun onCaptureSuccess(image: ImageProxy) {
-
                             mViewModel.scanText(image)
+
+
 
                         }
 
@@ -164,21 +172,22 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
                             val message =exception.message
                             if(message!=null){
 
-                                mMainActivity?.progressInVisible()
+                            progressInVisible()
 
 
                             }
                         }
                     })
             }else{
-                mMainActivity?.internetConnectionDialog() }
+           //     mMainActivity?.internetConnectionDialog()
+
+                val action =  ScanNavigatorDirections.actionGlobalInternetConnectionDialog()
+                findNavController().navigate(action)
+
+            }
         } }
 
 
-
-    override fun showHistory() {
-        val myIntent = Intent(mMainActivity, SettingsActivity::class.java)
-        this.startActivity(myIntent)    }
 
     private fun requestGalleryPermission(){
         requestPermissions(CameraPermissions.GALLERY_ARRAY, CameraPermissions.CAMERA_GALLERY_PERMISSION)
@@ -251,11 +260,9 @@ private fun startCamera() {
 
 
     override fun onDestroyView() {
-        mScanFragmentDataBinding = null
-
+      //  mScanFragmentDataBinding = null
         super.onDestroyView()
-        progressDialog =null
-        cameraProvider=null
+
 
     }
 
@@ -265,6 +272,9 @@ private fun startCamera() {
     }
 
     override fun onDestroy() {
+
+        println("Binding "+ mScanFragmentDataBinding)
+
         super.onDestroy()
         println("Destroy Fragment")
 
@@ -364,7 +374,6 @@ private fun startCamera() {
         } catch (exc: Exception) {
          //   Log.e(CameraFragment.TAG, "Use case binding failed", exc)
 
-
         }
     }
 
@@ -372,7 +381,7 @@ private fun startCamera() {
       val cameraController =  camera.cameraControl
         val cameraInfo =camera.cameraInfo
 
-        mScanFragmentDataBinding?.include2?.torch?.setOnClickListener {
+        mScanFragmentDataBinding?.actionButtonId?.cameraOptionId?.torch?.setOnClickListener {
             when(cameraInfo.torchState.value) {
                 0->{
                     cameraController.enableTorch(true) }
@@ -382,8 +391,6 @@ private fun startCamera() {
                 else-> {
                     cameraController.enableTorch(false) } }
         } }
-
-
 
     /****
      * Observers
@@ -401,34 +408,31 @@ private fun startCamera() {
     }
 
 
-
-
     //TranslateLiveData
     private val translatedObserver = Observer<String?>{
         if(it!=null){
-
-            mMainActivity?.showScanDialog(it)
-
-
+            NavGraph.navigate( NavGraph.SCAN_FRAGMENT_TO_SCAN_DIALOG ,findNavController() ,it)
         } }
-
-
-
-
 
     //ProgressLiveData
     private val progressStatusObserver =Observer<Boolean>{progressStatus ->
         if(progressStatus!=null) {
             when (progressStatus) {
                 true -> {
-                    mMainActivity?.progressVisible()
+                    progressVisible()
                 }
                 false -> {
-                    mMainActivity?.progressInVisible()
+                   progressInVisible()
 
                 } }}
     }
 
+    private fun progressVisible(){
+        NavGraph.navigate(NavGraph.SCAN_FRAGMENT_TO_PROGRESS, findNavController()) }
+
+    private fun progressInVisible(){
+        findNavController().popBackStack()
+    }
 
 
 
@@ -485,18 +489,14 @@ private fun startCamera() {
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
 
-        println("OnSaveInstance")
+    override fun showSettings() {
+
+
+        val myIntent = Intent(mMainActivity, SettingsActivity::class.java)
+        this.startActivity(myIntent)
+
     }
 
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-
-        println("onRestoresaveInstance")
-    }
 
 }

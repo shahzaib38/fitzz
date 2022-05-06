@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <array name="spinner_items">
+
+
+        <item>Arabic</item>
+        <item>English</item>
+        <item>Sindhi</item>
+        <item>Baloch</item>
+
+
+    </array>
+
+
+</resources>

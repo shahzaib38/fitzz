@@ -12,43 +12,65 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import imagetrack.app.trackobject.R
+import imagetrack.app.trackobject.notifications.Channels
+import imagetrack.app.trackobject.notifications.Notifications
 
 class ScanFirebaseMessagingService  : FirebaseMessagingService() {
 
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (remoteMessage.notification != null) {
-            sendUpdateNotification(remoteMessage.notification!!.title, remoteMessage.notification!!.body)
-        }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        println("Scan Firebase MEssaging Sevice Destroyed")
 
     }
 
-    private fun sendUpdateNotification(title: String?, messageBody: String?) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(URL)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = getString(R.string.default_notification_channel_id)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(title)
-            .setContentText(messageBody)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri).setStyle(
-                NotificationCompat.BigTextStyle()
-                .bigText(messageBody))
-            .addAction( R.mipmap.ic_launcher ,UPDATE,
-                pendingIntent)
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = messageBody
-            notificationManager.createNotificationChannel(channel)
+        val notification =remoteMessage.notification
+        if (notification != null) {
+           val mChannelId = notification.channelId
+            if(mChannelId!=null){
+                sendUpdateNotification(notification,mChannelId) }
         }
+    }
+
+    private fun sendUpdateNotification(notification: RemoteMessage.Notification,channelId :String ) {
+//        val intent = Intent(Intent.ACTION_VIEW)
+//        intent.data = Uri.parse(URL)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+//
+//
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val channelList = listOf(Channels.createUpdateNotification(),Channels.createOfferNotification())
+
+//        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+//            .setSmallIcon(R.mipmap.ic_launcher)
+//            .setContentTitle(title)
+//            .setContentText(messageBody)
+//            .setContentIntent(pendingIntent)
+//
+//            .setAutoCancel(true)
+//            .setSound(defaultSoundUri).setStyle(
+//                NotificationCompat.BigTextStyle()
+//                .bigText(messageBody))
+//            .addAction( R.mipmap.ic_launcher ,UPDATE,
+//                pendingIntent)
+
+     //   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+     //       val channel = NotificationChannel("test", title, NotificationManager.IMPORTANCE_DEFAULT)
+      //      channel.description = messageBody
+
+
+     val notificationBuilder =   when(notification.channelId){
+         Channels.UPDATE_OFFER_ID ->{
+                Notifications.createOfferNotification(this ,notification ,Channels.UPDATE_OFFER_ID) }
+         else ->{
+                Notifications.createUpdateNotification(this ,notification ,Channels.UPDATE_CHANNEL_ID) } }
+        notificationManager.createNotificationChannels(channelList)
+
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 

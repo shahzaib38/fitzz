@@ -3,6 +3,7 @@ package imagetrack.app.trackobject.repo
 import imagetrack.app.trackobject.database.local.ILocalDataSource
 import imagetrack.app.trackobject.database.local.history.HistoryBean
 import imagetrack.app.trackobject.database.local.history.HistoryDatabase
+import java.util.concurrent.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,10 +33,14 @@ class HistoryRepository  @Inject constructor(private val historyDatabase: Histor
 
     suspend fun deleteAll():Boolean{
         historyDatabase.userDao().deleteAll()
+        return true }
 
 
-        return true
+    suspend fun getAllHistoryData(): kotlinx.coroutines.flow.Flow<List<HistoryBean>> {
+
+
+        return historyDatabase.userDao().getAllHistoryData()
+
     }
-
 
 }

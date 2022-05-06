@@ -2,16 +2,106 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/scan"
-app:startDestination="@id/scanFragment"
-    >
-
+android:id="@+id/scan_navigator"
+app:startDestination="@id/scanFragment">
 
 <fragment android:id="@+id/scanFragment"
     android:name="imagetrack.app.trackobject.ui.fragment.ScanFragment"
+    tools:layout="@layout/scan_fragment">
 
-    />
+    <action
+        android:id="@+id/action_scanFragment_to_exitDialogFragment"
+        app:destination="@id/exitDialogFragment" />
+
+    <action
+        android:id="@+id/action_scanFragment_to_scanDialogFragment"
+        app:destination="@id/scanDialogFragment" />
+    <action
+        android:id="@+id/action_scanFragment_to_progressDialogFragment"
+        app:destination="@id/progressDialogFragment" />
 
 
+</fragment>
+
+
+    <dialog
+        android:id="@+id/progressDialogFragment"
+        tools:layout="@layout/progress_layout"
+        android:name="imagetrack.app.trackobject.ui.dialogs.ProgressDialogFragment"
+        android:label="Progress Dialog Fragment">
+
+
+    </dialog>
+    <dialog
+        android:id="@+id/exitDialogFragment"
+        android:name="imagetrack.app.trackobject.ui.dialogs.ExitDialogFragment"
+        android:label="ExitDialogFragment"
+        tools:layout="@layout/exit_dialog" />
+
+    <dialog
+        android:id="@+id/scanDialogFragment"
+        android:name="imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment"
+        android:label="ScanDialogFragment"
+        tools:layout="@layout/translated_text"
+        >
+
+        <argument
+            android:name="textvalue"
+            app:argType="string"
+            android:defaultValue="Text Not Found" />
+        <action
+            android:id="@+id/action_scanDialogFragment_to_languageListDialogFragment2"
+            app:destination="@id/languageListDialogFragment" />
+        <action
+            android:id="@+id/action_scanDialogFragment_to_speakingDialogFragment"
+            app:destination="@id/speakingDialogFragment" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/languageListDialogFragment"
+        android:name="imagetrack.app.trackobject.ui.dialogs.LanguageListDialogFragment"
+        android:label="LanguageListDialogFragment"
+        tools:layout="@layout/language_list_dialog">
+
+        <action
+            android:id="@+id/action_languageListDialogFragment_to_scanDialogFragment"
+            app:destination="@id/scanDialogFragment"
+            app:popUpTo="@id/scanDialogFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="textvalue"
+            app:argType="string"
+            android:defaultValue="No Text found" />
+        <action
+            android:id="@+id/action_languageListDialogFragment_to_inAppPurchaseActivity"
+            app:destination="@id/inAppPurchaseActivity" />
+
+
+    </dialog>
+    <dialog
+        android:id="@+id/internetConnectionDialog"
+        android:name="imagetrack.app.trackobject.ui.dialogs.InternetConnectionDialog"
+        android:label="InternetConnectionDialog" />
+    <action android:id="@+id/action_global_internetConnectionDialog"
+
+        app:destination="@id/internetConnectionDialog" />
+    <activity
+        android:id="@+id/inAppPurchaseActivity"
+        android:name="imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity"
+        android:label="InAppPurchaseActivity"
+        tools:layout="@layout/in_app_billing_layout"
+        />
+    <fragment
+        android:id="@+id/speakingDialogFragment"
+        android:name="imagetrack.app.trackobject.ui.dialogs.SpeakingDialogFragment"
+        android:label="SpeakingDialogFragment"
+        tools:layout="@layout/speak_layout"
+        >
+        <argument
+            android:name="text"
+            app:argType="string"
+            android:defaultValue="No Text Found" />
+    </fragment>
 
 </navigation>

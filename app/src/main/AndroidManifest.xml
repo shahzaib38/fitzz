@@ -3,146 +3,159 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="imagetrack.app.trackobject">
 
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"  tools:node="remove"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
 
     <application
+        android:name=".app.ShapeDetectorApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name="imagetrack.app.trackobject.app.ShapeDetectorApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="imagetrack.app.trackobject.ui.DemoActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
 
 
-        </activity>
+<!--        <activity-->
+<!--            android:name=".ui.DemoActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/AppTheme"-->
+<!--            tools:ignore="LockedOrientationActivity"></activity>-->
+<!--        <activity-->
+<!--            android:name=".ui.activities.LauncherActivity"-->
+<!--            android:hardwareAccelerated="true"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            tools:ignore="LockedOrientationActivity">-->
 
 
-        <activity android:name="imagetrack.app.trackobject.ui.activities.LauncherActivity"
+<!--        </activity>-->
+
+
+        <activity
+            android:name=".ui.activities.SettingsActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            >
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity
+            android:name=".ui.activities.PdfActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity
+            android:name=".ui.activities.HistoryActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ui.activities.EditorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-        </activity>
-
-
-        <activity android:name="imagetrack.app.trackobject.ui.activities.SettingsActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
 
 
         </activity>
 
 
-
-        <activity android:theme="@style/AppTheme"
-            android:name="imagetrack.app.trackobject.ui.activities.PdfActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            >
+        <activity android:name=".ui.activities.TranslateAccessibilityActivity">
 
 
         </activity>
 
-
-
-        <activity android:theme="@style/AppTheme"
-            android:name="imagetrack.app.trackobject.ui.activities.HistoryActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            >
-
-
-        </activity>
-
-        <activity android:name="imagetrack.app.trackobject.ui.activities.EditorActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-
-        </activity>
-
-        <activity android:name="imagetrack.app.trackobject.ui.activities.MainActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            >
-
-
-
-        </activity>
-        
         <provider
-            android:authorities="imagetrack.app.trackobject.provider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="imagetrack.app.trackobject.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-
+                android:resource="@xml/provider_paths" />
         </provider>
-        
-        
 
-        <activity android:name="imagetrack.app.trackobject.ui.activities.FreeSubscriptionActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity">
-
-        </activity>
-
-
-        <activity android:name="imagetrack.app.trackobject.ui.activities.InAppPurchaseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            tools:ignore="LockedOrientationActivity"
+        <activity
+            android:name=".ui.activities.InAppPurchaseActivity"
             android:hardwareAccelerated="true"
-            >
-
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"></activity>
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
-        <service android:name="imagetrack.app.trackobject.services.ScanFirebaseMessagingService"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
-    </service>
 
-        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <service
+            android:name=".services.ScanFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/app_id"/>
-
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+            android:value="@string/app_id" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+        <service android:name=".services.JobSchedularIntent"
+            android:permission="android.permission.BIND_JOB_SERVICE"             android:enabled="true"
+            />
+
+
+        <service android:name=".services.ScanService" android:exported="true"/>
+
+        <service android:name=".services.TranslateAccessibilitService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:label="@string/accessibility_service_label">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+
+        </service>
+
+
+
+
+
     </application>
+
 </manifest>

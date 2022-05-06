@@ -6,14 +6,17 @@
 
     <item
         android:icon="@drawable/capture"
-        android:id="@+id/scan"
+        android:id="@+id/scan_navigator"
         android:title="@string/scan" />
 
 
+
     <item
-        android:id="@+id/live"
-        android:title="@string/live"
-        android:icon="@drawable/capture"
-        />
+        android:icon="@drawable/translate_icon"
+        android:id="@id/translate_nav"
+        android:title="@string/translate" />
+
+
+
 
 </menu>

@@ -5,10 +5,9 @@ import imagetrack.app.trackobject.model.SettingBean
 object SettingsUtils {
 
 
-    fun arrayList() = arrayListOf(SettingBean(HISTORY) ,SettingBean(VIEW_PDF) ,
-        SettingBean(PURCHASE_REPORT),SettingBean(SHARE_APP)
-
-
+    fun arrayList() = arrayListOf(SettingBean(0,HISTORY) ,SettingBean(1,VIEW_PDF) ,
+        SettingBean(2,PURCHASE_REPORT),SettingBean(3,SHARE_APP),
+        SettingBean(4,ENABLE_COPY_TO_TRANSLATE)
     )
 
 
@@ -19,6 +18,8 @@ object SettingsUtils {
      const val SHARE_APP ="Share App"
 
     const val CONTACT_DEVELOPER ="Contact us"
+    const val ENABLE_COPY_TO_TRANSLATE ="enable copy to translate"
+
 
 
 }

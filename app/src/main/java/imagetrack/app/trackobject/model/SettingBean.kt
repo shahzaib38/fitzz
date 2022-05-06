@@ -1,3 +1,3 @@
 package imagetrack.app.trackobject.model
 
-class SettingBean( val data : String )
+class SettingBean(val id:Int , val data : String )

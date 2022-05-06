@@ -3,14 +3,17 @@ package imagetrack.app.trackobject.app
 import android.app.Application
 import androidx.databinding.library.BuildConfig
 import com.google.android.gms.ads.MobileAds
-import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
 import dagger.hilt.android.HiltAndroidApp
+import imagetrack.app.trackobject.repo.MainRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class ShapeDetectorApplication : Application() {
 
+
+    @Inject
+     lateinit var mainRepository :MainRepository
 
 
     override fun onCreate() {
@@ -29,7 +32,6 @@ class ShapeDetectorApplication : Application() {
         }
 
         setupAdSdk()
-        setupLeakCanary();
     }
 
     private fun setupAdSdk(){
@@ -37,17 +39,7 @@ class ShapeDetectorApplication : Application() {
         MobileAds.initialize(this)
     }
 
-    private fun setupLeakCanary():RefWatcher {
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-
-            return RefWatcher.DISABLED;
-
-        }
-
-        return LeakCanary.install(this);
-
-    }
 
 
 
