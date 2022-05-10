@@ -50,67 +50,70 @@ class TranslateAccessibilityActivity : BaseActivity<MainViewModel , Accessibilit
 
         mAccessibilityServiceDataBinding =  getViewDataBinding()
 
-        loadAccessibilityData()
+      //  loadAccessibilityData()
 
     }
 
 
     private fun loadAccessibilityData(){
 
+//
+//        var permissionList =ArrayList<AccessibilityItem>()
+//        val accessibilityServiceAdapter  = AccessibilityServiceAdapter(this)
+//
+////        if (!Settings.canDrawOverlays(this)) {
+////            // send user to the device settings
+////          //  val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+////        //    startActivity(myIntent)
+////
+////            permissionList.add(AccessibilityItem(APPEAR_ON_TOP,"Enable place on Top"))
+////        }else{
+////         //   Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show()
+////            permissionList.add(AccessibilityItem(APPEAR_ON_TOP,"Enable place on Top",true)  )
+////
+////        }
+//
+//
+//        permissionList.add(AccessibilityItem(ACCESSIBILITY_SERVICE,"Accessibility Service ",false)  )
+//
+//
+//        accessibilityServiceAdapter.setData(permissionList)
+//
+//        mAccessibilityServiceDataBinding?.accessibilityRecclerviewId?.recycle(this, accessibilityServiceAdapter)
+//
+//
 
-        var permissionList =ArrayList<AccessibilityItem>()
-        val accessibilityServiceAdapter  = AccessibilityServiceAdapter(this)
-
-        if (!Settings.canDrawOverlays(this)) {
-            // send user to the device settings
-          //  val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-        //    startActivity(myIntent)
-
-            permissionList.add(AccessibilityItem(APPEAR_ON_TOP,"Enable place on Top"))
-        }else{
-         //   Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show()
-            permissionList.add(AccessibilityItem(APPEAR_ON_TOP,"Enable place on Top",true)  )
-
-        }
-
-
-        permissionList.add(AccessibilityItem(ACCESSIBILITY_SERVICE,"Accessibility Service ",false)  )
-
-
-        accessibilityServiceAdapter.setData(permissionList)
-
-        mAccessibilityServiceDataBinding?.accessibilityRecclerviewId?.recycle(this, accessibilityServiceAdapter)
     }
 
     override fun clickItem(item: AccessibilityItem) {
 
-        when(item.id){
-            APPEAR_ON_TOP->{
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!Settings.canDrawOverlays(this)) {
-                        // send user to the device settings
-                        val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-                        myIntent.data = Uri.parse("package:$packageName")
-                        startActivity(myIntent)
-                    }else{
-                        Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show()
-
-                    }
-
-
-                }
-
-            }
-            ACCESSIBILITY_SERVICE->{
-                val openSettings = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                openSettings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
-                startActivity(openSettings)
-
-            }
-
-
-        }
+//        when(item.id){
+//            APPEAR_ON_TOP->{
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    if (!Settings.canDrawOverlays(this)) {
+//                        // send user to the device settings
+//                        val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+//                        myIntent.data = Uri.parse("package:$packageName")
+//                        startActivity(myIntent)
+//                    }else{
+//                        Toast.makeText(this,"Permission is granted",Toast.LENGTH_LONG).show()
+//
+//                    }
+//
+//
+//                }
+//
+//            }
+//            ACCESSIBILITY_SERVICE->{
+//                val openSettings = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+//                openSettings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
+//                startActivity(openSettings)
+//
+//            }
+//
+//
+//        }
 
 
 

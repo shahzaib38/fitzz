@@ -3,11 +3,14 @@ package imagetrack.app.trackobject.ui.dialogs
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -29,7 +32,9 @@ import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.ui.activities.EditorActivity
 import imagetrack.app.trackobject.ui.activities.MainActivity
+import imagetrack.app.trackobject.ui.fragment.BaseFragment
 import imagetrack.app.trackobject.viewmodel.ScanDialogViewModel
+import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.utils.CameraPermissions
 import imagetrack.app.utils.DateUtils
 import imagetrack.app.utils.InternetConnection
@@ -38,7 +43,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
- class ScanDialogFragment : BaseDialogFragment<ScanDialogViewModel, ScanDialogDataBinding>()  , ScanDialogNavigator , DialogInterface.OnDismissListener {
+ class ScanDialogFragment : BaseFragment<ScanDialogViewModel, ScanDialogDataBinding>()  , ScanDialogNavigator , DialogInterface.OnDismissListener {
 
     override fun onDismiss(dialog: DialogInterface) {}
     private val mViewModel by viewModels<ScanDialogViewModel>()
@@ -49,9 +54,11 @@ import kotlinx.coroutines.launch
 
    private var mNavController : NavController? =null
 
+    private val activityViewModel by activityViewModels<ScanViewModel>()
 
 
-    override fun getBindingVariable(): Int =BR.viewModel
+
+    override fun getBindingVariable(): Int = BR.viewModel
     override fun getViewModel(): ScanDialogViewModel = mViewModel
     override fun getLayoutId(): Int  = R.layout.translated_text
 
@@ -73,21 +80,47 @@ import kotlinx.coroutines.launch
 
 
         mViewModel.setNavigator(this)
-        dialog?.setCanceledOnTouchOutside(false)
+        //dialog?.setCanceledOnTouchOutside(false)
       //  val arguments = arguments?.run { get(KEY_VALUE) }
-           val derivedText =   args.textvalue
-
-
-        mBinding?.apply {
-            //val derivedText =arguments as? String
-            this.translatedId.translatedtext.translateText(derivedText) }
-
-
-//        mainActivity?.let {
-//            if (!AdThreshold.getInstance(it).isMaxClickedPerformed()) {
-//            }
+//           val derivedText =   args.textvalue
 //
-//        }
+//
+//        mBinding?.apply {
+//            //val derivedText =arguments as? String
+//            this.translatedId.translatedtext.translateText(derivedText) }
+
+
+        activityViewModel.progressLiveData.observe(viewLifecycleOwner) {
+
+            mBinding?.topSectionnId?.progressId?.isVisible =it
+
+        }
+
+
+        activityViewModel.scannerText.observe(viewLifecycleOwner) { scannedText->
+            if(scannedText.isEmpty()){
+                mBinding?.translatedId?.translatedtext?.setText(NO_TEXT_FOUND)
+            }else {
+                mBinding?.translatedId?.translatedtext?.setText(scannedText) }
+        }
+
+
+
+        activityViewModel.progressLiveData.observe(viewLifecycleOwner){ isRunning->
+            if(isRunning){
+                mBinding?.translatedId?.translatedtext?.visibility = View.GONE
+
+            } else {
+                mBinding?.translatedId?.translatedtext?.visibility = View.VISIBLE
+            }
+        }
+
+
+
+        activityViewModel.translateText.observe(viewLifecycleOwner){
+
+            activityViewModel.update(it)
+        }
 
         setupAds()
 
@@ -131,13 +164,13 @@ import kotlinx.coroutines.launch
         grantResults: IntArray
     ) {
        if(requestCode == CameraPermissions.CAMERA_GALLERY_PERMISSION){
-           dismiss()
-          mainActivity?.showPdf(getText())
+      //     dismiss()
+      //    mainActivity?.showPdf(getText())
        }
     }
-
-    fun showDialog(fragmentManager: FragmentManager) {
-        super.showDialogs(fragmentManager ,TAG) }
+//
+//    fun showDialog(fragmentManager: FragmentManager) {
+//        super.showDialogs(fragmentManager ,TAG) }
 
 
 
@@ -175,7 +208,7 @@ import kotlinx.coroutines.launch
         val intent = Intent(context, EditorActivity::class.java)
         intent.putExtra(resources.getString(R.string.edit_value), getText())
         startActivity(intent)
-       this.dismiss()
+     //  this.dismiss()
     }
 
     private fun getText():String{
@@ -194,7 +227,7 @@ import kotlinx.coroutines.launch
             val activity = mainActivity
             if (activity != null) {
                 if (CameraPermissions.isGalleryPermissionGranted(activity)) {
-                    dismiss()
+                   // dismiss()
                     activity.showPdf(getText())
                 } else {
                     requestGalleryPermission()
@@ -236,7 +269,7 @@ import kotlinx.coroutines.launch
 
     override fun exit() {
          // saveToDataBase()
-        this.dismiss()
+       // this.dismiss()
     }
 
 
@@ -260,13 +293,13 @@ import kotlinx.coroutines.launch
                 toast(mess)
             }
 
-            val isShowing =dialog?.isShowing
-            if(isShowing!=null && isShowing ) {
-             toast("Showing ")
-                this.dismiss()
-            }else{
-                toast("Not Showing")
-            }
+//            val isShowing =dialog?.isShowing
+//            if(isShowing!=null && isShowing ) {
+//             toast("Showing ")
+//                this.dismiss()
+//            }else{
+//                toast("Not Showing")
+//            }
 
         }
     }

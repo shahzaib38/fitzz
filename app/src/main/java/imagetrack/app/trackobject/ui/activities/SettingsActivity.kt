@@ -1,28 +1,17 @@
 package imagetrack.app.trackobject.ui.activities
 
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
-import android.content.Context
+
 import android.content.Intent
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoScheduler
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
 import imagetrack.app.trackobject.R
-import imagetrack.app.trackobject.Workmanager.CopyToTranslateWorkManager
 import imagetrack.app.trackobject.adapter.SettingsAdapter
 import imagetrack.app.trackobject.common.SettingsUtils
 import imagetrack.app.trackobject.database.local.SubscriptionStatus
@@ -32,8 +21,6 @@ import imagetrack.app.trackobject.ext.*
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants.SUBSCRIPTION_EXPIRE
 import imagetrack.app.trackobject.inapppurchaseUtils.Constants.SUBSCRIPTION_NOT_PURCHASE
 import imagetrack.app.trackobject.inapppurchaseUtils.createTimeNote
-import imagetrack.app.trackobject.services.JobSchedularIntent
-import imagetrack.app.trackobject.services.TranslateAccessibilitService
 import imagetrack.app.trackobject.viewmodel.SettingsViewModel
 import imagetrack.app.utils.InternetConnection
 
@@ -70,10 +57,6 @@ class SettingsActivity : BaseActivity<SettingsViewModel, SettingsDataBinding>() 
 
         loadSettingData()
 
-
-
-        if(!AdThreshold.getInstance(this).isMaxClickedPerformed()) {
-            setupAds() }
 
 
     }
@@ -121,7 +104,7 @@ class SettingsActivity : BaseActivity<SettingsViewModel, SettingsDataBinding>() 
             }
             SettingsUtils.ENABLE_COPY_TO_TRANSLATE -> {
 
-                startWorker()
+               // startWorker()
 
             }
 
@@ -132,8 +115,8 @@ class SettingsActivity : BaseActivity<SettingsViewModel, SettingsDataBinding>() 
 
 
     private fun startWorker() {
-        startActivity(Intent(this ,
-            TranslateAccessibilityActivity::class.java))
+//        startActivity(Intent(this ,
+//            TranslateAccessibilityActivity::class.java))
 
 //        var JOB_ID =1212
 //

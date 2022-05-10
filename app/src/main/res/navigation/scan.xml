@@ -7,7 +7,10 @@ app:startDestination="@id/scanFragment">
 
 <fragment android:id="@+id/scanFragment"
     android:name="imagetrack.app.trackobject.ui.fragment.ScanFragment"
-    tools:layout="@layout/scan_fragment">
+    tools:layout="@layout/scan_fragment"
+
+
+    >
 
     <action
         android:id="@+id/action_scanFragment_to_exitDialogFragment"
@@ -15,7 +18,12 @@ app:startDestination="@id/scanFragment">
 
     <action
         android:id="@+id/action_scanFragment_to_scanDialogFragment"
-        app:destination="@id/scanDialogFragment" />
+        app:destination="@id/scanDialogFragment"
+
+        app:enterAnim="@anim/horizontal_slide_in"
+        app:exitAnim="@anim/horizontal_slide_out"
+        />
+
     <action
         android:id="@+id/action_scanFragment_to_progressDialogFragment"
         app:destination="@id/progressDialogFragment" />
@@ -31,6 +39,9 @@ app:startDestination="@id/scanFragment">
         android:label="Progress Dialog Fragment">
 
 
+        <action
+            android:id="@+id/action_progressDialogFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
     </dialog>
     <dialog
         android:id="@+id/exitDialogFragment"
@@ -38,11 +49,13 @@ app:startDestination="@id/scanFragment">
         android:label="ExitDialogFragment"
         tools:layout="@layout/exit_dialog" />
 
-    <dialog
+    <fragment
         android:id="@+id/scanDialogFragment"
         android:name="imagetrack.app.trackobject.ui.dialogs.ScanDialogFragment"
         android:label="ScanDialogFragment"
         tools:layout="@layout/translated_text"
+
+
         >
 
         <argument
@@ -55,8 +68,11 @@ app:startDestination="@id/scanFragment">
         <action
             android:id="@+id/action_scanDialogFragment_to_speakingDialogFragment"
             app:destination="@id/speakingDialogFragment" />
+        <action
+            android:id="@+id/action_scanDialogFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
 
-    </dialog>
+    </fragment>
 
     <dialog
         android:id="@+id/languageListDialogFragment"

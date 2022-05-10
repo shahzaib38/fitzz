@@ -10,7 +10,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray"
+        >
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/bannerId"
@@ -21,7 +23,7 @@
             android:layout_marginTop="12dp"
             ads:adSize="BANNER"
             android:visibility="visible"
-            ads:adUnitId="@string/banner_ad"
+            ads:adUnitId="@string/language_banner_ad"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

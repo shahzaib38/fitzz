@@ -7,4 +7,8 @@ fun openGallery()
     fun capture()
 
    fun  showSettings()
+
+   fun progressVisible()
+   fun progressInVisible()
+
 }

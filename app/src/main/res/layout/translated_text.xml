@@ -47,6 +47,7 @@
         <include
             android:id="@+id/top_sectionnId"
             layout="@layout/translate_top_section"
+            android:layout_marginEnd="16dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/option_sectionId"

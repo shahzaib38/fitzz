@@ -1,8 +1,10 @@
 package imagetrack.app.trackobject.ui.dialogs
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +33,7 @@ import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.LanguageListNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
+import imagetrack.app.trackobject.viewmodel.ScanViewModel
 import imagetrack.app.translate.TranslateUtils
 import imagetrack.app.utils.InternetConnection
 import imagetrack.app.utils.LanguageArray
@@ -43,7 +46,11 @@ import kotlinx.coroutines.withContext
 class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, LanguageListDataBinding>() ,OnItemClickListener<String> ,LanguageListNavigator  {
 
     private  var bind : LanguageListDataBinding?=null
+
     private val mViewModel by viewModels<LanguageListViewModel>()
+    private val activityViewModel by activityViewModels<ScanViewModel>()
+
+
     private  var resultText :Any?=null
     private var subscriptionStatus : SubscriptionStatus?=null
     private var adLoader : AdLoader?=null
@@ -88,30 +95,74 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
        // resultText = arguments?.run { get(ScanDialogFragment.KEY_VALUE) }
 
 
-        languageAdapter= LanguageAdapter( this)
+        languageAdapter = LanguageAdapter( this)
+
+        bind?.languagelistId?.run {
+
+            this.adapter =languageAdapter
+
+        }
+
+        lifecycleScope.launch(Dispatchers.Default) {
+
+              arrayItems()
+
+//            withContext(Dispatchers.Main){
+//                updateRecyclerView()
+//
+//
+//            }
+        }
+
+        activityViewModel.translate.observe(viewLifecycleOwner ,userObserver)
+
+        setupAds()
+    }
 
 
-        lifecycleScope.launch {
-              val jobFetch =launch(Dispatchers.IO) {
-              arrayItems() }
-            jobFetch.join()
 
-            withContext(Dispatchers.Main){
-                updateRecyclerView()
 
+    private fun setupAds(){
+
+        val activity = mainActivity ?: return
+
+        bind?.adviewId?.run{
+            val adRequest = AdRequest.Builder().build()
+            this.bannerId.loadAd(adRequest)
+            this.bannerId.adListener = object : AdListener(){
+
+                override fun onAdClicked() {
+                    super.onAdClicked()
+
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+
+                }
 
             }
-
-     }
-
-//        mRecyclerViewItems.addAll(LanguageArray.arrayValues())
-//        mRecyclerViewItems.add(0, Ads(null))
-//        mRecyclerViewItems.add(40, Ads(null))
-//        mRecyclerViewItems.add(80, Ads(null))
-//        languageAdapter?.setData(mRecyclerViewItems)
-        mViewModel.translate.observe(viewLifecycleOwner ,userObserver)
+        }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private fun updateRecyclerView(){
         bind?.languagelistId?.fragmentRecycle(requireContext(), languageAdapter!!)
@@ -122,9 +173,7 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     private   fun arrayItems(){
         mRecyclerViewItems.addAll(LanguageArray.arrayValues())
-        mRecyclerViewItems.add(0, Ads(null))
-        mRecyclerViewItems.add(40, Ads(null))
-        mRecyclerViewItems.add(80, Ads(null))
+
         languageAdapter?.setData(mRecyclerViewItems) }
 
 
@@ -135,9 +184,6 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     }
 
-    override fun onDestroyView() {
-        bind=null
-        super.onDestroyView() }
 
     override fun onDestroy() {
         mRecyclerViewItems.clear()
@@ -164,24 +210,48 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     override fun clickItem(item: String) {
 
-//        val subscriptionStatus =  subscriptionStatus
-//        val activity = mainActivity
-//
-//        if(activity!=null ) {
-//            if (!InternetConnection.isInternetAvailable(activity)){
-//                NavGraph.navigate(NavGraph.GLOBAL_INTERNET_CONNECTION,findNavController())
-//                return } }
-//
-//        if(subscriptionStatus!=null){
-//            val isExpire = subscriptionStatus.isExpired()
-//            if(isExpire){
-//                dismiss()
-//                openIntent()
-//            } else {
+        Log.i("Testt","data ${item}")
+        val subscriptionStatus =  subscriptionStatus
+        val activity = mainActivity
 
-        val postParameters: MutableMap<String, String> = getLanguageApiData(item)
-        startProgress()
-        mViewModel.getUsersFlow(postParameters)
+        if(activity!=null ) {
+            if (!InternetConnection.isInternetAvailable(activity)){
+                NavGraph.navigate(NavGraph.GLOBAL_INTERNET_CONNECTION,findNavController())
+                return } }
+
+        if(subscriptionStatus!=null){
+            val isExpire = subscriptionStatus.isExpired()
+            if(isExpire){
+                dismiss()
+                openIntent()
+            } else {
+
+
+                val postParameters: MutableMap< String, String> = getLanguageApiData(item)
+
+                activityViewModel.getUsersFlow(postParameters , startProgress = {
+
+                    startProgress()
+
+
+                } , stopProgress = {
+                    stopProgress()
+                    findNavController().popBackStack()
+
+                })
+
+
+
+
+            }
+
+
+            }else{
+
+                openIntent()
+            }
+
+
 
          //   .observe(this, userObserver)
 //            }
@@ -307,5 +377,32 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
 
 
+    override fun onDestroyView() {
+
+        bind?.adviewId?.bannerId?.apply {
+            this.destroy()
+            println("onDestroy"+this)
+        }
+        bind =null
+        super.onDestroyView()
+
+
+    }
+
+    override fun onPause() {
+        bind?.adviewId?.bannerId?.apply {
+            this.pause()
+
+        }
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bind?.adviewId?.bannerId?.apply {
+            this.resume()
+        }
+
+    }
 
 }

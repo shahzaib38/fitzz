@@ -10,15 +10,16 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
 
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 31
+
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "imagetrack.app.trackobject"
         minSdkVersion 28
-        targetSdkVersion 30
-        versionCode 19
-        versionName "4.0.10"
+        targetSdkVersion 31
+        versionCode 21
+        versionName "5.0.02"
 
         testInstrumentationRunner "imagetrack.app.trackobject.CustomTestRunner"
 //            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -236,5 +237,5 @@ dependencies {
 
     implementation 'androidx.work:work-multiprocess:2.6.0-alpha02'
 
-
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
 }

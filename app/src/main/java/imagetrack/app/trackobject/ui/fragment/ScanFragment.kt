@@ -8,11 +8,13 @@ import android.content.res.Configuration
 import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +22,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.window.WindowManager
 import androidx.work.Worker
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
 import imagetrack.app.trackobject.R
@@ -52,30 +56,27 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
         ScanFragmentDataBinding>() ,
     ScanNavigator {
 
-    private val mViewModel by viewModels<ScanViewModel>()
+    private val mViewModel by activityViewModels<ScanViewModel>()
+
     private var mScanFragmentDataBinding : ScanFragmentDataBinding? = null
     private var mMainActivity :MainActivity? =null
     private var displayId: Int = -1
     private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
     private var cameraProvider: ProcessCameraProvider? = null
     private lateinit var windowManager: WindowManager
-   // private var mNavController : NavController?=null
 
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager }
 
 
-
-
-
-
     companion object {
-
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
-       private  const val RESULT_LOADING = 11122
+        private  const val RESULT_LOADING = 11122
 
     }
+
+
     override fun getBindingVariable(): Int = imagetrack.app.trackobject.BR.viewModel
     override fun getLayoutId(): Int = R.layout.scan_fragment
     override fun getViewModel(): ScanViewModel = mViewModel
@@ -95,12 +96,34 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
         if (isCameraPermissionGranted(requireContext()))
             startCamera() else requestCameraPermission()
-        mViewModel.setNavigator(this)
-        mViewModel.translateText.observe( viewLifecycleOwner , translatedObserver)
+             mViewModel.setNavigator(this)
 
+       // mViewModel.translateText.observe( viewLifecycleOwner , translatedObserver)
+
+      //  setupAds()
+    }
+    private fun setupAds(){
+
+
+        mScanFragmentDataBinding?.include2?.adViewId?.run{
+            val adRequest = AdRequest.Builder().build()
+            this.bannerId.loadAd(adRequest)
+            this.bannerId.adListener = object : AdListener(){
+
+                override fun onAdClicked() {
+                    super.onAdClicked()
+
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+
+                }
+
+            }
+        }
 
     }
-
 
     private fun displayListener(imageCapture: ImageCapture){
 
@@ -236,7 +259,7 @@ private fun startCamera() {
 
     private fun cameraXLiveData(camera :Camera){
         val cameraController = camera.cameraInfo
-        mViewModel.progressLiveData.observe(viewLifecycleOwner, progressStatusObserver)
+     //   mViewModel.progressLiveData.observe(viewLifecycleOwner, progressStatusObserver)
         cameraController.zoomState.observe(viewLifecycleOwner, zoomState)
         cameraController.torchState.observe(viewLifecycleOwner, torchState)
         mViewModel.translateText.observe(viewLifecycleOwner, translatedObserver)
@@ -259,26 +282,13 @@ private fun startCamera() {
     }
 
 
-    override fun onDestroyView() {
-      //  mScanFragmentDataBinding = null
-        super.onDestroyView()
 
-
-    }
 
     override fun onDetach() {
         super.onDetach()
         println("Detach")
     }
 
-    override fun onDestroy() {
-
-        println("Binding "+ mScanFragmentDataBinding)
-
-        super.onDestroy()
-        println("Destroy Fragment")
-
-    }
 
 
 
@@ -411,27 +421,42 @@ private fun startCamera() {
     //TranslateLiveData
     private val translatedObserver = Observer<String?>{
         if(it!=null){
-            NavGraph.navigate( NavGraph.SCAN_FRAGMENT_TO_SCAN_DIALOG ,findNavController() ,it)
-        } }
 
-    //ProgressLiveData
-    private val progressStatusObserver =Observer<Boolean>{progressStatus ->
-        if(progressStatus!=null) {
-            when (progressStatus) {
-                true -> {
-                    progressVisible()
-                }
-                false -> {
-                   progressInVisible()
 
-                } }}
+        }
+
     }
 
-    private fun progressVisible(){
-        NavGraph.navigate(NavGraph.SCAN_FRAGMENT_TO_PROGRESS, findNavController()) }
+    //ProgressLiveData
+//    private val progressStatusObserver =Observer<Boolean>{progressStatus ->
+////        if(progressStatus!=null) {
+////            when (progressStatus) {
+////                true -> {
+////                    progressVisible()
+////                }
+////                false -> {
+////                   progressInVisible()
+////
+////                } }}
+//    }
 
-    private fun progressInVisible(){
-        findNavController().popBackStack()
+    override fun progressVisible(){
+
+
+   //    val action=  ScanFragmentDirections.actionScanFragmentToProgressDialogFragment()
+
+        //findNavController().navigate(action)
+
+    //    NavGraph.navigate(NavGraph.SCAN_FRAGMENT_TO_PROGRESS, findNavController())
+
+    }
+
+    override fun progressInVisible(){
+        val action =    ScanFragmentDirections.actionScanFragmentToScanDialogFragment("")
+
+        findNavController().navigate(action)
+      //  findNavController().popBackStack()
+
     }
 
 
@@ -463,31 +488,34 @@ private fun startCamera() {
     }
 
 
-    override fun onStart() {
-        super.onStart()
+    override fun onDestroyView() {
+//        mScanFragmentDataBinding?.include2?.adViewId?.bannerId?.apply {
+//            this.destroy()
+//            println("onDestroy"+this)
+//        }
 
-        println("onStart")
 
-    }
+        mScanFragmentDataBinding = null
+        super.onDestroyView()
 
-    override fun onResume() {
-        super.onResume()
-
-        println("onResume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-    println("oStop")
 
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        println("onPause")
-
-    }
+//    override fun onPause() {
+//        mScanFragmentDataBinding?.include2?.adViewId?.bannerId?.apply {
+//            this.pause()
+//
+//        }
+//        super.onPause()
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        mScanFragmentDataBinding?.include2?.adViewId?.bannerId?.apply {
+//            this.resume()
+//        }
+//
+//    }
 
 
     override fun showSettings() {

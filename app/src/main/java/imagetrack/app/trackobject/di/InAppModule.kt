@@ -41,7 +41,7 @@ object InAppModule {
     @Provides
     @Singleton
     fun provideVisionImageProcessor(@ApplicationContext context : Context) :
-      VisionImageProcessor = DeviceTextRecognizer(context)
+      VisionImageProcessor = CloudTextRecognition(context)
 
 
 

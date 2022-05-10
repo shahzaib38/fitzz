@@ -34,10 +34,10 @@ fun Activity.tryOpenPathIntent(path: String, openAsType: Int = OPEN_AS_DEFAULT) 
 
 
 /** Scan Dialog Fragment **/
- fun AppCompatActivity.showScanDialog(it: String) {
-        ScanDialogFragment
-            .getInstance(it)
-            .showDialog(this.supportFragmentManager) }
+// fun AppCompatActivity.showScanDialog(it: String) {
+//        ScanDialogFragment
+//            .getInstance(it)
+//            .showDialog(this.supportFragmentManager) }
 
 /** Instruction Dialog Fragment **/
 fun AppCompatActivity.showInstructionDialog(){

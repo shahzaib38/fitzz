@@ -1,34 +1,42 @@
 package imagetrack.app.trackobject.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.camera.core.ImageProxy
 //import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.repo.ScanRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
 class ScanViewModel  @ViewModelInject constructor(private val mainRepository : ScanRepository) : BaseViewModel<ScanNavigator>(mainRepository) {
 
 
+    private var _ScannedText = MutableLiveData<String>("Scanned Text")
+       val scannerText = _ScannedText
 
-//    val translateText  = mainRepository.translateLiveData
+
+       val translateText  =  mainRepository.translateLiveData
+
+
+
+
+
+    val _ProgressMutableLiveData = MutableSharedFlow<Boolean>()
 
     val progressLiveData = mainRepository.progressLiveData
 
 
     val mutableTranslatedText =MutableLiveData<String>()
 
-    val translateText =mutableTranslatedText
+ //   val translateText =  mainRepository.translateLiveData
 
 
 
@@ -49,38 +57,136 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
 
     fun scanText(bitmap : Bitmap){
+        viewModelScope.launch(Dispatchers.IO) {
 
-         viewModelScope.launch(Dispatchers.IO) {
 
-             val derivedFlow = mainRepository.scanText(bitmap)
 
-             derivedFlow.catch {exception ->
-                 val message =       exception.message
+            try {
 
-                 if(message!=null) {
+                withContext(Dispatchers.Main) {
+                    getNavigator().progressVisible()
 
-                     mutableTranslatedText.postValue(message)
-                 }
+                }
 
-                 }.collect {
-                 mutableTranslatedText.postValue(it) }
+                mainRepository.scanText(bitmap)
 
-         }
+            } catch (exception:Exception){
+
+                val message = exception.message
+                if (message != null) {
+
+                }
+
+            }finally {
+                withContext(Dispatchers.Main) {
+                    getNavigator().progressInVisible()
+                }
+
+            }
+        }
     }
 
-    fun scanText(image: ImageProxy){
+    fun scanText(image: ImageProxy) {
+
 
         viewModelScope.launch(Dispatchers.IO) {
-            mainRepository.scanText(image)
+
+            try {
+                mainRepository.clear()
+                _ScannedText.postValue("Scanning Text please wait...")
+
+                withContext(Dispatchers.Main) {
+                    getNavigator().progressVisible()
+
+                }
+
+                mainRepository.scanText(image)
+
+            } catch (exception:Exception){
+
+                val message = exception.message
+                if (message != null) {
+
+                }
+
+            }finally {
+                 withContext(Dispatchers.Main) {
+                       getNavigator().progressInVisible()
+                   }
+
+            }
         }
-
-
-
     }
-
     fun stopImageProcessor() {
 
         mainRepository.stopImageProcessor()
+    }
+
+
+
+
+    var mutableLiveData = MutableLiveData<String>()
+    val translate : LiveData<String> = mutableLiveData
+
+
+
+
+
+    fun getUsersFlow(name: MutableMap<String, String> ,
+                     startProgress: ()->Unit   ,
+    stopProgress :()->Unit ){
+
+        startProgress()
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+            val data =    mainRepository.getUsers(name).getData()
+
+            if(data!=null){
+                val translation =   data.getTranslations()
+
+                if(translation!=null){
+
+                    for(translate in translation){
+
+                        if(translate!=null) {
+                            var translatedText = translate.getTranslatedText()
+                            if(translatedText!=null && translatedText.isNotEmpty()){
+
+                                Log.i("test","traslated ${translatedText}")
+
+                                update(translatedText!!)
+
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+
+            withContext(Dispatchers.Main){
+                stopProgress.invoke()
+
+            }
+
+
+        }
+
+
+    }
+
+    fun update(it: String) {
+
+        viewModelScope.launch {
+            _ScannedText.value= it
+
+        }
+
     }
 
 

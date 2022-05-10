@@ -1,5 +1,6 @@
 package imagetrack.app.trackobject.viewmodel
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.security.auth.callback.Callback
 
 class LanguageListViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) : BaseViewModel<LanguageListNavigator>(mainRepository) {
@@ -20,27 +22,34 @@ class LanguageListViewModel @ViewModelInject constructor(private val mainReposit
 
     val subscriptionLiveData = mainRepository.subscriptionLiveData
 
-
-    var mutableLiveData = MutableLiveData<String>()
-    val translate :LiveData<String> = mutableLiveData
-
-
     fun  close(){
         getNavigator().close()
 
     }
 
 
+    var mutableLiveData = MutableLiveData<String>()
+    val translate :LiveData<String> = mutableLiveData
 
-    fun getUsersFlow(name: MutableMap<String, String>){
+
+
+
+
+
+    fun getUsersFlow(name: MutableMap<String, String> ,
+                     startProgress: ()->Unit   ,
+                     stopProgress :()->Unit ){
+
+        startProgress()
+
 
         viewModelScope.launch(Dispatchers.IO) {
 
 
-        val data =    mainRepository.getUsers(name).getData()
+            val data =    mainRepository.getUsers(name).getData()
 
             if(data!=null){
-             val translation =   data.getTranslations()
+                val translation =   data.getTranslations()
 
                 if(translation!=null){
 
@@ -51,7 +60,7 @@ class LanguageListViewModel @ViewModelInject constructor(private val mainReposit
                             if(translatedText!=null && translatedText.isNotEmpty()){
 
 
-                                mutableLiveData.postValue(translatedText)
+
 
                             }
 
@@ -63,9 +72,14 @@ class LanguageListViewModel @ViewModelInject constructor(private val mainReposit
             }
 
 
+            withContext(Dispatchers.Main){
+                stopProgress.invoke()
+
+            }
 
 
         }
+
 
     }
 

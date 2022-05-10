@@ -1,6 +1,7 @@
 package imagetrack.app.trackobject.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -102,4 +103,14 @@ abstract class BaseFragment<VM : ViewModel, VDB: ViewDataBinding> : Fragment() {
     }
 
 
+    fun shareData(value: String = "no value was shared"){
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, value)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        requireActivity().startActivity(shareIntent)
+    }
 }
