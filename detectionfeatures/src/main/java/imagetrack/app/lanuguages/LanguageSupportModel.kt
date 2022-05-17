@@ -2,6 +2,10 @@ package imagetrack.app.lanuguages
 
 import imagetrack.app.utils.Model
 
-class LanguageSupportModel constructor(var name: String?, var languageKey: String?, var imageSupport: String?) :Model(){
+data class LanguageSupportModel constructor( var dataId :Int, var name: String, var languageKey: String, var imageSupport: String) : BaseLanguageModel(dataId){
 
+
+    override fun toString(): String {
+        return name
+    }
 }

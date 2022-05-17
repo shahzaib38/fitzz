@@ -1,5 +1,6 @@
 package imagetrack.app.translate
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,8 +15,7 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 object TranslateRetrofit {
 
-
-   private const val BASE_URL = "https://www.googleapis.com/language/translate/"
+     const val BASE_URL = "https://www.googleapis.com/language/translate/"
 
     @Singleton
     @Provides
@@ -23,8 +23,12 @@ object TranslateRetrofit {
         val okHttpClient = OkHttpClient().newBuilder().writeTimeout(7, TimeUnit.SECONDS)
             .readTimeout(7, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS).build()
-       return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build()
+       return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient).addConverterFactory(GsonConverterFactory.create())
+           .addCallAdapterFactory(FlowCallAdapterFactory.create())
+           .build()
     }
+
+
 
     @Singleton
     @Provides

@@ -1,7 +1,6 @@
 package imagetrack.app.di
 
 import android.content.Context
-import com.google.auth.oauth2.AccessToken
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -31,6 +30,8 @@ class AppModule {
         val stream: InputStream = context.resources.openRawResource(R.raw.credential)
         return GoogleCredentials.fromStream(stream)
             .createScoped(mutableListOf("https://www.googleapis.com/auth/androidpublisher"))
+
+
           }
 
 

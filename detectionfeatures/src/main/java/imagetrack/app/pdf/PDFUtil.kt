@@ -1,48 +1,54 @@
 package imagetrack.app.pdf
 
-import android.graphics.Paint
-import android.graphics.pdf.PdfDocument
-import android.graphics.pdf.PdfDocument.PageInfo
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Environment
 import android.util.Log
+import com.itextpdf.io.font.constants.StandardFonts
+import com.itextpdf.kernel.font.PdfFontFactory
+import com.itextpdf.kernel.geom.Rectangle
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.property.BaseDirection
+import com.itextpdf.layout.property.TextAlignment
+import com.itextpdf.layout.property.VerticalAlignment
 import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.FileNotFoundException
+import java.util.regex.Pattern
 
-class PDFUtil private constructor(){
+
+class PDFUtil private constructor(private val context: Context){
 
 
     companion object{
 
+        val directory =   File(Environment.getExternalStorageDirectory(), PDFUtil.PdfName)
+
+        const val PdfName: String = "Sb Scanner"
+
         private val TAG = PDFUtil::class.java.name
 
         /**
-         * Page width for our PDF.
+         * average header Top Margin
          */
-        const val PDF_PAGE_WIDTH = 8.3 * 40    //332
+         const val averageTopMargin = 35.0f
 
         /**
-         * Page height for our PDF.
+         * SingleTon Instance PDFUTil
          */
-        const val PDF_PAGE_HEIGHT = 11.7 * 72  //842.4
+        private var   INSTANCE  : PDFUtil?=null ;
+        private val context : Context?=null
 
-        private var   sInstance : PDFUtil?=null ;
-
-        public fun   getInstance(): PDFUtil? {
-            if (sInstance == null) {
-                sInstance =  PDFUtil();
-            }
-            return sInstance;
-        }
-
-
+        fun   getInstance(context :Context): PDFUtil =
+            INSTANCE?: synchronized(this){
+                INSTANCE?: PDFUtil(context).also { INSTANCE =it } }
     }
 
     fun generatePDF(
-        text: String,
-        filePath: String,
+        pdfMetaData: PDFMetaData,
         listener: PDFUtilListener
     ) {
         //Check Api Version.
@@ -50,7 +56,7 @@ class PDFUtil private constructor(){
         if (currentApiVersion >= Build.VERSION_CODES.KITKAT) {
             // Kitkat
             println("Generate Pf")
-            GeneratePDFAsync(text, filePath, listener).execute(text)
+            GeneratePDFAsync(pdfMetaData.data, pdfMetaData.fileName, listener).execute(pdfMetaData)
         } else {
             // Before Kitkat
             Log.e(TAG, "Generate PDF is not available for your android version.")
@@ -58,45 +64,44 @@ class PDFUtil private constructor(){
                 Exception("Generate PDF is not available for your android version.")
             )
         }
+
+
+
     }
 
-    interface PDFUtilListener {
-        /**
-         * Called on the success of PDF Generation.
-         */
-        fun pdfGenerationSuccess()
 
-        /**
-         * Called when PDF Generation failed.
-         *
-         * @param exception Exception occurred during PDFGeneration.
-         */
-        fun pdfGenerationFailure(exception: Exception?)
-    }
 
      class GeneratePDFAsync(
          private val text: String,
          private val filePath: String,
          private val mListener: PDFUtilListener
-     ): AsyncTask<String, Void, Boolean>(){
+     ): AsyncTask<PDFMetaData, Void, Boolean>(){
 
-         var i :Int =0
-         override fun doInBackground(vararg params: String): Boolean {
+         override fun doInBackground(vararg params: PDFMetaData): Boolean {
 
              val isPdfSuccessfullyGenerated: Boolean
+
              isPdfSuccessfullyGenerated = try {
                  // Create PDF Document.
-                 val pdfDocument = PdfDocument()
 
-                 println("Do in Background")
+
+                 if(!directory.exists()){
+                     directory.mkdir()
+
+                 }
+
+                 val pdfFile  =File(directory ,"$filePath.pdf")
+
+
+                 val pdfDocument = PdfDocument(PdfWriter(pdfFile))
+
                  // Write content to PDFDocument.
                  writePDFDocument(params[0], pdfDocument)
 
-                 // Save document to file.
-                 savePDFDocumentToStorage(pdfDocument)
                  true
 
-             } catch (exception: java.lang.Exception) {
+             } catch (exception: FileNotFoundException) {
+                 println("File ${exception.message}")
 
                  false
              }
@@ -113,103 +118,118 @@ class PDFUtil private constructor(){
                  mListener.pdfGenerationFailure(Exception("Pdf Not Generated"))
              }
          }
-         private fun writePDFDocument(data: String, pdfDocument: PdfDocument) {
-//
-          val character =   data.toCharArray()
-//             val numOfLoops = character.size / PDF_PAGE_WIDTH
 
-//             println("Charachter sizees" +numOfLoops)
+         private fun writePDFDocument(pdfMetaData : PDFMetaData, pdfDocument: PdfDocument) {
 
-             val pageInfo = PageInfo.Builder(PDF_PAGE_WIDTH.toInt(), PDF_PAGE_HEIGHT.toInt(), 1).create()
+             val document = Document(pdfDocument)
+             /**
+              * Add Paragraph to Pdf File
+              */
+              createText(pdfMetaData.data, document)
 
-             // start a page
-             val page = pdfDocument.startPage(pageInfo)
-
-             // draw view on the page
-             val pageCanvas = page.canvas
-             val paint = Paint()
-
-
-             var verticalLine =0
-             var XAxis =10F
-             var YAXIS =10F
-              var numOf = 0
-              var temoindex =0
-             var tempcount =58
-             while(verticalLine<8) {
-
-                     pageCanvas.drawText(character, temoindex,tempcount ,10F ,YAXIS,paint)
-
-                 temoindex =tempcount +1
-                 tempcount *= 2
-if(tempcount>=character.size){
-    break
-
-}
-                 verticalLine++
-                  YAXIS +=20
-
-
+             /**
+              * Add HEader to Pdf File
+              */
+             if(pdfMetaData.header.isNotEmpty()) {
+                 createHeader(pdfMetaData.header, document, pdfDocument)
              }
 
-
-             // finish the page
-             pdfDocument.finishPage(page)
-
-
+             // Close document
+             /**
+              * Close Doucment
+              */
+             document.close()
 
          }
 
 
 
+       private   fun removeMultipleSpaces(text :String ):String{
+
+           Log.i("Thread","${Thread.currentThread().name}")
+
+           val stringBuffer =StringBuilder(text)
+           val pattern =  Pattern.compile("\\s{2,}")
+
+           val matcher =   pattern.matcher(stringBuffer.toString())
+
+           while(matcher.find()){
+
+               println("${matcher.start()}    "+"${matcher.end()}")
+
+                stringBuffer.delete(matcher.start()+1,matcher.end())
 
 
-         @Throws(IOException::class)
-         private fun savePDFDocumentToStorage(pdfDocument: PdfDocument) {
-             var fos: FileOutputStream? = null
-             // Create file.
+           }
+           return stringBuffer.toString() }
 
-             println("Saving to File")
-            // val pdfFile: File = File("pdf", "maooo")
-             val pdfFile =File(
-                 Environment.getExternalStorageDirectory()
-                     .toString() + "/" + File.separator + "$filePath.pdf"
-             )
-             //Create parent directories
-             val parentFile = pdfFile.parentFile
-             if(parentFile!=null) {
-                 check(!(!parentFile.exists() && !parentFile.mkdirs())) { "Couldn't create directory: $parentFile" }
+
+
+
+
+
+      private fun createText(text: String, document: Document) {
+          val paragraphText=  text.trim()
+          val noSpaceString =  removeMultipleSpaces(paragraphText)
+
+          val noNewLine  =  noSpaceString.
+              replace("\n", "")
+             .replace("\r", "");
+
+          val textParagraph = Paragraph(noNewLine)
+              .setBaseDirection(BaseDirection.RIGHT_TO_LEFT)
+              .setMultipliedLeading(1.5f).setMarginTop( averageTopMargin)
+
+          document.add(textParagraph)
+      }
+
+         private fun createHeader(header: String, document: Document, pdfDoc: PdfDocument) {
+
+             val fontSize =32f
+             val topAlignment=60
+
+            val headerParagraph =   Paragraph(header)
+                .setFont(PdfFontFactory
+                .createFont(StandardFonts.HELVETICA))
+                 .setFontSize(fontSize).setMarginTop(averageTopMargin)
+
+             println("Ddocument Size " + pdfDoc.numberOfPages)
+             for(i in 1..pdfDoc.numberOfPages) {
+
+                 val pageSize: Rectangle = pdfDoc.getPage(i).pageSize
+                 val x: Float = pageSize.width / 2.0f
+                 val y: Float = pageSize.top - topAlignment
+
+                 document.showTextAligned(headerParagraph, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0f)
+
              }
 
-             var fileExists = pdfFile.exists()
-             // If File already Exists. delete it.
-             if (fileExists) {
-                 fileExists = !pdfFile.delete()
-             }
-             try {
-                 if (!fileExists) {
-                     // Create New File.
-                     fileExists = pdfFile.createNewFile()
-                 }
-                 if (fileExists) {
-                     // Write PDFDocument to the file.
-                     fos = FileOutputStream(pdfFile)
-                     pdfDocument.writeTo(fos)
-
-                     //Close output stream
-                     fos.close()
-
-                     // close the document
-                     pdfDocument.close()
-                 }
-             } catch (exception: IOException) {
-                 println("Exception $exception")
-                 fos?.close()
-                 throw exception
-             }
          }
 
      }
+
+
+
+
+
+
+    /**
+     *PDFUtilListener
+     */
+
+    interface PDFUtilListener {
+        /**
+         * Called on the success of PDF Generation.
+         */
+        fun pdfGenerationSuccess()
+
+        /**
+         * Called when PDF Generation failed.
+         *
+         * @param exception Exception occurred during PDFGeneration.
+         */
+        fun pdfGenerationFailure(exception: Exception?)
+    }
 
 
 }

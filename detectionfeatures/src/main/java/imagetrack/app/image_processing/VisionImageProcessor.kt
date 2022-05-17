@@ -1,26 +1,45 @@
 package imagetrack.app.image_processing
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.camera.core.ImageProxy
-import imagetrack.app.trackobject.camera_features.OnProgression
-import imagetrack.app.trackobject.camera_features.OpenDialog
-import imagetrack.app.view.GraphicOverlay
+import androidx.lifecycle.LiveData
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.CompletableFuture
+
+
+sealed class Result {
+
+    data class onSuccess<T>(var t: T) : Result()
+
+
+
+
+
+    data class onShutDown<T>(var t: T) : Result()
+
+
+
+}
+
+
 
 interface VisionImageProcessor {
 
-     fun processImageProxy(image: ImageProxy, graphicOverlay: GraphicOverlay)
-    fun processImageProxy(image: ImageProxy,openDialog : OpenDialog ,onProgression: OnProgression  )
-    fun processImageProxy(bitmap: Bitmap,openDialog : OpenDialog, onProgression: OnProgression )
+    suspend fun processImageProxy(imageProxy: ImageProxy): String
+
+    suspend fun processImage(imageProxy:ImageProxy):String
+
+      suspend fun processImageProxy(bitmap: Bitmap) :String
+
+
     fun stop()
 
+    fun getProgressLiveData(): LiveData<Boolean>
+    fun getTranslateTextLiveData() :LiveData<String>
+    fun processImgeProxyFuture( bitmap: Bitmap): CompletableFuture<String>
+    fun clear()
 
 
-    interface Factory{
-        fun createOnDeviceTextRecognizer(context  : Context) : VisionImageProcessor
-
-        fun createOnCloudTextRecognizer(context : Context): VisionImageProcessor
-    }
-
-
+    // fun processImgeProxyFlow( bitmap: Bitmap): Flow<String>
 }

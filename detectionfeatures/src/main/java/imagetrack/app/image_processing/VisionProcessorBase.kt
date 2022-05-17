@@ -1,32 +1,81 @@
 package imagetrack.app.image_processing
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Build
+import android.util.Log
 import androidx.annotation.GuardedBy
-import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
-import imagetrack.app.trackobject.camera_features.OnProgression
-import imagetrack.app.trackobject.camera_features.OpenDialog
 import imagetrack.app.utils.FrameMetadata
 import imagetrack.app.view.GraphicOverlay
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.CompletableFuture
 
 abstract class VisionProcessorBase<T>(private val context: Context) : VisionImageProcessor {
 
  companion object {
-//  const val MANUAL_TESTING_LOG = "LogTagForTest"
   private const val TAG = "VisionProcessorBase"
+ }
+
+
+ private val mutableProgressLiveData = MutableLiveData<Boolean>()
+ private val translateTextLiveData = MutableLiveData<String>("Scanning Text....")
+
+ override fun getTranslateTextLiveData(): LiveData<String> = translateTextLiveData
+
+ override fun getProgressLiveData(): LiveData<Boolean> {
+  return mutableProgressLiveData }
+
+
+ open fun postData(value:String ){
+  translateTextLiveData.postValue(value )
+
  }
 
 
  private val executor = ScopedExecutor(TaskExecutors.MAIN_THREAD)
 
  private var isShutdown = false
+
+
+ @SuppressLint("UnsafeExperimentalUsageError")
+ override suspend fun processImage(imageProxy : ImageProxy): String {
+
+  if (isShutdown) {
+  // return Result.onShutDown<String>("System is closed")
+
+  }
+
+  val mediaImage =  imageProxy.image
+  val rotationDegree = imageProxy.imageInfo.rotationDegrees
+  val degree = degreesToFirebaseRotation(rotationDegree)
+  val firebaseVisionImage=   FirebaseVisionImage.fromMediaImage(mediaImage!!, degree)
+
+
+  return  requestDetectInImage(firebaseVisionImage)
+ }
+
+
+
+ override suspend fun processImageProxy(bitmap: Bitmap) :String {
+
+  if (isShutdown) {
+   // return Result.onShutDown<String>("System is closed")
+
+  }
+  val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
+
+  return  requestDetectInImage(firebaseVisionImage)
+ }
+
 
 
 
@@ -43,65 +92,99 @@ abstract class VisionProcessorBase<T>(private val context: Context) : VisionImag
 
 
  @ExperimentalGetImage
- override fun processImageProxy(image: ImageProxy,openDialog : OpenDialog, onProgression: OnProgression ) {
-  if (isShutdown) {
-   return
-  }
+ override suspend fun processImageProxy(image: ImageProxy) :String{
 
-  onProgression.startProgress()
+  Log.i("Closed","adad")
+
+//  if (isShutdown) {
+//   return
+//  }
+
+
+  postData("Scanning Text please wait...")
+
+  mutableProgressLiveData.postValue(true)
+
  val mediaImage =  image.image
  val rotationDegree = image.imageInfo.rotationDegrees
   val degree = degreesToFirebaseRotation(rotationDegree)
   val firebaseVisionImage=   FirebaseVisionImage.fromMediaImage(mediaImage!!, degree)
-  requestDetectInImage(firebaseVisionImage, openDialog, onProgression)
-    .addOnCompleteListener { image.close() }
- }
 
- override fun processImageProxy(
-  bitmap: Bitmap,
-  openDialog: OpenDialog,
-  onProgression: OnProgression
- ) {
+  Log.i("Closed","second")
 
-    onProgression.startProgress()
-   val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
-  requestDetectInImage(firebaseVisionImage, openDialog, onProgression)
- }
-
- // -----------------Code for processing live preview frame from CameraX API-----------------------
- @RequiresApi(Build.VERSION_CODES.KITKAT)
- @ExperimentalGetImage
- override fun processImageProxy(image: ImageProxy, graphicOverlay: GraphicOverlay) {     //Dynamic Aurgument
-//  val frameStartMs = SystemClock.elapsedRealtime()
-//       println("Frame Rate $frameStartMs")
-//     if (isShutdown) {
-//   return
-//  }
-//  var bitmap: Bitmap? = null
-//
-//  requestDetectInImage(InputImage.fromMediaImage(image.image!! , image.imageInfo.rotationDegrees) ,
-//   graphicOverlay,bitmap, true, frameStartMs).addOnCompleteListener {
+//  requestDetectInImage(firebaseVisionImage ).addOnCompleteListener {
 //   image.close()
 //  }
+
+  return ""
  }
 
+ override fun clear() {
 
+  postData("Scanning Text please wait...")
+ }
 
+// override fun processImageProxy(bitmap: Bitmap) {
+////  mutableProgressLiveData.postValue(true)
+////  postData("Scanning Text please wait...")
+////
+////
+////  val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
+////  requestDetectInImage(firebaseVisionImage)
+//
+// }
 
+ override fun processImgeProxyFuture( bitmap: Bitmap):CompletableFuture<String>{
+  val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
+   return  requestDetectInImageFuture(firebaseVisionImage)
 
- private fun requestDetectInImage(firebaseVisionImage : FirebaseVisionImage,   openDialog : OpenDialog,onProgression: OnProgression): Task<T> {
-
-  return detectInImage(firebaseVisionImage).addOnSuccessListener{ results: T ->
-   onProgression.stopProgress()
-   this@VisionProcessorBase.onSuccess(results,openDialog)
-
-  }.addOnFailureListener { e: Exception ->
-   onProgression.stopProgress()
-   this@VisionProcessorBase.onFailure(e,openDialog)
-
-  }
 
  }
+
+// override fun processImgeProxyFlow( bitmap: Bitmap):CompletableFuture<String>{
+//
+//  println("processImageProxyFlow "+Thread.currentThread().name)
+//  val firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap)
+//  return  requestDetectInImageFuture(firebaseVisionImage)
+//
+//
+// }
+
+
+abstract fun  requestDetectInImageFuture(firebaseVisionImage : FirebaseVisionImage): CompletableFuture<String>
+
+ abstract suspend fun  requestDetectInImageFlow(firebaseVisionImage : FirebaseVisionImage,imageProxy: ImageProxy): String
+
+
+
+ private suspend fun  requestDetectInImage(firebaseVisionImage : FirebaseVisionImage):String
+ {
+
+  return requestDetectTextFromImage(firebaseVisionImage)
+
+
+ }
+
+ protected abstract suspend fun requestDetectTextFromImage(firebaseVisionImage: FirebaseVisionImage ): String     //Template Method
+
+
+// private fun requestDetectInImage(firebaseVisionImage : FirebaseVisionImage): Task<T> {
+//
+//  return detectInImage(firebaseVisionImage).addOnSuccessListener{ results: T ->
+//
+//
+//   mutableProgressLiveData.postValue(false)
+//""   this@VisionProcessorBase.onSuccess(results)
+//
+//  }.addOnFailureListener { e: Exception ->
+//   mutableProgressLiveData.postValue(false)
+//
+//   ""
+//  // this@VisionProcessorBase.onFailure(e)
+//
+//  }
+//
+// }
 
  override fun stop() {
   executor.shutdown()
@@ -114,10 +197,8 @@ abstract class VisionProcessorBase<T>(private val context: Context) : VisionImag
  protected abstract fun detectInImage(image: FirebaseVisionImage ): Task<T>  //Template Method
 
  protected abstract fun onSuccess(results: T, graphicOverlay: GraphicOverlay)   //Template Method
- protected abstract fun onSuccess(results: T,openDialog : OpenDialog)
+ protected abstract fun onSuccess(results: T)
  protected abstract fun onFailure(e: Exception)    //Template Method
 
- protected open fun onFailure(e: Exception, openDialog : OpenDialog){
 
- }
 }
