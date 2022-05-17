@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdListener
@@ -21,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.lanuguages.BaseLanguageModel
 import imagetrack.app.listener.OnItemClickListener
 import imagetrack.app.trackobject.BR
+import imagetrack.app.trackobject.BuildConfig
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.ScanNavigatorDirections
 import imagetrack.app.trackobject.adapter.LanguageAdapter
@@ -29,7 +31,6 @@ import imagetrack.app.trackobject.database.preferences.AdThreshold
 import imagetrack.app.trackobject.databinding.LanguageListDataBinding
 import imagetrack.app.trackobject.ext.fragmentRecycle
 import imagetrack.app.trackobject.model.Ads
-import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.LanguageListNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.viewmodel.LanguageListViewModel
@@ -216,7 +217,12 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
         if(activity!=null ) {
             if (!InternetConnection.isInternetAvailable(activity)){
-                NavGraph.navigate(NavGraph.GLOBAL_INTERNET_CONNECTION,findNavController())
+               // NavGraph.navigate(NavGraph.GLOBAL_INTERNET_CONNECTION,findNavController())
+
+                   val action = InternetConnectionDialogDirections.actionGlobalInternetConnectionDialog()
+                findNavController().navigate(action )
+
+
                 return } }
 
         if(subscriptionStatus!=null){
@@ -253,6 +259,7 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
 
 
+
          //   .observe(this, userObserver)
 //            }
 //        }
@@ -268,7 +275,8 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
         postParameters["target"] =item
         println("Result is given"+item)
 
-        postParameters["key"] = TranslateUtils.SCANNER_KEY
+        postParameters["key"] = BuildConfig.API_KEY
+
         return postParameters
     }
 
@@ -277,7 +285,10 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
   private   val userObserver = Observer<String?> {
         stopProgress()
         if (it != null) {
-            NavGraph.navigate(NavGraph.LIST_DIALOG_TO_SCAN_DIALOG ,findNavController() ,it)
+           // NavGraph.navigate(NavGraph.LIST_DIALOG_TO_SCAN_DIALOG ,findNavController() ,it)
+
+            val action = LanguageListDialogFragmentDirections.actionLanguageListDialogFragmentToScanDialogFragment()
+            this.findNavController().navigate(action)
 
         }
   }
@@ -287,7 +298,11 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     //Subscription
     private fun openIntent(){
-        NavGraph.navigate(NavGraph.LIST_DiALOG_TO_INAPP ,findNavController())
+
+     val action =   LanguageListDialogFragmentDirections.actionLanguageListDialogFragmentToInAppPurchaseActivity()
+
+        findNavController().navigate(action )
+
     }
 
     private fun checkTranslationAvailable(){
@@ -369,8 +384,8 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
 
 
-        adLoader?.loadAds(AdRequest.Builder().build(),NUMBER_OF_ADS)
-
+//        adLoader?.loadAds(AdRequest.Builder().build(),NUMBER_OF_ADS)
+//
 
 
     }

@@ -1,5 +1,8 @@
 package imagetrack.app.trackobject.ui.fragment
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,10 +12,14 @@ import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -26,13 +33,13 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
+import imagetrack.app.trackobject.BuildConfig
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.ScanNavigatorDirections
 import imagetrack.app.trackobject.animations.animate
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import imagetrack.app.trackobject.ext.scaleGestureDetector
 import imagetrack.app.trackobject.ext.toast
-import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.ui.activities.MainActivity
 import imagetrack.app.trackobject.ui.activities.SettingsActivity
@@ -54,7 +61,9 @@ import kotlin.math.min
 @AndroidEntryPoint
 class ScanFragment :  BaseFragment<ScanViewModel ,
         ScanFragmentDataBinding>() ,
-    ScanNavigator {
+    ScanNavigator   ,ValueAnimator.AnimatorUpdateListener , Animator.AnimatorListener
+    , View.OnTouchListener , ScaleGestureDetector.OnScaleGestureListener
+{
 
     private val mViewModel by activityViewModels<ScanViewModel>()
 
@@ -76,6 +85,9 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
     }
 
+    var camera:Camera?=null
+    val valueAnimator = ValueAnimator.ofFloat(1.0f ,0.8f )
+    var  scaleGestureDetector : ScaleGestureDetector?=null
 
     override fun getBindingVariable(): Int = imagetrack.app.trackobject.BR.viewModel
     override fun getLayoutId(): Int = R.layout.scan_fragment
@@ -88,20 +100,33 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
         println("onViewCreated")
         mScanFragmentDataBinding = getViewDataBinding()
 
+
         val baseActivitty  = getBaseActivity()
         if(baseActivitty is MainActivity){
             mMainActivity =baseActivitty }
 
         windowManager = WindowManager(view.context)
 
+            scaleGestureDetector  = ScaleGestureDetector(requireContext(),this )
+
+
+            valueAnimator.duration = 350
+
+                    valueAnimator.addUpdateListener(this)
+                    valueAnimator.addListener(this)
         if (isCameraPermissionGranted(requireContext()))
             startCamera() else requestCameraPermission()
              mViewModel.setNavigator(this)
 
+        mScanFragmentDataBinding?.include2?.previewFinder?.setOnTouchListener(this )
+
        // mViewModel.translateText.observe( viewLifecycleOwner , translatedObserver)
 
-      //  setupAds()
+        setupAds()
+
     }
+
+
     private fun setupAds(){
 
 
@@ -177,6 +202,8 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
 
     private fun captureImage(imageCapture: ImageCapture){
+
+
 
         mScanFragmentDataBinding?.actionButtonId?.capture?.setOnClickListener {
 
@@ -259,10 +286,10 @@ private fun startCamera() {
 
     private fun cameraXLiveData(camera :Camera){
         val cameraController = camera.cameraInfo
-     //   mViewModel.progressLiveData.observe(viewLifecycleOwner, progressStatusObserver)
+
         cameraController.zoomState.observe(viewLifecycleOwner, zoomState)
         cameraController.torchState.observe(viewLifecycleOwner, torchState)
-        mViewModel.translateText.observe(viewLifecycleOwner, translatedObserver)
+
     }
 
 
@@ -370,6 +397,7 @@ private fun startCamera() {
         try {
           val camera =  cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
 
+            this.camera = camera
             cameraXLiveData(camera)
             captureImage(imageCapture)
             torch(camera)
@@ -427,27 +455,8 @@ private fun startCamera() {
 
     }
 
-    //ProgressLiveData
-//    private val progressStatusObserver =Observer<Boolean>{progressStatus ->
-////        if(progressStatus!=null) {
-////            when (progressStatus) {
-////                true -> {
-////                    progressVisible()
-////                }
-////                false -> {
-////                   progressInVisible()
-////
-////                } }}
-//    }
 
     override fun progressVisible(){
-
-
-   //    val action=  ScanFragmentDirections.actionScanFragmentToProgressDialogFragment()
-
-        //findNavController().navigate(action)
-
-    //    NavGraph.navigate(NavGraph.SCAN_FRAGMENT_TO_PROGRESS, findNavController())
 
     }
 
@@ -494,8 +503,12 @@ private fun startCamera() {
 //            println("onDestroy"+this)
 //        }
 
+        println("ondestroyview")
 
         mScanFragmentDataBinding = null
+
+        valueAnimator.removeAllListeners()
+
         super.onDestroyView()
 
 
@@ -523,6 +536,119 @@ private fun startCamera() {
 
         val myIntent = Intent(mMainActivity, SettingsActivity::class.java)
         this.startActivity(myIntent)
+
+    }
+
+    override fun onAnimationUpdate(animation: ValueAnimator?) {
+
+
+        if(animation!=null) {
+
+            val animatedValues = animation.animatedValue as Float
+
+            val focusRing = mScanFragmentDataBinding?.include2?.focusRing
+            focusRing?.apply {
+                this.scaleX = animatedValues
+                this.scaleY = animatedValues
+            }
+
+        }
+
+
+    }
+
+    override fun onAnimationStart(animation: Animator?) {
+    }
+
+    override fun onAnimationEnd(animation: Animator?) {
+
+    mScanFragmentDataBinding?.include2?.focusRing?.visibility = View.GONE
+    }
+
+    override fun onAnimationCancel(animation: Animator?) {
+    }
+
+    override fun onAnimationRepeat(animation: Animator?) {
+
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+        if(event==null)return false
+
+
+             scaleGestureDetector?.onTouchEvent(event)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> return true
+            MotionEvent.ACTION_UP -> {
+
+                mScanFragmentDataBinding?.include2?.focusRing?.apply {
+                    val x = event.rawX  - this.width/2
+                    val y  = event.rawY  - this.width/2
+                    this.x =x
+                    this.y =y
+                    this.visibility = View.VISIBLE }
+
+                mScanFragmentDataBinding?.include2?.previewFinder?.apply {
+                    val factory = this.meteringPointFactory
+                    val point = factory.createPoint(event.x, event.y)
+                    val action = FocusMeteringAction.Builder(point).build()
+                    camera?.cameraControl?.startFocusAndMetering(action)
+                    valueAnimator.start() }
+
+                view?.performClick();
+                return true }
+            else -> return false }
+
+
+
+
+
+    }
+
+    override fun onScale(detector: ScaleGestureDetector?): Boolean {
+        val delta = detector?.scaleFactor ?: return false
+        val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 0F
+        camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
+
+        return true
+    }
+
+    override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+
+        return true
+    }
+
+    override fun onScaleEnd(detector: ScaleGestureDetector?) {
+
+
+    }
+
+
+    override fun onDestroy() {
+        println("Destroyed before")
+
+        super.onDestroy()
+
+        println("Destroyed after")
+
+
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        println("OnPause ")
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        println("OnStop ")
+
+
 
     }
 

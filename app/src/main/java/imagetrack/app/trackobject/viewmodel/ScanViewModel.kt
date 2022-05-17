@@ -3,49 +3,32 @@ package imagetrack.app.trackobject.viewmodel
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.camera.core.ImageProxy
-//import androidx.camera.lifecycle.ExperimentalUseCaseGroupLifecycle
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import imagetrack.app.trackobject.navigator.ScanNavigator
 import imagetrack.app.trackobject.repo.ScanRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executors
 
 class ScanViewModel  @ViewModelInject constructor(private val mainRepository : ScanRepository) : BaseViewModel<ScanNavigator>(mainRepository) {
 
 
-    private var _ScannedText = MutableLiveData<String>("Scanned Text")
-       val scannerText = _ScannedText
+    private var _ScannedText = MutableStateFlow<String>("please wait Scanning Text")
+    val scannerText = _ScannedText.asLiveData()
 
 
-       val translateText  =  mainRepository.translateLiveData
-
-
-
-
-
-    val _ProgressMutableLiveData = MutableSharedFlow<Boolean>()
-
-    val progressLiveData = mainRepository.progressLiveData
-
-
-    val mutableTranslatedText =MutableLiveData<String>()
-
- //   val translateText =  mainRepository.translateLiveData
-
-
-
+    private var _ProgressMutableLiveData = MutableStateFlow<Boolean>(false)
+    val progressLiveData = _ProgressMutableLiveData.asLiveData()
 
     fun showSettings(){
         getNavigator().showSettings() }
 
     fun enableTorch(){
         getNavigator().enableTorch() }
+
+
 
     fun openGallery(){
         getNavigator().openGallery() }
@@ -57,66 +40,74 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
 
     fun scanText(bitmap : Bitmap){
+
         viewModelScope.launch(Dispatchers.IO) {
-
-
 
             try {
 
-                withContext(Dispatchers.Main) {
-                    getNavigator().progressVisible()
+                progress(true)
+                val result = mainRepository.scanText(bitmap )
+                updateText(result)
 
-                }
 
-                mainRepository.scanText(bitmap)
 
             } catch (exception:Exception){
 
+
                 val message = exception.message
                 if (message != null) {
-
+                    updateText("No Text found try again")
                 }
+
 
             }finally {
+
                 withContext(Dispatchers.Main) {
-                    getNavigator().progressInVisible()
-                }
+                    getNavigator().progressInVisible() }
+
+                progress(false)
 
             }
         }
     }
 
-    fun scanText(image: ImageProxy) {
 
+    private fun progress(progress:Boolean){
+        _ProgressMutableLiveData.update {
+            progress }
 
+    }
+
+    fun scanText(imageProxy : ImageProxy) {
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
-                mainRepository.clear()
-                _ScannedText.postValue("Scanning Text please wait...")
-
-                withContext(Dispatchers.Main) {
-                    getNavigator().progressVisible()
-
-                }
-
-                mainRepository.scanText(image)
+                   progress(true)
+                   val result = mainRepository.scanText(imageProxy)
+                   updateText(result)
 
             } catch (exception:Exception){
 
                 val message = exception.message
                 if (message != null) {
+                    updateText("No Text found try again")
 
                 }
 
             }finally {
                  withContext(Dispatchers.Main) {
+                     imageProxy.close()
                        getNavigator().progressInVisible()
                    }
+
+                progress(false)
 
             }
         }
     }
+
+
+
     fun stopImageProcessor() {
 
         mainRepository.stopImageProcessor()
@@ -125,11 +116,8 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
 
 
-    var mutableLiveData = MutableLiveData<String>()
+   private  var mutableLiveData = MutableLiveData<String>()
     val translate : LiveData<String> = mutableLiveData
-
-
-
 
 
     fun getUsersFlow(name: MutableMap<String, String> ,
@@ -137,13 +125,8 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
     stopProgress :()->Unit ){
 
         startProgress()
-
-
         viewModelScope.launch(Dispatchers.IO) {
-
-
             val data =    mainRepository.getUsers(name).getData()
-
             if(data!=null){
                 val translation =   data.getTranslations()
 
@@ -152,12 +135,11 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
                     for(translate in translation){
 
                         if(translate!=null) {
-                            var translatedText = translate.getTranslatedText()
+                            val translatedText = translate.getTranslatedText()
                             if(translatedText!=null && translatedText.isNotEmpty()){
 
-                                Log.i("test","traslated ${translatedText}")
 
-                                update(translatedText!!)
+                                updateText(translatedText)
 
                             }
 
@@ -180,13 +162,10 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
     }
 
-    fun update(it: String) {
-
+    private fun updateText(text : String) {
         viewModelScope.launch {
-            _ScannedText.value= it
-
-        }
-
+            _ScannedText.update{
+                text } }
     }
 
 

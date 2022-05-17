@@ -8,6 +8,7 @@ apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
+
 android {
 
     compileSdkVersion 31
@@ -18,8 +19,8 @@ android {
         applicationId "imagetrack.app.trackobject"
         minSdkVersion 28
         targetSdkVersion 31
-        versionCode 21
-        versionName "5.0.02"
+        versionCode 22
+        versionName "5.0.03"
 
         testInstrumentationRunner "imagetrack.app.trackobject.CustomTestRunner"
 //            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,6 +28,7 @@ android {
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
 
 
+        buildConfigField("String", "API_KEY", API_KEY)
 
     }
 

@@ -7,10 +7,7 @@ app:startDestination="@id/scanFragment">
 
 <fragment android:id="@+id/scanFragment"
     android:name="imagetrack.app.trackobject.ui.fragment.ScanFragment"
-    tools:layout="@layout/scan_fragment"
-
-
-    >
+    tools:layout="@layout/scan_fragment">
 
     <action
         android:id="@+id/action_scanFragment_to_exitDialogFragment"
@@ -24,9 +21,6 @@ app:startDestination="@id/scanFragment">
         app:exitAnim="@anim/horizontal_slide_out"
         />
 
-    <action
-        android:id="@+id/action_scanFragment_to_progressDialogFragment"
-        app:destination="@id/progressDialogFragment" />
 
 
 </fragment>
@@ -64,7 +58,13 @@ app:startDestination="@id/scanFragment">
             android:defaultValue="Text Not Found" />
         <action
             android:id="@+id/action_scanDialogFragment_to_languageListDialogFragment2"
-            app:destination="@id/languageListDialogFragment" />
+            app:destination="@id/languageListDialogFragment"
+            app:enterAnim="@anim/horizontal_slide_in"
+            app:exitAnim="@anim/horizontal_slide_out"
+
+            />
+
+
         <action
             android:id="@+id/action_scanDialogFragment_to_speakingDialogFragment"
             app:destination="@id/speakingDialogFragment" />
@@ -91,7 +91,11 @@ app:startDestination="@id/scanFragment">
             android:defaultValue="No Text found" />
         <action
             android:id="@+id/action_languageListDialogFragment_to_inAppPurchaseActivity"
-            app:destination="@id/inAppPurchaseActivity" />
+            app:destination="@id/inAppPurchaseActivity"
+
+            app:enterAnim="@anim/horizontal_slide_in"
+            app:exitAnim="@anim/horizontal_slide_out"
+            />
 
 
     </dialog>

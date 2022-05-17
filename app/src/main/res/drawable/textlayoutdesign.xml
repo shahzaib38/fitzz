@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-android:shape="rectangle"
-    >
+             android:shape="rectangle">
 
-<solid android:color="#fff"
+<solid android:color="@color/light_gray" />
+    <stroke android:color="@color/light_blue"
+              android:width="5dp"
+              android:dashGap="5dp" />
 
-    />
-<stroke android:color="@color/customtrackcolor"
-
-    android:width="5dp"
-    android:dashGap="5dp"
-    />
-<corners android:radius="10dp"
-    />
+    <corners android:radius="10dp" />
 
 </shape>

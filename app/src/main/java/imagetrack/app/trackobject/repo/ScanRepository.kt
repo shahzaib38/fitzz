@@ -28,7 +28,7 @@ class ScanRepository @Inject constructor(private val visionImageProcessor: Visio
     suspend fun getUsers(name: Map<String, String>) = translateApi.getData(name)
 
 
-    suspend fun scanText(image: ImageProxy) = visionImageProcessor.processImageProxy(image)
+    suspend fun scanText(image: ImageProxy) = visionImageProcessor.processImage(image)
 
 
     fun stopImageProcessor() {
@@ -37,7 +37,7 @@ class ScanRepository @Inject constructor(private val visionImageProcessor: Visio
 
     fun clear() {
 
-        visionImageProcessor.clear()
+       // visionImageProcessor.clear()
     }
 
 

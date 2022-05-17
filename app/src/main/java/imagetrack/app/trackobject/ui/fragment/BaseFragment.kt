@@ -69,12 +69,7 @@ abstract class BaseFragment<VM : ViewModel, VDB: ViewDataBinding> : Fragment() {
              println("MainActivity Fragment  Attached")
 
          }
-//         else if(context is InAppPurchaseActivity){
-//
-//             mActivity =context
-//             println("InappActivity Fragment  Attached")
-//
-//         }
+
 
          else if(context is HistoryActivity){
              mActivity =context

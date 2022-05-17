@@ -28,7 +28,7 @@ import imagetrack.app.trackobject.databinding.ScanDialogDataBinding
 //import imagetrack.app.trackobject.ext.showLanguageList
 import imagetrack.app.trackobject.ext.showPdf
 import imagetrack.app.trackobject.ext.translateText
-import imagetrack.app.trackobject.navgraph.NavGraph
+//import imagetrack.app.trackobject.navgraph.NavGraph
 import imagetrack.app.trackobject.navigator.ScanDialogNavigator
 import imagetrack.app.trackobject.ui.activities.EditorActivity
 import imagetrack.app.trackobject.ui.activities.MainActivity
@@ -105,23 +105,6 @@ import kotlinx.coroutines.launch
         }
 
 
-
-        activityViewModel.progressLiveData.observe(viewLifecycleOwner){ isRunning->
-            if(isRunning){
-                mBinding?.translatedId?.translatedtext?.visibility = View.GONE
-
-            } else {
-                mBinding?.translatedId?.translatedtext?.visibility = View.VISIBLE
-            }
-        }
-
-
-
-        activityViewModel.translateText.observe(viewLifecycleOwner){
-
-            activityViewModel.update(it)
-        }
-
         setupAds()
 
 
@@ -196,7 +179,7 @@ import kotlinx.coroutines.launch
 
     override fun speak() {
 
-        NavGraph.navigate(NavGraph.SCAN_TO_SPEAK ,this.findNavController(),getText())
+        //NavGraph.navigate(NavGraph.SCAN_TO_SPEAK ,this.findNavController(),getText())
     }
 
     override fun copy() {
@@ -244,22 +227,14 @@ import kotlinx.coroutines.launch
         val activity =mainActivity
         if(activity!=null) {
             if (!InternetConnection.isInternetAvailable(activity)) {
-             //   mainActivity?.internetConnectionDialog()
 
-          //      val action =  ScanNavigatorDirections.actionGlobalInternetConnectionDialog()
-        //        mNavController?.navigate(action)
-
-                NavGraph.navigate(NavGraph.GLOBAL_INTERNET_CONNECTION,findNavController())
-
+                 val action =InternetConnectionDialogDirections.actionGlobalInternetConnectionDialog()
+                this.findNavController().navigate(action )
 
                 return } }
 
-
-       // val action= ScanDialogFragmentDirections.actionScanDialogFragmentToLanguageListDialogFragment2(getText())
-        //mNavController?.navigate(action)
-
-        NavGraph.navigate(NavGraph.SCAN_DIALOG_TO_LIST_DIALOG , findNavController(),getText())
-
+        val action= ScanDialogFragmentDirections.actionScanDialogFragmentToLanguageListDialogFragment2(getText())
+        this.findNavController().navigate(action )
 
     }
 

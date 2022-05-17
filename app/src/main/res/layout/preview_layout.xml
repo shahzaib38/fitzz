@@ -38,10 +38,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+
+            android:id="@+id/mainId"
             >
 
 
             <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/adViewId"
                 layout="@layout/ads_layout_translated"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,6 +70,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/focusRing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/focus"
+                android:src="@drawable/focus_icon"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/adViewId" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -72,16 +88,7 @@
 
 
 
-        <ImageView
-            android:id="@+id/focusRing"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"
-            android:src="@drawable/focus_ring"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/preview_finder" />
+
 
         <include
             android:id="@+id/processId"
