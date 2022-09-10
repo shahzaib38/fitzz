@@ -25,14 +25,14 @@ class AppModule {
         return "shahzaib" }
 
 
-    @Provides
-    fun getRefreshToken(@ApplicationContext context  : Context) : GoogleCredentials {
-        val stream: InputStream = context.resources.openRawResource(R.raw.credential)
-        return GoogleCredentials.fromStream(stream)
-            .createScoped(mutableListOf("https://www.googleapis.com/auth/androidpublisher"))
-
-
-          }
+//    @Provides
+//    fun getRefreshToken(@ApplicationContext context  : Context) : GoogleCredentials {
+//        val stream: InputStream = context.resources.openRawResource(R.raw.credential)
+//        return GoogleCredentials.fromStream(stream)
+//            .createScoped(mutableListOf("https://www.googleapis.com/auth/androidpublisher"))
+//
+//
+//          }
 
 
 
