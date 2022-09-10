@@ -88,6 +88,7 @@ class ScanViewModel  @ViewModelInject constructor(private val mainRepository : S
 
             } catch (exception:Exception){
 
+                println("Exception"+exception.message)
                 val message = exception.message
                 if (message != null) {
                     updateText("No Text found try again")

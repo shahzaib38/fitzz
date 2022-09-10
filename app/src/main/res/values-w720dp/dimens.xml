@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <dimen name="capture_size">120dp</dimen>
+    <dimen name="scan_image_size">48dp</dimen>
+
+    <dimen name="capture_button_size">130</dimen>
+    <dimen name="circle_radius">25dp</dimen>
+
+    <dimen name="internet_start_dimen">134dp</dimen>
+    <dimen name="internet_margin_top">46dp</dimen>
+    <dimen name="internet_text_size">35sp</dimen>
+    <dimen name="wifi_error_size">104dp</dimen>
+    <dimen name="ok_text_size">28sp</dimen>
+
+
+
+    <dimen name="ok_button_margin">28dp</dimen>
+    <dimen name="button_top">56dp</dimen>
+
+    <dimen name="language_text_size">48sp</dimen>
+    <dimen name="languAGE_itwm_sizw">38sp</dimen>
+    <dimen name="language_padding">32dp</dimen>
+
+
+
+    <dimen name="scanned_text_size">52sp</dimen>
+    <dimen name="option_text_size">34sp</dimen>
+    <dimen name="translate_text_size">35sp</dimen>
+
+    <dimen name="optionicon_size">44dp</dimen>
+    <dimen name="translated_text_size">36sp</dimen>
+
+
+
+    <dimen name="premium_text_size">62sp</dimen>
+    <dimen name="package_text_size">40sp</dimen>
+    <dimen name="buy_monthly_text_size">52sp</dimen>
+    <dimen name="subscribe_text_size">36sp</dimen>
+    <dimen name="description_text_size">34sp</dimen>
+
+
+</resources>

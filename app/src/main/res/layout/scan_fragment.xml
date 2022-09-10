@@ -5,6 +5,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data class="ScanFragmentDataBinding">
+
         <variable
             name="viewModel"
             type="imagetrack.app.trackobject.viewmodel.ScanViewModel" />
@@ -21,25 +22,28 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/action_button_id"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            bind:previewLayout="@{viewModel}" >
+            app:layout_constraintVertical_chainStyle="packed"
+            bind:previewLayout="@{viewModel}">
 
         </include>
 
         <include
-            layout="@layout/capture_layout"
             android:id="@+id/action_button_id"
+            layout="@layout/capture_layout"
             android:layout_width="0dp"
+
             android:layout_height="wrap_content"
-            bind:captureViewModel ="@{viewModel}"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include2">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            bind:captureViewModel="@{viewModel}">
 
 
         </include>

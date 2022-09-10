@@ -65,7 +65,7 @@
 
 
     <!-- Test Ads -->
-<!--    <string name="app_id">ca-app-pub-3940256099942544~3347511713</string>-->
+    <string name="app_id">ca-app-pub-8453124532033807~1199249375</string>
 
     <string name="launcher_native">ca-app-pub-3940256099942544/2247696110</string>
     <string name="history_native">ca-app-pub-3940256099942544/1044960115</string>
@@ -75,8 +75,8 @@
     <string name="settings_native">ca-app-pub-3940256099942544/1044960115</string>
     <string name="subscription_native">ca-app-pub-3940256099942544/1044960115</string>
     <string name="exit_ads" >ca-app-pub-3940256099942544/1044960115</string>
-<!--    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="language_banner_ad">ca-app-pub-3940256099942544/6300978111</string>-->
+    <string name="banner_ad">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="language_banner_ad">ca-app-pub-8453124532033807/3210822702</string>
 
 
 
@@ -176,7 +176,7 @@
     <string name="torch">torch</string>
     <string name="capture">Capture</string>
     <string name="focus">focus</string>
-    <string name="check_internet">Please check \n your \n Internet Connection</string>
+    <string name="check_internet">You are Offline</string>
     <string name="wifi_off">Wifi Off</string>
 
 

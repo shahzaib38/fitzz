@@ -21,7 +21,7 @@ class TokenLoader(@ApplicationContext private val context: Context) {
            credentials.refreshAccessToken().tokenValue
         }catch (ioException : IOException) {
             "" }
-    }
+  }
 
 
 

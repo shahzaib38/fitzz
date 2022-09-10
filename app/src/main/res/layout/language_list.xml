@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/languageId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/language_padding"
+        android:text="Germany"
+        android:textSize="@dimen/languAGE_itwm_sizw"
+        android:fontFamily="@font/poppins_semibold"
+        android:background="@drawable/ripple_effect_with_border"
+        android:textColor="@color/black"
+    />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/language_padding"
+        android:text="Spain"
+        android:textSize="@dimen/languAGE_itwm_sizw"
+        android:fontFamily="@font/poppins_semibold"
+        android:background="@drawable/ripple_effect_with_border"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/language_padding"
+        android:text="Austallia"
+        android:textSize="@dimen/languAGE_itwm_sizw"
+        android:fontFamily="@font/poppins_semibold"
+        android:background="@drawable/ripple_effect_with_border"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/language_padding"
+        android:text="Switzerland"
+        android:textSize="@dimen/languAGE_itwm_sizw"
+        android:fontFamily="@font/poppins_semibold"
+        android:background="@drawable/ripple_effect_with_border"
+        android:textColor="@color/black"
+        />
+
+</LinearLayout>

@@ -96,6 +96,7 @@ abstract class BaseDialogFragment<VM : ViewModel, VDB : ViewDataBinding> : Dialo
             )
         }
 
+
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
         return dialog }

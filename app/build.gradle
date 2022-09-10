@@ -9,6 +9,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 
+
 android {
 
     compileSdkVersion 31
@@ -19,8 +20,8 @@ android {
         applicationId "imagetrack.app.trackobject"
         minSdkVersion 28
         targetSdkVersion 31
-        versionCode 22
-        versionName "5.0.03"
+         versionCode 26
+        versionName "5.3.13"
 
         testInstrumentationRunner "imagetrack.app.trackobject.CustomTestRunner"
 //            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -240,4 +241,7 @@ dependencies {
     implementation 'androidx.work:work-multiprocess:2.6.0-alpha02'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+
+
+
 }

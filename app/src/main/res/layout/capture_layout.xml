@@ -8,43 +8,75 @@
         <variable
             name="captureViewModel"
             type="imagetrack.app.trackobject.viewmodel.ScanViewModel"
-
             />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#66000000"
 
-        <LinearLayout
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:orientation="vertical"
             android:id="@+id/action_button_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/light_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <include android:id="@+id/camera_optionId"
-                layout="@layout/camera_options"
-                bind:previewLayout="@{captureViewModel}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/gallery_style"
+                android:contentDescription="@string/gallery"
+                android:onClick="@{()->captureViewModel.openGallery()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/capture"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+<!--            <include-->
+<!--                android:id="@+id/camera_optionId"-->
+<!--                layout="@layout/camera_options"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                bind:previewLayout="@{captureViewModel}" />-->
+<!--          -->
+
+            <ImageView
+                android:id="@+id/torch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_effect_scanfragment_borderless"
+                android:contentDescription="@string/torch"
+                android:src="@drawable/flash_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/capture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <imagetrack.app.trackobject.customview.CameraButton
                 android:id="@+id/capture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
-                android:contentDescription="@string/capture"
                 android:layout_gravity="center"
-                android:clickable="@{!captureViewModel.progressLiveData}"
-                android:background="@drawable/camera_button_style"/>
 
-        </LinearLayout>
+                android:clickable="@{!captureViewModel.progressLiveData}"
+                android:contentDescription="@string/capture"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

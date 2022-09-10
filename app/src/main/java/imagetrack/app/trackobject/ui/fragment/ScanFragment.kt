@@ -1,42 +1,36 @@
 package imagetrack.app.trackobject.ui.fragment
 
 import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.hardware.display.DisplayManager
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.window.WindowManager
-import androidx.work.Worker
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import imagetrack.app.ext.requestCameraPermission
-import imagetrack.app.trackobject.BuildConfig
 import imagetrack.app.trackobject.R
 import imagetrack.app.trackobject.ScanNavigatorDirections
-import imagetrack.app.trackobject.animations.animate
+import imagetrack.app.trackobject.customview.CameraButton
 import imagetrack.app.trackobject.databinding.ScanFragmentDataBinding
 import imagetrack.app.trackobject.ext.scaleGestureDetector
 import imagetrack.app.trackobject.ext.toast
@@ -49,7 +43,10 @@ import imagetrack.app.utils.CameraPermissions
 import imagetrack.app.utils.CameraPermissions.isCameraPermissionGranted
 import imagetrack.app.utils.CameraPermissions.isGalleryPermissionGranted
 import imagetrack.app.utils.InternetConnection.isInternetAvailable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
+import java.nio.ByteBuffer
 import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
@@ -130,23 +127,7 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
     private fun setupAds(){
 
 
-        mScanFragmentDataBinding?.include2?.adViewId?.run{
-            val adRequest = AdRequest.Builder().build()
-            this.bannerId.loadAd(adRequest)
-            this.bannerId.adListener = object : AdListener(){
 
-                override fun onAdClicked() {
-                    super.onAdClicked()
-
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-
-                }
-
-            }
-        }
 
     }
 
@@ -167,7 +148,10 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
 
    private   fun  changeTorchState(state :Int =R.drawable.ic_flash_off){
-       mScanFragmentDataBinding?.actionButtonId?.cameraOptionId?.torch?.setImageResource(state)
+
+
+
+       mScanFragmentDataBinding?.actionButtonId?.torch?.setImageResource(state)
 
 
    }
@@ -205,37 +189,74 @@ class ScanFragment :  BaseFragment<ScanViewModel ,
 
 
 
-        mScanFragmentDataBinding?.actionButtonId?.capture?.setOnClickListener {
 
-            if(isInternetAvailable(requireActivity())) {
-                imageCapture.takePicture(Executors.newSingleThreadExecutor(),
-                    object : ImageCapture.OnImageCapturedCallback() {
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            mViewModel.scanText(image)
+        mScanFragmentDataBinding?.actionButtonId?.capture?.setOnClickListener(object : CameraButton.onButtonClickListener{
+            override fun onClick() {
 
 
+                if(isInternetAvailable(requireActivity())) {
+                    imageCapture.takePicture(Executors.newSingleThreadExecutor(),
+                        object : ImageCapture.OnImageCapturedCallback() {
+                            override fun onCaptureSuccess(image: ImageProxy) {
 
-                        }
+                                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
-                        override fun onError(exception: ImageCaptureException) {
 
-                            val message =exception.message
-                            if(message!=null){
+                                    mScanFragmentDataBinding?.include2?.previewFinder?.visibility = View.VISIBLE
 
-                            progressInVisible()
+                                  val bitmap =  mScanFragmentDataBinding?.include2?.previewFinder?.bitmap
 
+                                    if(bitmap!=null) {
+                                        mScanFragmentDataBinding?.include2?.scannedId?.setImageBitmap(
+                                            bitmap
+                                        )
+
+                                    }
+
+                                    mScanFragmentDataBinding?.include2?.
+                                    scannerId?.animateScanner {
+                                        mScanFragmentDataBinding?.include2?.previewFinder?.visibility = View.GONE
+
+                                        mViewModel.scanText(image)
+
+                                    }
+
+                                }
 
                             }
-                        }
-                    })
-            }else{
-           //     mMainActivity?.internetConnectionDialog()
 
-                val action =  ScanNavigatorDirections.actionGlobalInternetConnectionDialog()
-                findNavController().navigate(action)
+                            override fun onError(exception: ImageCaptureException) {
+
+                                val message = exception.message
+                                if(message!=null){
+
+                                    progressInVisible()
+
+
+                                }
+                            }
+                        })
+                }else{
+                    //     mMainActivity?.internetConnectionDialog()
+
+                    val action =  ScanNavigatorDirections.actionGlobalInternetConnectionDialog()
+                    findNavController().navigate(action)
+
+                }
+
 
             }
-        } }
+
+
+        })
+
+      //  {
+
+
+       // }
+
+
+    }
 
 
 
@@ -419,7 +440,7 @@ private fun startCamera() {
       val cameraController =  camera.cameraControl
         val cameraInfo =camera.cameraInfo
 
-        mScanFragmentDataBinding?.actionButtonId?.cameraOptionId?.torch?.setOnClickListener {
+        mScanFragmentDataBinding?.actionButtonId?.torch?.setOnClickListener {
             when(cameraInfo.torchState.value) {
                 0->{
                     cameraController.enableTorch(true) }
@@ -428,7 +449,10 @@ private fun startCamera() {
                     cameraController.enableTorch(false) }
                 else-> {
                     cameraController.enableTorch(false) } }
-        } }
+        }
+
+
+    }
 
     /****
      * Observers
@@ -436,13 +460,15 @@ private fun startCamera() {
 
     //ZoomLiveData
     private  val zoomState =Observer<ZoomState>{zoomState->
-        if(zoomState!=null) {
-            val zoom = zoomState.zoomRatio
-            val zoomString = String.format("%.1f", zoom)
-            val createString = "$zoomString X"
-            mScanFragmentDataBinding?.include2?.zoomstate?.text = createString
-            val animate = mScanFragmentDataBinding?.include2?.zoomstate?.animate(R.anim.fade_in)
-        }
+//        if(zoomState!=null) {
+//            val zoom = zoomState.zoomRatio
+//            val zoomString = String.format("%.1f", zoom)
+//            val createString = "x$zoomString"
+//            mScanFragmentDataBinding?.include2?.zoomstate?.text = createString
+//            val zoomPercentage  = zoomState.zoomRatio / zoomState.maxZoomRatio
+//            mScanFragmentDataBinding?.include2?.zoomViewId?.setDynamicRadius(zoomPercentage)
+//
+//        }
     }
 
 
@@ -482,6 +508,7 @@ private fun startCamera() {
         if(torchState!=null) {
             when (torchState) {
                 TorchState.OFF -> {
+
                     changeTorchState(R.drawable.ic_flash_off)
                 }
                 TorchState.ON -> {
@@ -542,18 +569,18 @@ private fun startCamera() {
     override fun onAnimationUpdate(animation: ValueAnimator?) {
 
 
-        if(animation!=null) {
-
-            val animatedValues = animation.animatedValue as Float
-
-            val focusRing = mScanFragmentDataBinding?.include2?.focusRing
-            focusRing?.apply {
-                this.scaleX = animatedValues
-                this.scaleY = animatedValues
-            }
-
-        }
-
+//        if(animation!=null) {
+//
+//            val animatedValues = animation.animatedValue as Float
+//
+//            val focusRing = mScanFragmentDataBinding?.include2?.focusRing
+//            focusRing?.apply {
+//                this.scaleX = animatedValues
+//                this.scaleY = animatedValues
+//            }
+//
+//        }
+//
 
     }
 
@@ -562,7 +589,7 @@ private fun startCamera() {
 
     override fun onAnimationEnd(animation: Animator?) {
 
-    mScanFragmentDataBinding?.include2?.focusRing?.visibility = View.GONE
+    //mScanFragmentDataBinding?.include2?.focusRing?.visibility = View.GONE
     }
 
     override fun onAnimationCancel(animation: Animator?) {
@@ -572,45 +599,87 @@ private fun startCamera() {
 
     }
 
+    private var doubleTouch =false
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
         if(event==null)return false
 
 
-             scaleGestureDetector?.onTouchEvent(event)
+        if(event.pointerCount>=2) {
+            Log.i("test","ACTION_DOWN")
+            scaleGestureDetector?.onTouchEvent(event)
+
+            doubleTouch = true
+
+            return true
+
+        }
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> return true
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_DOWN -> {
 
-                mScanFragmentDataBinding?.include2?.focusRing?.apply {
-                    val x = event.rawX  - this.width/2
-                    val y  = event.rawY  - this.width/2
-                    this.x =x
-                    this.y =y
-                    this.visibility = View.VISIBLE }
 
-                mScanFragmentDataBinding?.include2?.previewFinder?.apply {
-                    val factory = this.meteringPointFactory
-                    val point = factory.createPoint(event.x, event.y)
-                    val action = FocusMeteringAction.Builder(point).build()
-                    camera?.cameraControl?.startFocusAndMetering(action)
-                    valueAnimator.start() }
 
-                view?.performClick();
-                return true }
+
+
+
+
+                return true
+
+            }
+
+            MotionEvent.ACTION_UP ->  {
+
+
+                if(!doubleTouch){
+
+
+
+                    mScanFragmentDataBinding?.include2?.focusViewId?.apply {
+
+
+                        val x = event.rawX - width / 2
+                        val y = event.rawY - height
+
+                        this.focus(x, y)
+
+                    }
+
+//
+                    mScanFragmentDataBinding?.include2?.previewFinder?.apply {
+                        val factory = this.meteringPointFactory
+                        val point = factory.createPoint(event.x, event.y)
+                        val action = FocusMeteringAction.Builder(point).build()
+                        camera?.cameraControl?.startFocusAndMetering(action)
+                    }
+
+                    view?.performClick();
+
+
+                }
+
+
+                doubleTouch = false
+                return true
+                }
             else -> return false }
-
-
-
 
 
     }
 
+    private var radius = 0.1
     override fun onScale(detector: ScaleGestureDetector?): Boolean {
         val delta = detector?.scaleFactor ?: return false
         val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 0F
         camera?.cameraControl?.setZoomRatio(currentZoomRatio * delta)
+//
+
+        camera?.cameraInfo?.zoomState?.observe(viewLifecycleOwner ){
+
+
+            mScanFragmentDataBinding?.include2?.zoomViewId?.onZoom(it.zoomRatio)
+        }
+
 
         return true
     }
@@ -642,6 +711,15 @@ private fun startCamera() {
         println("OnPause ")
 
 
+    }
+
+    private fun toBitmap(image :Image ): Bitmap {
+
+
+        val buffer: ByteBuffer = image.getPlanes().get(0).getBuffer()
+        val bytes = ByteArray(buffer.capacity())
+        buffer.get(bytes)
+        return  BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)
     }
 
     override fun onStop() {

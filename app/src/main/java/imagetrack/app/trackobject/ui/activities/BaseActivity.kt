@@ -25,11 +25,7 @@ abstract class BaseActivity<out VM : ViewModel,out VDB : ViewDataBinding> : AppC
     private  var mViewModel :VM? =null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performDataBinding()
-
-    }
-
-
+        performDataBinding() }
 
 
 

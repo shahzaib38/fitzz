@@ -1,11 +1,14 @@
 package imagetrack.app.trackobject.ui.dialogs
 
+import android.animation.ValueAnimator
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.view.WindowManager
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.isVisible
@@ -92,16 +95,24 @@ import kotlinx.coroutines.launch
 
         activityViewModel.progressLiveData.observe(viewLifecycleOwner) {
 
-            mBinding?.topSectionnId?.progressId?.isVisible =it
+            mBinding?.topSectionnId?.progressId?.isVisible = it
 
         }
 
 
         activityViewModel.scannerText.observe(viewLifecycleOwner) { scannedText->
             if(scannedText.isEmpty()){
-                mBinding?.translatedId?.translatedtext?.setText(NO_TEXT_FOUND)
+
+                animateText(NO_TEXT_FOUND)
+
             }else {
-                mBinding?.translatedId?.translatedtext?.setText(scannedText) }
+
+
+                animateText(scannedText)
+
+
+
+            }
         }
 
 
@@ -110,27 +121,45 @@ import kotlinx.coroutines.launch
 
     }
 
+    private fun animateText(scannedText: String) {
+
+        mBinding?.translatedId?.translatedtext?.translationX = -300f
+        mBinding?.translatedId?.translatedtext?.alpha = 0f
+        mBinding?.translatedId?.translatedtext?.setText(scannedText)
+
+        mBinding?.translatedId?.
+        translatedtext?.
+        animate()?.
+        translationX(0f)?.
+        alpha(1f)?.
+        setDuration(1000)?.
+        setStartDelay(400)?.
+        start()
+
+
+    }
+
     private fun setupAds(){
 
      val activity = mainActivity ?: return
 
-        mBinding?.adviewId?.run{
-            val adRequest = AdRequest.Builder().build()
-            this.bannerId.loadAd(adRequest)
-            this.bannerId.adListener = object : AdListener(){
-
-                override fun onAdClicked() {
-                    super.onAdClicked()
-
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-
-                }
-
-            }
-        }
+//        mBinding?.adviewId?.run{
+//            val adRequest = AdRequest.Builder().build()
+//            this.bannerId.loadAd(adRequest)
+//            this.bannerId.adListener = object : AdListener(){
+//
+//                override fun onAdClicked() {
+//                    super.onAdClicked()
+//
+//                }
+//
+//                override fun onAdLoaded() {
+//                    super.onAdLoaded()
+//
+//                }
+//
+//            }
+//        }
 
     }
 
@@ -282,10 +311,10 @@ import kotlinx.coroutines.launch
 
     override fun onDestroyView() {
 
-        mBinding?.adviewId?.bannerId?.apply {
-            this.destroy()
-            println("onDestroy"+this)
-        }
+//        mBinding?.adviewId?.bannerId?.apply {
+//            this.destroy()
+//            println("onDestroy"+this)
+//        }
         mBinding =null
         super.onDestroyView()
 
@@ -293,18 +322,18 @@ import kotlinx.coroutines.launch
     }
 
      override fun onPause() {
-         mBinding?.adviewId?.bannerId?.apply {
-            this.pause()
-
-        }
+//         mBinding?.adviewId?.bannerId?.apply {
+//            this.pause()
+//
+//        }
         super.onPause()
     }
 
      override fun onResume() {
         super.onResume()
-         mBinding?.adviewId?.bannerId?.apply {
-            this.resume()
-        }
+//         mBinding?.adviewId?.bannerId?.apply {
+//            this.resume()
+//        }
 
      }
 

@@ -10,7 +10,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ScanRepository @Inject constructor(private val visionImageProcessor: VisionImageProcessor ,
+class ScanRepository @Inject constructor(
+
+    private val visionImageProcessor: VisionImageProcessor ,
 
                                          private val translateApi : TranslateApi
                                          ): BaseRepository() {

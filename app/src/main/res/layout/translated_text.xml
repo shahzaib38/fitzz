@@ -19,63 +19,41 @@
         android:background="@color/light_gray">
 
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp"
-        />
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="20dp"
-            />
-
-        <include
-            android:id="@+id/adviewId"
-            layout="@layout/ads_layout_translated"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/top_sectionnId"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <include
             android:id="@+id/top_sectionnId"
             layout="@layout/translate_top_section"
-            android:layout_marginEnd="16dp"
             android:layout_width="0dp"
+            android:layout_margin="16dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/option_sectionId"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
-            app:layout_constraintTop_toBottomOf="@+id/adviewId" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <include
             android:id="@+id/option_sectionId"
             layout="@layout/scan_option_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            bind:scanOptionViewModel="@{viewModel}"
+            android:layout_margin="16dp"
+
             app:layout_constraintBottom_toTopOf="@+id/translatedId"
-            app:layout_constraintEnd_toStartOf="@+id/guideline11"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
-            app:layout_constraintTop_toBottomOf="@+id/top_sectionnId" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top_sectionnId"
+            bind:scanOptionViewModel="@{viewModel}" />
 
         <include
             android:id="@+id/translatedId"
             layout="@layout/translated_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginBottom="24dp"
+            android:layout_margin="16dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline11"
-            app:layout_constraintStart_toStartOf="@+id/guideline10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/option_sectionId" />
 
 

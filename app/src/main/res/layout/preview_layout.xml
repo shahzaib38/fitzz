@@ -35,6 +35,13 @@
         </androidx.camera.view.PreviewView>
 
 
+        <imagetrack.app.trackobject.customview.CaptureView
+            android:id="@+id/captureViewID"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,14 +51,8 @@
             >
 
 
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/adViewId"
-                layout="@layout/ads_layout_translated"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
+
 
 
             <TextView
@@ -60,10 +61,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:elevation="25dp"
-                android:text="Zoom"
+                android:text="@string/pinch_to_zoom"
                 android:visibility="gone"
                 android:textColor="@color/white"
-                android:textSize="46sp"
+                android:textSize="16sp"
                 android:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,15 +81,52 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/adViewId" />
+                app:layout_constraintTop_toTopOf="@+id/zoomViewId" />
+
+            <imagetrack.app.trackobject.customview.FocusView
+                android:id="@+id/focusViewId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/focus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/zoomViewId" />
 
 
+
+
+            <imagetrack.app.trackobject.customview.SquareZoom
+                android:id="@+id/zoomViewId"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+            <ImageView
+                android:id="@+id/scannedId"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <imagetrack.app.trackobject.customview.ScannerView
+                android:id="@+id/scannerId"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
         <include
             android:id="@+id/processId"
@@ -96,8 +134,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="25dp"
-            android:layout_marginStart="25dp"
+
+           android:background="#33000000"
             android:elevation="12dp"
             android:visibility="@{previewLayout.progressLiveData ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/preview_finder"

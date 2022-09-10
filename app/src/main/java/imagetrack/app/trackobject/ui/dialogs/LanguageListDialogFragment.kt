@@ -126,26 +126,26 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
     private fun setupAds(){
 
         val activity = mainActivity ?: return
-
-        bind?.adviewId?.run{
-            val adRequest = AdRequest.Builder().build()
-            this.bannerId.loadAd(adRequest)
-            this.bannerId.adListener = object : AdListener(){
-
-                override fun onAdClicked() {
-                    super.onAdClicked()
-
-                }
-
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-
-                }
-
-            }
-        }
-
-    }
+//
+//        bind?.adviewId?.run{
+//            val adRequest = AdRequest.Builder().build()
+//            this.bannerId.loadAd(adRequest)
+//            this.bannerId.adListener = object : AdListener(){
+//
+//                override fun onAdClicked() {
+//                    super.onAdClicked()
+//
+//                }
+//
+//                override fun onAdLoaded() {
+//                    super.onAdLoaded()
+//
+//                }
+//
+//            }
+//        }
+//
+ }
 
 
 
@@ -394,10 +394,10 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
 
     override fun onDestroyView() {
 
-        bind?.adviewId?.bannerId?.apply {
-            this.destroy()
-            println("onDestroy"+this)
-        }
+//        bind?.adviewId?.bannerId?.apply {
+//            this.destroy()
+//            println("onDestroy"+this)
+//        }
         bind =null
         super.onDestroyView()
 
@@ -405,18 +405,18 @@ class LanguageListDialogFragment : BaseDialogFragment<LanguageListViewModel, Lan
     }
 
     override fun onPause() {
-        bind?.adviewId?.bannerId?.apply {
-            this.pause()
-
-        }
+//        bind?.adviewId?.bannerId?.apply {
+//            this.pause()
+//
+//        }
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        bind?.adviewId?.bannerId?.apply {
-            this.resume()
-        }
+//        bind?.adviewId?.bannerId?.apply {
+//            this.resume()
+//        }
 
     }
 

@@ -30,7 +30,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/scanned_text"
                 android:textColor="#1E1F20"
-                android:textSize="32sp"
+                android:textSize="@dimen/scanned_text_size"
                 ads:layout_constraintBottom_toBottomOf="parent"
                 ads:layout_constraintEnd_toStartOf="@+id/progressId"
                 ads:layout_constraintHorizontal_bias="0.5"
